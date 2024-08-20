@@ -8,11 +8,11 @@ variables:
   buildConfiguration: "Release"
 
 steps:
-  # Manually install JDK (Java Development Kit)
+  # Manually install JDK (Java Development Kit) version 17
   - script: |
       sudo apt-get update
-      sudo apt-get install -y openjdk-11-jdk
-    displayName: "Install OpenJDK 11"
+      sudo apt-get install -y openjdk-17-jdk
+    displayName: "Install OpenJDK 17"
 
   # Restore Maven dependencies
   - task: Maven@4
