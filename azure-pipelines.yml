@@ -11,7 +11,7 @@ steps:
   # Install JDK (Java Development Kit)
   - task: UseJavaVersion@1
     inputs:
-      versionSpec: "11" # Specify the JDK version you need, e.g., '8', '11', etc.
+      versionSpec: "17" # Specify the JDK version you need, e.g., '8', '11', etc.
       jdkArchitectureOption: "x64"
 
   # Restore Maven dependencies
