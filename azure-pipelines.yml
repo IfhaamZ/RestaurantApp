@@ -8,11 +8,11 @@ variables:
   buildConfiguration: "Release"
 
 steps:
-  # Install JDK (Java Development Kit)
-  - task: UseJavaVersion@1
-    inputs:
-      versionSpec: "17" # Specify the JDK version you need, e.g., '8', '11', etc.
-      jdkArchitectureOption: "x64"
+  # Manually install JDK (Java Development Kit)
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y openjdk-11-jdk
+    displayName: "Install OpenJDK 11"
 
   # Restore Maven dependencies
   - task: Maven@4
