@@ -1,22 +1,44 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
-- main
+  - "*"
 
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  buildConfiguration: "Release"
+
 steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+  # Install JDK (Java Development Kit)
+  - task: UseJavaVersion@1
+    inputs:
+      versionSpec: "11" # Specify the JDK version you need, e.g., '8', '11', etc.
+      jdkArchitectureOption: "x64"
+
+  # Restore Maven dependencies
+  - task: Maven@4
+    displayName: "Maven - Restore Dependencies"
+    inputs:
+      mavenPomFile: "pom.xml" # Path to the pom.xml file
+      goals: "dependency:resolve"
+
+  # Build the Maven project
+  - task: Maven@4
+    displayName: "Maven - Build"
+    inputs:
+      mavenPomFile: "pom.xml" # Path to the pom.xml file
+      goals: "clean install"
+
+  # Run unit tests
+  - task: Maven@4
+    displayName: "Maven - Run Tests"
+    inputs:
+      mavenPomFile: "pom.xml" # Path to the pom.xml file
+      goals: "test"
+
+  # Archive build artifacts (optional)
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifacts"
+    inputs:
+      pathtoPublish: "$(System.DefaultWorkingDirectory)/target"
+      artifactName: "drop"
+      publishLocation: "Container"
