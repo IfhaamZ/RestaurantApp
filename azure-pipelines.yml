@@ -6,6 +6,7 @@ pool:
 
 variables:
   buildConfiguration: "Release"
+  outputDir: "$(Build.ArtifactStagingDirectory)/$(buildConfiguration)"
 
 steps:
   # Manually install JDK (Java Development Kit) version 17
@@ -35,10 +36,24 @@ steps:
       mavenPomFile: "pom.xml" # Path to the pom.xml file
       goals: "test"
 
-  # Archive build artifacts (optional)
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifacts"
+  # Publish the project to the output directory
+  - task: Maven@4
+    displayName: "Maven - Package"
     inputs:
-      pathtoPublish: "$(System.DefaultWorkingDirectory)/target"
+      mavenPomFile: "pom.xml"
+      goals: "package"
+      options: "-DoutputDirectory=$(outputDir)"
+  
+  # Compress the output directory into a ZIP file
+  - script: |
+      zip -r $(outputDir)/artifact.zip $(outputDir)
+    displayName: "Create ZIP File of Build Artifacts"
+
+  # Publish the ZIP file as an artifact
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact: drop"
+    inputs:
+      pathtoPublish: "$(outputDir)/artifact.zip"
       artifactName: "drop"
       publishLocation: "Container"
+    condition: succeeded()
