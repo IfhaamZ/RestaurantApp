@@ -30,10 +30,18 @@ steps:
 
   # Run unit tests
   - task: Maven@4
-    displayName: "Maven - Run Tests"
+    displayName: 'Run unit tests - $(buildConfiguration)'
     inputs:
-      mavenPomFile: "pom.xml" # Path to the pom.xml file
+      mavenPomFile: "pom.xml"
       goals: "test"
+      options: "-DskipTests=false"
+
+  # Publish test results
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results'
+    inputs:
+      testResultsFiles: '**/target/surefire-reports/*.xml'
+      mergeTestResults: true
 
   # Compress the contents of the target directory into a ZIP file
   - script: |
