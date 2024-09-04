@@ -16,10 +16,6 @@
         <!-- Jetty version from
            https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-maven-plugin/
         -->
-<<<<<<< HEAD
-        <jettyVersion>9.4.12.v20180830</jettyVersion>
-=======
->>>>>>> main
         <junit.jupiter.version>5.2.0</junit.jupiter.version>
         <junit.platform.version>1.2.0</junit.platform.version>
         <hamcrest.version>1.3</hamcrest.version>
@@ -28,18 +24,7 @@
     </properties>
 
     <dependencies>
-<<<<<<< HEAD
-
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.25</version>
-        </dependency>
-
-        <dependency>
-=======
-        <dependency>
->>>>>>> main
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>8.0</version>
@@ -49,11 +34,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-<<<<<<< HEAD
-            <version>${jettyVersion}</version>
-=======
             <version>9.4.51.v20230217</version>
->>>>>>> main
         </dependency>
         <!-- Testing dependencies. -->
         <dependency>
@@ -85,15 +66,6 @@
             <version>${mockito.version}</version>
         </dependency>
 
-<<<<<<< HEAD
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>5.1.9.RELEASE</version>
-        </dependency>
-=======
->>>>>>> main
     </dependencies>
 
     <build>
