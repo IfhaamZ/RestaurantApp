@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Event {
@@ -7,10 +8,10 @@ public class Event {
     private int id;
     private String name;
     private String description;
-    private Date date;
+    private LocalDate date;
     private String type;
     
-    public Event(int id, String name, String description, Date date, String type) {
+    public Event(int id, String name, String description, LocalDate date, String type) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -36,10 +37,10 @@ public class Event {
     public void setDescription(String description) {
         this.description = description;
     }
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
     public String getType() {
