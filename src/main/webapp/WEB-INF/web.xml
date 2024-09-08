@@ -13,4 +13,49 @@
    <servlet-name>index.jsp</servlet-name>
    <url-pattern>/index/*</url-pattern>
   </servlet-mapping>
+
+  <!-- DB Connection Parameters -->
+  <context-param>
+    <param-name>jdbcURL</param-name>
+    <param-value>jdbc:mysql://localhost:3306/restaurantdb</param-value>
+  </context-param>
+  <context-param>
+    <param-name>jdbcUsername</param-name>
+    <param-value>root</param-value>
+  </context-param>
+  <context-param>
+    <param-name>jdbcPassword</param-name>
+    <param-value>Lama1234!</param-value>
+  </context-param>
+
+  <!-- Controller Servlet -->
+  <servlet>
+    <servlet-name>ControllerServlet</servlet-name>
+    <servlet-class>controller.ControllerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ControllerServlet</servlet-name>
+    <url-pattern>/ControllerServlet</url-pattern>
+    <url-pattern>/event</url-pattern>
+  </servlet-mapping>
+
+  <!-- EventServlet to handle all event-related operations -->
+    <servlet>
+        <servlet-name>EventServlet</servlet-name>
+        <servlet-class>controller.EventServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EventServlet</servlet-name>
+        <url-pattern>/eventnew</url-pattern>  <!-- To show add event form -->
+        <url-pattern>/eventinsert</url-pattern>  <!-- To handle new event insertion -->
+        <url-pattern>/eventedit</url-pattern>  <!-- To show edit event form -->
+        <url-pattern>/eventupdate</url-pattern>  <!-- To handle event update -->
+        <url-pattern>/eventdelete</url-pattern>  <!-- To handle event deletion -->
+        <url-pattern>/eventlist</url-pattern>  <!-- To list all events (e.g., EventCalendarStaff.jsp) -->
+        <url-pattern>/eventsearch</url-pattern>
+        <url-pattern>/staffeventsearch</url-pattern>
+        <url-pattern>/staffeventlist</url-pattern>
+      </servlet-mapping>
+
 </web-app>

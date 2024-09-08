@@ -13,7 +13,7 @@
         <ul>
             <li><a href="menu.jsp">Menu</a></li>
             <li><a href="reservation.jsp">Reservations</a></li>
-            <li><a href="EventCalendar.jsp">Events</a></li>
+            <li><a href="eventlist">Events</a></li>
             <li><a href="TableManagement.jsp">Table Management</a></li>
             <li><a href="contact.jsp">Contact Us</a></li>
         </ul>

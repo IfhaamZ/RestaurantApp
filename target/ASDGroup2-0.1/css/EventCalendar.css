@@ -97,19 +97,23 @@ nav ul li a:hover {
   margin-bottom: 10px;
 }
 
-/* Reservation Button */
-.btn {
-  display: inline-block;
+/* Search Events Button Styling */
+.search-button-container {
+  margin-top: -30px;
+  text-align: end;
+}
+
+.btn-search-event {
   background-color: #ff6f61;
   color: white;
   padding: 10px 20px;
+  font-size: 1.2rem;
   text-decoration: none;
-  font-size: 1rem;
   border-radius: 5px;
   transition: background 0.3s ease;
 }
 
-.btn:hover {
+.btn-search-event:hover {
   background-color: #333;
 }
 

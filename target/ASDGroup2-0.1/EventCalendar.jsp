@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Event" %>
 <html>
@@ -20,16 +21,21 @@
     
     <div class="container">
         <h2>Upcoming Events</h2>
+        <!-- Button to Search Events -->
+        <div class="search-button-container">
+            <a href="eventsearch" class="btn-search-event"><span class="search-icon">🔍</span> Search Events</a>
+        </div>
         <div class="event-list">
             <c:forEach var="event" items="${events}">
                 <div class="event-item">
                     <h3>${event.name}</h3>
                     <p>${event.description}</p>
-                    <p>Date: ${event.date}</p>
                     <p>Type: ${event.type}</p>
+                    <p>Date: ${event.date}</p>
                 </div>
             </c:forEach>
         </div>
+
     </div>
 </body>
 </html>

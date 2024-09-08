@@ -40,7 +40,7 @@ public class DBManager {
     // Fetch all events
     public List<Event> fetchAllEvents() throws SQLException {
         List<Event> events = new ArrayList<>();
-        String sql = "SELECT * FROM event";
+        String sql = "SELECT * FROM Event";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql);
                 ResultSet rs = st.executeQuery()) {
@@ -54,6 +54,7 @@ public class DBManager {
                 events.add(event);
             }
         }
+        System.out.println("Total events fetched: " + events.size()); // Debugging line
         return events;
     }
 
@@ -75,6 +76,44 @@ public class DBManager {
             }
         }
         return null;
+    }
+
+    // Search events by type and date
+    public List<Event> searchEvents(String type, String date) throws SQLException {
+        List<Event> events = new ArrayList<>();
+        String sql = "SELECT * FROM Event WHERE 1=1";
+
+        if (type != null && !type.isEmpty()) {
+            sql += " AND type = ?";
+        }
+        if (date != null && !date.isEmpty()) {
+            sql += " AND date = ?";
+        }
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+
+            int paramIndex = 1;
+            if (type != null && !type.isEmpty()) {
+                st.setString(paramIndex++, type);
+            }
+            if (date != null && !date.isEmpty()) {
+                st.setDate(paramIndex++, java.sql.Date.valueOf(date));
+            }
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Event event = new Event(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getDate("date").toLocalDate(),
+                        rs.getString("type"));
+                events.add(event);
+            }
+        }
+        return events;
     }
 
     // Delete an event

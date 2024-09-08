@@ -7,7 +7,9 @@ import java.sql.SQLException;
 public class DBConnector extends CreateDB {
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(db_url + db_name, db_user, db_pass);
+        Connection connection = DriverManager.getConnection(db_url + db_name, db_user, db_pass);
+        System.out.println("Database connection established"); // Debugging line
+        return connection;
     }
 
     public static void closeConnection(Connection connection) {
