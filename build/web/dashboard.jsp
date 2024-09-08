@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
@@ -44,7 +43,7 @@
             transform: translateY(-5px);
             background-color: #f0f8ff; /* Light blue background on hover */
         }
-
+        
         .card h2 {
             color: #1E90FF;
             font-size: 20px;

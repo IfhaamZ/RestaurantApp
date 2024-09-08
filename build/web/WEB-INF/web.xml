@@ -17,7 +17,6 @@
         <servlet-class>com.example.controller.ErrorSubmissionServlet</servlet-class>
     </servlet>
 
-
     <!-- Servlet Mapping for Error Submission -->
     <servlet-mapping>
         <servlet-name>ErrorSubmissionServlet</servlet-name>
