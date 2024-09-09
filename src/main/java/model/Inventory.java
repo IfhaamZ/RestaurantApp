@@ -65,5 +65,4 @@ public class Inventory implements Serializable {
         return false;
     }
 
-    // Other methods related to inventory management can go here
 }

@@ -2,9 +2,15 @@
 <html>
   <head>
     <title>View Stock Levels</title>
+    <link rel="stylesheet" href="css/Payment.css" />
   </head>
   <body>
     <h2>Stock Levels</h2>
+    <!-- Confirmation message -->
+    <c:if test="${not empty message}">
+      <p style="color: green">${message}</p>
+    </c:if>
+
     <table border="1">
       <tr>
         <th>Product Name</th>
@@ -23,5 +29,13 @@
       <label>New Stock: <input type="number" name="newStock" /></label><br />
       <input type="submit" value="Update Stock" />
     </form>
+
+    <!-- Home Button -->
+    <a href="index.jsp" class="home-button">Main Page</a>
+
+    <!-- Low Stock Notification Button -->
+    <a href="lowStockNotification.jsp" class="low-stock-button"
+      >Check Low Stock Notification</a
+    >
   </body>
 </html>
