@@ -23,7 +23,6 @@ public class PaymentServlet extends HttpServlet {
         String cvn = request.getParameter("cvn");
         String paymentAmount = request.getParameter("paymentAmount");
         String paymentDate = request.getParameter("paymentDate");
-        String staffRole = request.getParameter("staffRole");
         String action = request.getParameter("action"); // "cancel" or "submit"
 
         // Create or retrieve the Payment object from the session (if it exists)
@@ -41,13 +40,6 @@ public class PaymentServlet extends HttpServlet {
         payment.setCVN(cvn);
         payment.setPaymentAmount(paymentAmount);
         payment.setPaymentDate(paymentDate);
-        payment.setStaffRole(staffRole);
-
-        // Check role-based access control
-        if (!payment.canManagePayments()) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied: Unauthorized Role");
-            return;
-        }
 
         // Handle action (either submit or cancel payment)
         if ("cancel".equals(action)) {
