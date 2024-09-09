@@ -1,43 +1,59 @@
 package model;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Order {
-    
     private int orderId;
-    private int userId;
-    private LocalDate reservationDate;
-    private int numberOfGuests;
-    
-    public Order(int orderId, int userId, LocalDate reservationDate, int numberOfGuests) {
+    private String customerName;
+    private String dishName;
+    private int quantity;
+    private Date orderDate;
+
+    public Order(int orderId, String customerName, String dishName, int quantity, Date orderDate) {
         this.orderId = orderId;
-        this.userId = userId;
-        this.reservationDate = reservationDate;
-        this.numberOfGuests = numberOfGuests;
+        this.customerName = customerName;
+        this.dishName = dishName;
+        this.quantity = quantity;
+        this.orderDate = orderDate;
     }
 
     public int getOrderId() {
         return orderId;
     }
+
     public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
-    public int getUserId() {
-        return userId;
+
+    public String getCustomerName() {
+        return customerName;
     }
-    public void setUserId(int userId) {
-        this.userId = userId;
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
-    public LocalDate getReservationDate() {
-        return reservationDate;
+
+    public String getDishName() {
+        return dishName;
     }
-    public void setReservationDate(LocalDate reservationDate) {
-        this.reservationDate = reservationDate;
+
+    public void setDishName(String dishName) {
+        this.dishName = dishName;
     }
-    public int getNumberOfGuests() {
-        return numberOfGuests;
+
+    public int getQuantity() {
+        return quantity;
     }
-    public void setNumberOfGuests(int numberOfGuests) {
-        this.numberOfGuests = numberOfGuests;
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 }

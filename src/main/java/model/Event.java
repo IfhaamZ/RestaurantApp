@@ -48,6 +48,5 @@ public class Event {
     }
     public void setType(String type) {
         this.type = type;
-    }
 }
-// asdasd
+}
