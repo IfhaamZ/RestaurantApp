@@ -17,10 +17,10 @@
       "server": "localhost",
       "port": 33060,
       "driver": "MySQL",
-      "name": "MySQL Local",
-      "database": "restaurantdb",
+      "name": "Local instance 3306",
+      "database": "restaurantDB",
       "username": "root",
-      "password": "Lama1234!",
+      "password": "password123",
       "connectionTimeout": 100
     }
   ]
