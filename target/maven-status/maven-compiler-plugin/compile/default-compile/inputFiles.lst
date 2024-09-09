@@ -1,9 +1,12 @@
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/DAO/CreateDB.java
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/model/Event.java
+/Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/controller/InventoryServlet.java
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/controller/ControllerServlet.java
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/controller/EventServlet.java
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/DAO/DBManager.java
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/model/Payment.java
+/Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/model/Product.java
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/DAO/DBConnector.java
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/model/Table.java
 /Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/controller/PaymentServlet.java
+/Users/rkdhs/Documents/GitHub/RestaurantApp/src/main/java/model/Inventory.java

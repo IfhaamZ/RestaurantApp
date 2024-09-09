@@ -15,6 +15,8 @@ pageEncoding="UTF-8"%>
 
     <nav>
       <ul>
+        <li><a href="lowStockNotification.jsp">Stock Level Notification</a></li>
+        <li><a href="viewStockLevels.jsp">View Stock Level</a></li>
         <li><a href="Payment.jsp">Payment</a></li>
         <li><a href="reservation.jsp">Reservations</a></li>
         <li><a href="eventlist">Events</a></li>
