@@ -98,8 +98,8 @@ pageEncoding="UTF-8"%>
         </div>
       </form>
 
-      <% // Display a message if available (for example, after a successful or
-      canceled payment) String message = (String)
+      <%-- Display a message if available (for example, after a successful or
+      canceled payment) --%> <% String message = (String)
       request.getAttribute("message"); if (message != null) { %>
       <p class="message"><%= message %></p>
       <% } %>
