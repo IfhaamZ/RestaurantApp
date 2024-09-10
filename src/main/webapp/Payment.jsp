@@ -92,7 +92,13 @@ pageEncoding="UTF-8"%>
           <button type="submit" name="action" value="submit" class="submit-btn">
             Submit Payment
           </button>
-          <button type="submit" name="action" value="cancel" class="cancel-btn">
+          <button
+            type="submit"
+            name="action"
+            value="cancel"
+            class="cancel-btn"
+            formnovalidate
+          >
             Cancel Payment
           </button>
         </div>
