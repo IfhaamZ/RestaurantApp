@@ -4,9 +4,17 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Home Page</title>
+        <title>Reservation Management System</title>
+        <!-- Link to CSS -->
+        <link rel="stylesheet" href="css/index.css">
     </head>
     <body>
-        <h1>Home Page</h1>
+        <h1>Welcome to the Reservation Management System</h1>
+    <ul>
+        <li><a href="MakeReservation.jsp">Make a Reservation</a></li>
+        <li><a href="ViewReservation.jsp">View Reservations</a></li>
+        <li><a href="ModifyReservation.jsp">Modify a Reservation</a></li>
+        <li><a href="CancelReservation.jsp">Cancel a Reservation</a></li>
+    </ul>
     </body>
 </html>
