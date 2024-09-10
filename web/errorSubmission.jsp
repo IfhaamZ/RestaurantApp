@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report an Error</title>
     <style>
-    
         /* Basic Styles */
         body {
             font-family: 'Arial', sans-serif;
@@ -179,7 +178,14 @@
         <div class="form-header">
             <h2>Report an Error</h2>
         </div>
-        <form action="submitError" method="post" onsubmit="return validateForm()">
+
+        <!-- Display error messages passed from the servlet -->
+        <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+        <% if (errorMessage != null) { %>
+            <div class="alert alert-danger"><%= errorMessage %></div>
+        <% } %>
+
+        <form action="ErrorSubmissionServlet" method="post" onsubmit="return validateForm()">
             
             <!-- Error Description -->
             <div class="form-group">
