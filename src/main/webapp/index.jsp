@@ -29,7 +29,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2024 Restaurant Management System. All Rights Reserved.</p>
+        <p>2024 Restaurant Management System.</p>
     </footer>
 </body>
 </html>
