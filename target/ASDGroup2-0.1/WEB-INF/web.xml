@@ -13,4 +13,29 @@
    <servlet-name>index.jsp</servlet-name>
    <url-pattern>/index/*</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+        <servlet-name>ReservationServlet</servlet-name>
+        <servlet-class>controller.ReservationServlet</servlet-class> <!-- 서블릿 클래스 경로 확인 -->
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ReservationServlet</servlet-name>
+        <url-pattern>/ReservationServlet</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>jdbcURL</param-name>
+        <param-value>jdbc:mysql://localhost:3306/reservation_db</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbcUsername</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbcPassword</param-name>
+        <param-value>1234</param-value>
+    </context-param>
+
+
 </web-app>
