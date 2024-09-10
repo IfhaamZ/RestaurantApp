@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report an Error</title>
     <style>
-    
         /* Basic Styles */
         body {
             font-family: 'Arial', sans-serif;

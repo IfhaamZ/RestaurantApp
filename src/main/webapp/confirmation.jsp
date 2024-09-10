@@ -59,17 +59,10 @@
     <div class="container">
         <h1>Thank You!</h1>
         <!-- Display the success message dynamically passed from the servlet -->
-        <p class="success-message">
-            <%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "Your submission has been successfully processed." %>
-        </p>
+        <p class="success-message">${successMessage}</p>
         <p>Your error report has been successfully submitted and is being reviewed.</p>
         <a href="dashboard.jsp" class="btn">Return to Dashboard</a>
     </div>
-
-    <!-- Clear the session attribute after displaying the message -->
-    <%
-        session.removeAttribute("successMessage");
-    %>
 
 </body>
 </html>
