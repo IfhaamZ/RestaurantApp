@@ -178,7 +178,8 @@
         <div class="form-header">
             <h2>Report an Error</h2>
         </div>
-        <form action="/error/confirmation" method="post" onsubmit="return validateForm()"> <!-- Updated action URL -->
+        <form action="${pageContext.request.contextPath}/error/submit" method="post" onsubmit="return validateForm()">
+
             
             <!-- Error Description -->
             <div class="form-group">

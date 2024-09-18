@@ -37,6 +37,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
     }
 
     // Handle GET requests and route based on path
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -45,17 +46,17 @@ public class ErrorSubmissionServlet extends HttpServlet {
 
         try {
             switch (action) {
-                case "/error/submit":
-                    submitError(request, response); // Handle error submission
+                case "/submit": // Handles form submission
+                    submitError(request, response);
                     break;
-                case "/error/form":
-                    showForm(request, response); // Show the error submission form
+                case "/form": // Displays the form
+                    showForm(request, response);
                     break;
-                case "/error/confirmation":
-                    showConfirmation(request, response); // Show confirmation after submission
+                case "/confirmation": // Displays confirmation page
+                    showConfirmation(request, response);
                     break;
                 default:
-                    showForm(request, response); // Default action to show the form
+                    showForm(request, response); // Default action is to show the form
                     break;
             }
         } catch (SQLException ex) {
@@ -114,7 +115,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
     private void showConfirmation(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("Displaying confirmation page.");
-        RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + "/error/confirmation");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/confirmation.jsp");
         dispatcher.forward(request, response);
     }
 }
