@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provide Feedback</title>
+    <title>Report an Error</title>
     <style>
         /* Basic Styles */
         body {
@@ -52,7 +52,6 @@
         }
 
         .form-group input[type="text"],
-        .form-group input[type="email"],
         .form-group textarea,
         .form-group select {
             width: 100%;
@@ -66,15 +65,14 @@
         }
 
         .form-group input[type="text"]:focus,
-        .form-group input[type="email"]:focus,
         .form-group textarea:focus,
         .form-group select:focus {
-            border-color: #28a745;
+            border-color: #007bff;
             background-color: #fff;
         }
 
         .form-group textarea {
-            height: 100px;
+            height: 120px;
             resize: vertical;
         }
 
@@ -82,11 +80,12 @@
             height: 45px;
         }
 
+        /* Button Styles */
         .submit-btn {
             display: block;
             width: 100%;
             padding: 15px;
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -98,17 +97,18 @@
         }
 
         .submit-btn:hover {
-            background-color: #218838;
+            background-color: #0056b3;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        /* Additional Styling */
         .form-group small {
             color: #666;
             font-size: 12px;
         }
 
         .form-header {
-            background-color: #28a745;
+            background-color: #007bff;
             padding: 20px;
             color: white;
             border-radius: 10px 10px 0 0;
@@ -126,42 +126,15 @@
             color: red;
         }
 
-        /* Star Rating Styles */
-        .star-rating {
-            display: flex;
-            gap: 5px;
-            justify-content: center;
-            margin: 10px 0;
-        }
-
-        .star-rating input[type="radio"] {
+        .submit-message {
             display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #28a745;
+            font-size: 16px;
         }
 
-        .star-rating label {
-            font-size: 24px;
-            color: #ccc;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .star-rating input[type="radio"]:checked ~ label {
-            color: #ffc107;
-        }
-
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-            color: #ffc107;
-        }
-
-        /* Character count for textarea */
-        .char-counter {
-            display: block;
-            text-align: right;
-            font-size: 12px;
-            color: #666;
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 width: 90%;
@@ -173,72 +146,86 @@
             }
         }
     </style>
+
+    <script>
+        function validateForm() {
+            const description = document.getElementById('description').value.trim();
+            const steps = document.getElementById('steps').value.trim();
+            const category = document.getElementById('category').value;
+            const severity = document.getElementById('severity').value;
+            const submitMessage = document.getElementById('submit-message');
+            const submitButton = document.getElementById('submit-btn');
+
+            if (description === '' || steps === '' || category === '' || severity === '') {
+                alert('Please fill out all required fields.');
+                return false; // Prevent form submission
+            }
+
+            // Show the submitting message
+            submitMessage.style.display = 'block';
+            // Disable the submit button to prevent multiple submissions
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+
+            return true; // Allow form submission
+        }
+    </script>
+
 </head>
 <body>
 
     <div class="container">
         <div class="form-header">
-            <h2>Provide Feedback</h2>
+            <h2>Report an Error</h2>
         </div>
-        <form action="submitFeedback" method="post" onsubmit="showLoading()">
-            <!-- Name -->
+        <form action="submitError" method="post" onsubmit="return validateForm()">
+            
+            <!-- Error Description -->
             <div class="form-group">
-                <label for="name">Your Name</label>
-                <input type="text" id="name" name="name" placeholder="Enter your name">
+                <label for="description">Error Description <span class="required-field">*</span></label>
+                <textarea id="description" name="description" required></textarea>
+                <small>Provide a detailed description of the error you encountered.</small>
             </div>
 
-            <!-- Email (with required and validation) -->
+            <!-- Steps Taken Before Error -->
             <div class="form-group">
-                <label for="email">Your Email <span class="required-field">*</span></label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required 
-                       oninvalid="this.setCustomValidity('Please enter a valid email address')" 
-                       oninput="setCustomValidity('')">
-                <small>Please enter a valid email address (e.g., name@example.com)</small>
+                <label for="steps">Steps to Reproduce <span class="required-field">*</span></label>
+                <textarea id="steps" name="steps" required></textarea>
+                <small>Describe the steps you took leading to this error.</small>
             </div>
 
-            <!-- Star Rating -->
+            <!-- Error Category -->
             <div class="form-group">
-                <label for="rating">Overall Experience Rating <span class="required-field">*</span></label>
-                <div class="star-rating">
-                    <input type="radio" id="rating5" name="rating" value="5" required>
-                    <label for="rating5">&#9733;</label>
-                    <input type="radio" id="rating4" name="rating" value="4">
-                    <label for="rating4">&#9733;</label>
-                    <input type="radio" id="rating3" name="rating" value="3">
-                    <label for="rating3">&#9733;</label>
-                    <input type="radio" id="rating2" name="rating" value="2">
-                    <label for="rating2">&#9733;</label>
-                    <input type="radio" id="rating1" name="rating" value="1">
-                    <label for="rating1">&#9733;</label>
-                </div>
+                <label for="category">Error Category <span class="required-field">*</span></label>
+                <select id="category" name="category" required>
+                    <option value="" disabled selected>Select error type</option>
+                    <option value="UI">UI Error</option>
+                    <option value="Backend">Backend Error</option>
+                    <option value="Database">Database Error</option>
+                    <option value="Network">Network Error</option>
+                </select>
+                <small>Select the category that best describes the error.</small>
             </div>
 
-            <!-- Feedback Comments -->
+            <!-- Severity Level -->
             <div class="form-group">
-                <label for="comments">Feedback <span class="required-field">*</span></label>
-                <textarea id="comments" name="comments" placeholder="Share your experience with us..." required oninput="updateCharCount()"></textarea>
-                <small id="charCount" class="char-counter">0/250 characters</small>
+                <label for="severity">Severity <span class="required-field">*</span></label>
+                <select id="severity" name="severity" required>
+                    <option value="" disabled selected>Select severity level</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+                <small>Choose the impact level of the issue.</small>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="submit-btn" id="submitBtn">Submit Feedback</button>
+            <button type="submit" id="submit-btn" class="submit-btn">Submit Error Report</button>
         </form>
+
+        <!-- Submitting message -->
+        <div id="submit-message" class="submit-message">Submitting your error report, please wait...</div>
     </div>
-
-    <script>
-        // Update character count
-        function updateCharCount() {
-            const charCount = document.getElementById('comments').value.length;
-            document.getElementById('charCount').innerText = `${charCount}/250 characters`;
-        }
-
-        // Show loading state on submit
-        function showLoading() {
-            const btn = document.getElementById('submitBtn');
-            btn.innerHTML = 'Submitting...';
-            btn.disabled = true;
-        }
-    </script>
 
 </body>
 </html>

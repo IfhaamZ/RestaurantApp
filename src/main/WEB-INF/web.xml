@@ -1,0 +1,22 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+version="3.0">
+
+    <!-- Display Name -->
+    <display-name>restaurant-app</display-name>
+<!-- EventServlet to handle all event-related operations -->
+<servlet>
+    <servlet-name>ErrorSubmissionServlet</servlet-name>
+    <servlet-class>controller.ErrorSubmissionServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>ErrorSubmissionServlet</servlet-name>
+    <url-pattern>/submit</url-pattern>  <!-- To show add event form -->
+    <url-pattern>/form</url-pattern>  <!-- To handle new event insertion -->
+    <url-pattern>/confirmation</url-pattern>  <!-- To show edit event form -->
+    <url-pattern>/submitError</url-pattern>  <!-- To show edit event form -->
+  </servlet-mapping>
+
+</web-app>

@@ -178,7 +178,7 @@
         <div class="form-header">
             <h2>Report an Error</h2>
         </div>
-        <form action="submitError" method="post" onsubmit="return validateForm()">
+        <form action="error/submit" method="post" onsubmit="return validateForm()"> <!-- Updated action URL -->
             
             <!-- Error Description -->
             <div class="form-group">
