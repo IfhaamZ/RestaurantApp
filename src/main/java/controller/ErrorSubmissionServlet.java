@@ -7,14 +7,12 @@ import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import DAO.DBManager;
 
-@WebServlet("/error/*") // Use a wildcard to handle multiple error-related routes
 public class ErrorSubmissionServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ErrorSubmissionServlet.class.getName());
@@ -35,7 +33,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Forwarding POST requests to doGet to handle form submissions similarly
+        doGet(request, response); // Forward POST requests to doGet for consistency
     }
 
     // Handle GET requests and route based on path
@@ -47,17 +45,17 @@ public class ErrorSubmissionServlet extends HttpServlet {
 
         try {
             switch (action) {
-                case "/submit":
+                case "/error/submit":
                     submitError(request, response); // Handle error submission
                     break;
-                case "/form":
+                case "/error/form":
                     showForm(request, response); // Show the error submission form
                     break;
-                case "/confirmation":
+                case "/error/confirmation":
                     showConfirmation(request, response); // Show confirmation after submission
                     break;
                 default:
-                    listErrors(request, response); // Default action, e.g., show list of errors (if needed)
+                    showForm(request, response); // Default action to show the form
                     break;
             }
         } catch (SQLException ex) {
@@ -116,16 +114,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
     private void showConfirmation(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("Displaying confirmation page.");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/confirmation.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + "/error/confirmation");
         dispatcher.forward(request, response);
-    }
-
-    // (Optional) List submitted errors (not part of original logic, can be used for
-    // error listing)
-    private void listErrors(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        // Placeholder for future expansion, like listing all submitted errors.
-        // For now, it can just redirect to the form
-        response.sendRedirect(request.getContextPath() + "/error/form");
     }
 }
