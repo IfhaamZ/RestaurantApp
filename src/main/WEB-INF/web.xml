@@ -6,17 +6,29 @@ version="3.0">
 <!-- Display Name -->
 <display-name>RestaurantApp</display-name>
 
-<!-- Servlet Definition for ErrorSubmissionServlet -->
+<!-- Controller Servlet -->
 <servlet>
-    <servlet-name>ErrorSubmissionServlet</servlet-name>
-    <servlet-class>controller.ErrorSubmissionServlet</servlet-class>
-</servlet>
+    <servlet-name>ControllerServlet</servlet-name>
+    <servlet-class>controller.ControllerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ControllerServlet</servlet-name>
+    <url-pattern>/ControllerServlet</url-pattern>
+    <url-pattern>/event</url-pattern>
+  </servlet-mapping>
 
-<!-- Servlet Mapping for Error Submission -->
-<servlet-mapping>
-    <servlet-name>ErrorSubmissionServlet</servlet-name>
-    <url-pattern>/error/*</url-pattern>  <!-- Wildcard for all /error/* paths -->
-</servlet-mapping>
+  <!-- EventServlet to handle all event-related operations -->
+    <servlet>
+        <servlet-name>ErrorSubmissionServlet</servlet-name>
+        <servlet-class>controller.ErrorSubmissionServlet</servlet-class>
+    </servlet>
 
+    <servlet-mapping>
+        <servlet-name>ErrorSubmissionServlet</servlet-name>
+        <url-pattern>/submit</url-pattern>  <!-- To show add event form -->
+        <url-pattern>/confirmation</url-pattern>  <!-- To handle new event insertion -->
+        <url-pattern>/form</url-pattern>  <!-- To show edit event form -->
+        
+      </servlet-mapping>
 
 </web-app>

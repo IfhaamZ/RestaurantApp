@@ -102,7 +102,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
         boolean success = dbManager.createErrorReport(description, steps, category, severity);
         if (success) {
             logger.info("Error report inserted into the database successfully.");
-            response.sendRedirect(request.getContextPath() + "/error/confirmation"); // Redirect to confirmation page
+            response.sendRedirect("confirmation.jsp"); // Redirect to confirmation page
         } else {
             logger.warning("Insert operation failed. No rows were inserted.");
             request.setAttribute("errorMessage", "Failed to submit your error report. Please try again.");
