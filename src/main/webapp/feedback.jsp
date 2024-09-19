@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report an Error</title>
+    <title>Submit Feedback</title>
     <style>
         /* Basic Styles */
         body {
@@ -52,6 +52,7 @@
         }
 
         .form-group input[type="text"],
+        .form-group input[type="email"],
         .form-group textarea,
         .form-group select {
             width: 100%;
@@ -64,7 +65,7 @@
             background-color: #f9f9f9;
         }
 
-        .form-group input[type="text"]:focus,
+        .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             border-color: #007bff;
@@ -76,11 +77,6 @@
             resize: vertical;
         }
 
-        .form-group select {
-            height: 45px;
-        }
-
-        /* Button Styles */
         .submit-btn {
             display: block;
             width: 100%;
@@ -101,31 +97,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Additional Styling */
-        .form-group small {
-            color: #666;
-            font-size: 12px;
-        }
-
-        .form-header {
-            background-color: #007bff;
-            padding: 20px;
-            color: white;
-            border-radius: 10px 10px 0 0;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .form-header h2 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: normal;
-        }
-
-        .required-field {
-            color: red;
-        }
-
         .submit-message {
             display: none;
             text-align: center;
@@ -134,97 +105,80 @@
             font-size: 16px;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 width: 90%;
-            }
-
-            .form-group label,
-            .form-group small {
-                font-size: 14px;
             }
         }
     </style>
 
     <script>
         function validateForm() {
-            const description = document.getElementById('description').value.trim();
-            const steps = document.getElementById('steps').value.trim();
-            const category = document.getElementById('category').value;
-            const severity = document.getElementById('severity').value;
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const rating = document.getElementById('rating').value.trim();
+            const comments = document.getElementById('comments').value.trim();
             const submitMessage = document.getElementById('submit-message');
             const submitButton = document.getElementById('submit-btn');
 
-            if (description === '' || steps === '' || category === '' || severity === '') {
+            if (name === '' || email === '' || rating === '' || comments === '') {
                 alert('Please fill out all required fields.');
                 return false; // Prevent form submission
             }
 
-            // Show the submitting message
             submitMessage.style.display = 'block';
-            // Disable the submit button to prevent multiple submissions
             submitButton.disabled = true;
             submitButton.textContent = 'Submitting...';
 
             return true; // Allow form submission
         }
     </script>
-
 </head>
 <body>
 
     <div class="container">
         <div class="form-header">
-            <h2>Report an Error</h2>
+            <h2>Submit Feedback</h2>
         </div>
-        <form action="submitError" method="post" onsubmit="return validateForm()">
+        <form action="/submitFeedback" method="post" onsubmit="return validateForm()">
             
-            <!-- Error Description -->
+            <!-- Name -->
             <div class="form-group">
-                <label for="description">Error Description <span class="required-field">*</span></label>
-                <textarea id="description" name="description" required></textarea>
-                <small>Provide a detailed description of the error you encountered.</small>
+                <label for="name">Name <span class="required-field">*</span></label>
+                <input type="text" id="name" name="name" required>
             </div>
 
-            <!-- Steps Taken Before Error -->
+            <!-- Email -->
             <div class="form-group">
-                <label for="steps">Steps to Reproduce <span class="required-field">*</span></label>
-                <textarea id="steps" name="steps" required></textarea>
-                <small>Describe the steps you took leading to this error.</small>
+                <label for="email">Email <span class="required-field">*</span></label>
+                <input type="email" id="email" name="email" required>
             </div>
 
-            <!-- Error Category -->
+            <!-- Rating -->
             <div class="form-group">
-                <label for="category">Error Category <span class="required-field">*</span></label>
-                <select id="category" name="category" required>
-                    <option value="" disabled selected>Select error type</option>
-                    <option value="UI">UI Error</option>
-                    <option value="Backend">Backend Error</option>
-                    <option value="Database">Database Error</option>
-                    <option value="Network">Network Error</option>
+                <label for="rating">Rating (1-5) <span class="required-field">*</span></label>
+                <select id="rating" name="rating" required>
+                    <option value="" disabled selected>Select rating</option>
+                    <option value="1">1 - Poor</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="3">3 - Good</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="5">5 - Excellent</option>
                 </select>
-                <small>Select the category that best describes the error.</small>
             </div>
 
-            <!-- Severity Level -->
+            <!-- Feedback Comments -->
             <div class="form-group">
-                <label for="severity">Severity <span class="required-field">*</span></label>
-                <select id="severity" name="severity" required>
-                    <option value="" disabled selected>Select severity level</option>
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-                <small>Choose the impact level of the issue.</small>
+                <label for="comments">Comments <span class="required-field">*</span></label>
+                <textarea id="comments" name="comments" required></textarea>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" id="submit-btn" class="submit-btn">Submit Error Report</button>
+            <button type="submit" id="submit-btn" class="submit-btn">Submit Feedback</button>
         </form>
 
         <!-- Submitting message -->
-        <div id="submit-message" class="submit-message">Submitting your error report, please wait...</div>
+        <div id="submit-message" class="submit-message">Submitting your feedback, please wait...</div>
     </div>
 
 </body>

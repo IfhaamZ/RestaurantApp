@@ -1,6 +1,10 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,15 +57,51 @@ public class FeedbackSubmissionServlet extends HttpServlet {
         logger.info("Rating: " + rating);
         logger.info("Comments: " + comments);
 
-        // TODO: Save the feedback to the database or send it to a relevant service
+        // Database connection setup (update with your database credentials)
+        Connection connection = null;
+        PreparedStatement statement = null;
 
-        // Simulate database logic (replace with actual database operations)
+        try {
+            // Establish database connection
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurant_db", "root", "Karthi");
 
-        // Set a success message and forward to the confirmation page
-        request.setAttribute("successMessage", "Thank you for your feedback!");
-        request.getRequestDispatcher("/feedbackConfirmation.jsp").forward(request, response);
+            // Insert feedback data into the feedback table
+            String sql = "INSERT INTO feedback (customer_name, customer_email, feedback_text, rating) VALUES (?, ?, ?, ?)";
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, name);
+            statement.setString(2, email);
+            statement.setString(3, comments);
+            statement.setInt(4, Integer.parseInt(rating));
+
+            // Execute the insert statement
+            statement.executeUpdate();
+
+            // Set a success message and forward to the confirmation page
+            request.setAttribute("successMessage", "Thank you for your feedback!");
+            request.getRequestDispatcher("/feedbackConfirmation.jsp").forward(request, response);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "There was an error saving your feedback. Please try again later.");
+            request.getRequestDispatcher("/feedback.jsp").forward(request, response);
+        } finally {
+            // Close resources
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    // Helper method to validate email format
     private boolean isValidEmail(String email) {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         return matcher.matches();

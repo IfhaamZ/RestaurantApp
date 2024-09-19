@@ -61,7 +61,9 @@
         <!-- Display the success message dynamically passed from the servlet -->
         <p class="success-message">${successMessage}</p>
         <p>Your error report has been successfully submitted and is being reviewed.</p>
-        <a href="dashboard.jsp" class="btn">Return to Dashboard</a>
+        <a href="${pageContext.request.contextPath}/error/dashboard" class="btn">Return to Dashboard</a>
+
+
     </div>
 
 </body>
