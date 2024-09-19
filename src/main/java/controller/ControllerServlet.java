@@ -28,6 +28,9 @@ public class ControllerServlet extends HttpServlet {
                 case "/event":
                     handleEventRequests(request, response);
                     break;
+                case "/table":
+                    handleTableRequests(request, response); // New case for handling table-related requests
+                    break;
                 default:
                     showDefaultPage(request, response);
                     break;
@@ -37,10 +40,17 @@ public class ControllerServlet extends HttpServlet {
         }
     }
 
-    // Handle requests related to staff management
+    // Handle requests related to event management
     private void handleEventRequests(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/EventServlet");
+        dispatcher.forward(request, response);
+    }
+
+    // Handle requests related to table management
+    private void handleTableRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/TableServlet"); // Forwarding to TableServlet
         dispatcher.forward(request, response);
     }
 

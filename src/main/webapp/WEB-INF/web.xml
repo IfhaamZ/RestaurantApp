@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-      version="3.1">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1">
   <servlet>
     <servlet-name>index.jsp</servlet-name>
     <jsp-file>/index.jsp</jsp-file>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-   <servlet-name>index.jsp</servlet-name>
-   <url-pattern>/index/*</url-pattern>
+    <servlet-name>index.jsp</servlet-name>
+    <url-pattern>/index/*</url-pattern>
   </servlet-mapping>
 
   <!-- DB Connection Parameters -->
@@ -40,22 +40,40 @@
   </servlet-mapping>
 
   <!-- EventServlet to handle all event-related operations -->
-    <servlet>
-        <servlet-name>EventServlet</servlet-name>
-        <servlet-class>controller.EventServlet</servlet-class>
-    </servlet>
+  <servlet>
+    <servlet-name>EventServlet</servlet-name>
+    <servlet-class>controller.EventServlet</servlet-class>
+  </servlet>
 
-    <servlet-mapping>
-        <servlet-name>EventServlet</servlet-name>
-        <url-pattern>/eventnew</url-pattern>  <!-- To show add event form -->
-        <url-pattern>/eventinsert</url-pattern>  <!-- To handle new event insertion -->
-        <url-pattern>/eventedit</url-pattern>  <!-- To show edit event form -->
-        <url-pattern>/eventupdate</url-pattern>  <!-- To handle event update -->
-        <url-pattern>/eventdelete</url-pattern>  <!-- To handle event deletion -->
-        <url-pattern>/eventlist</url-pattern>  <!-- To list all events (e.g., EventCalendarStaff.jsp) -->
-        <url-pattern>/eventsearch</url-pattern>
-        <url-pattern>/staffeventsearch</url-pattern>
-        <url-pattern>/staffeventlist</url-pattern>
-      </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>EventServlet</servlet-name>
+    <url-pattern>/eventnew</url-pattern>  <!-- To show add event form -->
+    <url-pattern>/eventinsert</url-pattern>  <!-- To handle new event insertion -->
+    <url-pattern>/eventedit</url-pattern>  <!-- To show edit event form -->
+    <url-pattern>/eventupdate</url-pattern>  <!-- To handle event update -->
+    <url-pattern>/eventdelete</url-pattern>  <!-- To handle event deletion -->
+    <url-pattern>/eventlist</url-pattern>  <!-- To list all events (e.g., EventCalendarStaff.jsp) -->
+    <url-pattern>/eventsearch</url-pattern>
+    <url-pattern>/staffeventsearch</url-pattern>
+    <url-pattern>/staffeventlist</url-pattern>
+  </servlet-mapping>
+
+  <!-- TableServlet to handle all table-related operations -->
+  <servlet>
+    <servlet-name>TableServlet</servlet-name>
+    <servlet-class>controller.TableServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>TableServlet</servlet-name>
+    <url-pattern>/tablelist</url-pattern>
+    <url-pattern>/tableinsert</url-pattern>
+    <url-pattern>/tabledelete</url-pattern>
+    <url-pattern>/tableupdate</url-pattern>
+    <url-pattern>/tableavailability</url-pattern>
+    <url-pattern>/tablereserve</url-pattern>
+    <url-pattern>/tableedit</url-pattern>
+    <url-pattern>/tablenew</url-pattern>
+  </servlet-mapping>
 
 </web-app>

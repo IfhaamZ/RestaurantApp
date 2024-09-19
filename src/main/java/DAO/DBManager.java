@@ -186,6 +186,42 @@ public class DBManager {
         return null;
     }
 
+    // Method to fetch all available tables
+    public List<Table> fetchAvailableTables() throws SQLException {
+        List<Table> availableTables = new ArrayList<>();
+        String sql = "SELECT * FROM table_management WHERE status = 'Available'";
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+
+            while (rs.next()) {
+                Table table = new Table(
+                        rs.getInt("id"),
+                        rs.getString("status"),
+                        rs.getInt("capacity"));
+                availableTables.add(table);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching available tables: " + e.getMessage());
+            throw e; // Rethrow exception to be handled by the servlet or calling method
+        }
+
+        return availableTables;
+    }
+
+    // Reserve a table by updating its status and reservation time
+    public boolean reserveTable(int tableId, Timestamp reservationTime) throws SQLException {
+        String sql = "UPDATE table_management SET status = ?, reservation_time = ? WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, "Reserved");
+            st.setTimestamp(2, reservationTime);
+            st.setInt(3, tableId);
+            return st.executeUpdate() > 0;
+        }
+    }
+
     // Delete a table
     public boolean deleteTable(int id) throws SQLException {
         String sql = "DELETE FROM table_management WHERE id = ?";
