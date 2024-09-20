@@ -72,6 +72,7 @@
     <url-pattern>/tableupdate</url-pattern>
     <url-pattern>/tableavailability</url-pattern>
     <url-pattern>/tablereserve</url-pattern>
+    <url-pattern>/tablereserveform</url-pattern>
     <url-pattern>/tableedit</url-pattern>
     <url-pattern>/tablenew</url-pattern>
   </servlet-mapping>

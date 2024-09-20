@@ -12,7 +12,7 @@
         <nav>
             <ul>
                 <li><a href="index.jsp">Home</a></li>
-                <li><a href="TableManagement.jsp">Manage Tables</a></li>
+                <li><a href="tablelist">Manage Tables</a></li>
             </ul>
         </nav>
     </header>
@@ -29,7 +29,7 @@
                 </c:otherwise>
             </c:choose>
 
-            <label for="capacity">Table Capacity:</label>
+            <label for="capacity">Table Seats:</label>
             <input type="number" id="capacity" name="capacity" min="1" required value="${table != null ? table.capacity : ''}">
 
             <label for="status">Status:</label>
@@ -38,6 +38,11 @@
                 <option value="Occupied" ${table != null && table.status == 'Occupied' ? 'selected' : ''}>Occupied</option>
                 <option value="Reserved" ${table != null && table.status == 'Reserved' ? 'selected' : ''}>Reserved</option>
             </select>
+
+            <!-- Date and Time Picker for Reservation Time -->
+            <label for="reservationTime">Reservation Time:</label>
+            <input type="datetime-local" id="reservationTime" name="reservationTime" 
+                   value="${table != null && table.reservationTime != null ? table.reservationTime : ''}">
 
             <button type="submit" class="btn-submit">${table == null ? 'Add Table' : 'Update Table'}</button>
         </form>

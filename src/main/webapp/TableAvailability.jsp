@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Table Availability</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/TableManagement.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/TableAvailability.css">
 </head>
 <body>
     <header>
@@ -23,14 +23,12 @@
             <c:forEach var="table" items="${tables}">
                 <div class="table-item">
                     <p>Table ID: ${table.id}</p>
-                    <p>Capacity: ${table.capacity}</p>
-                    <p>Status: ${table.status}</p>
-                    <c:if test="${table.status == 'Available'}">
-                        <form action="tableReserve" method="post">
-                            <input type="hidden" name="tableId" value="${table.id}">
-                            <button type="submit">Reserve</button>
-                        </form>
-                    </c:if>
+                    <p>Seats: ${table.capacity}</p>
+                    <!-- Reserve Table -->
+                    <form action="tablereserveform" method="get" style="display:inline;">
+                        <input type="hidden" name="tableId" value="${table.id}">
+                        <button type="submit" class="btn-reserve">Reserve</button>
+                    </form>
                 </div>
             </c:forEach>
         </div>

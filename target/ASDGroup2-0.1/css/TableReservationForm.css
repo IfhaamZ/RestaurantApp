@@ -96,3 +96,17 @@ form select, form input {
 .btn-reserve:hover {
     background-color: #2980b9;
 }
+
+.cancel-btn {
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.cancel-btn:hover {
+    background-color: #c82333;
+}

@@ -13,31 +13,36 @@
         <nav>
             <ul>
                 <li><a href="index.jsp">Home</a></li>
-                <li><a href="tablenew">Add Table</a></li>
-                <li><a href="tableList">View Tables</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="container">
-        <h2>Available Tables</h2>
+        <h1>Manage Tables</h1>
+
+        <!-- Add Table Button -->
+        <div class="add-table-button-container">
+            <a href="tablenew" class="btn-add-table">Add Table</a>
+        </div>
+
         <div class="table-list">
             <c:forEach var="table" items="${tables}">
                 <div class="table-item">
-                    <h3>Table ID: ${table.id}</h3>
+                    <h3>🍽️ Table: ${table.id}</h3>
                     <p>Status: ${table.status}</p>
-                    <p>Capacity: ${table.capacity}</p>
+                    <p>Seats: ${table.capacity}</p>
+
+                    <!-- Display reservation details if the table is reserved -->
+                    <c:if test="${table.status == 'Reserved'}">
+                        <p><strong>Reserved By:</strong> ${table.reservedByName}</p>
+                        <p><strong>Contact:</strong> ${table.reservedByPhone}</p>
+                        <p><strong>Email:</strong> ${table.reservedByEmail}</p>
+                    </c:if>
 
                     <!-- Edit Table -->
                     <form action="tableedit" method="get" style="display:inline;">
                         <input type="hidden" name="tableId" value="${table.id}">
                         <button type="submit" class="btn-edit">Edit</button>
-                    </form>
-
-                    <!-- Reserve Table -->
-                    <form action="tablereserve" method="post" style="display:inline;">
-                        <input type="hidden" name="tableId" value="${table.id}">
-                        <button type="submit" class="btn-reserve">Reserve</button>
                     </form>
 
                     <!-- Delete Table -->

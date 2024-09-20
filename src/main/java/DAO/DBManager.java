@@ -1,6 +1,7 @@
 package DAO;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import model.Event;
@@ -135,17 +136,28 @@ public class DBManager {
                 PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, table.getCapacity());
             st.setString(2, table.getStatus());
+            if (table.getReservationTime() != null) {
+                st.setTimestamp(3, Timestamp.valueOf(table.getReservationTime()));
+            } else {
+                st.setNull(3, Types.TIMESTAMP);
+            }
             return st.executeUpdate() > 0;
         }
     }
 
-    // Update a table status
-    public boolean updateTableStatus(int tableId, String status) throws SQLException {
-        String sql = "UPDATE table_management SET status = ? WHERE id = ?";
+    // Update a table
+    public boolean updateTable(Table table) throws SQLException {
+        String sql = "UPDATE table_management SET capacity = ?, status = ?, reservation_time = ? WHERE id = ?";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, status);
-            st.setInt(2, tableId);
+            st.setInt(1, table.getCapacity());
+            st.setString(2, table.getStatus());
+            if (table.getReservationTime() != null) {
+                st.setTimestamp(3, Timestamp.valueOf(table.getReservationTime()));
+            } else {
+                st.setNull(3, Types.TIMESTAMP);
+            }
+            st.setInt(4, table.getId());
             return st.executeUpdate() > 0;
         }
     }
@@ -154,6 +166,7 @@ public class DBManager {
     public List<Table> fetchAllTables() throws SQLException {
         List<Table> tables = new ArrayList<>();
         String sql = "SELECT * FROM table_management";
+
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql);
                 ResultSet rs = st.executeQuery()) {
@@ -161,7 +174,13 @@ public class DBManager {
                 Table table = new Table(
                         rs.getInt("id"),
                         rs.getString("status"),
-                        rs.getInt("capacity"));
+                        rs.getInt("capacity"),
+                        rs.getTimestamp("reservation_time") != null
+                                ? rs.getTimestamp("reservation_time").toLocalDateTime()
+                                : null,
+                        rs.getString("reserved_by_name"),
+                        rs.getString("reserved_by_phone"),
+                        rs.getString("reserved_by_email"));
                 tables.add(table);
             }
         }
@@ -179,14 +198,20 @@ public class DBManager {
                     return new Table(
                             rs.getInt("id"),
                             rs.getString("status"),
-                            rs.getInt("capacity"));
+                            rs.getInt("capacity"),
+                            rs.getTimestamp("reservation_time") != null
+                                    ? rs.getTimestamp("reservation_time").toLocalDateTime()
+                                    : null,
+                            rs.getString("reserved_by_name"),
+                            rs.getString("reserved_by_phone"),
+                            rs.getString("reserved_by_email"));
                 }
             }
         }
         return null;
     }
 
-    // Method to fetch all available tables
+    // Fetch all available tables
     public List<Table> fetchAvailableTables() throws SQLException {
         List<Table> availableTables = new ArrayList<>();
         String sql = "SELECT * FROM table_management WHERE status = 'Available'";
@@ -194,30 +219,48 @@ public class DBManager {
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql);
                 ResultSet rs = st.executeQuery()) {
-
             while (rs.next()) {
                 Table table = new Table(
                         rs.getInt("id"),
                         rs.getString("status"),
-                        rs.getInt("capacity"));
+                        rs.getInt("capacity"),
+                        rs.getTimestamp("reservation_time") != null
+                                ? rs.getTimestamp("reservation_time").toLocalDateTime()
+                                : null,
+                        rs.getString("reserved_by_name"),
+                        rs.getString("reserved_by_phone"),
+                        rs.getString("reserved_by_email"));
                 availableTables.add(table);
             }
-        } catch (SQLException e) {
-            System.out.println("Error fetching available tables: " + e.getMessage());
-            throw e; // Rethrow exception to be handled by the servlet or calling method
         }
-
         return availableTables;
     }
 
     // Reserve a table by updating its status and reservation time
-    public boolean reserveTable(int tableId, Timestamp reservationTime) throws SQLException {
-        String sql = "UPDATE table_management SET status = ?, reservation_time = ? WHERE id = ?";
+    public boolean reserveTable(int tableId, LocalDateTime reservationTime, String reservedByName,
+            String reservedByPhone, String reservedByEmail) throws SQLException {
+        String sql = "UPDATE table_management SET status = ?, reservation_time = ?, reserved_by_name = ?, reserved_by_phone = ?, reserved_by_email = ? WHERE id = ?";
+
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
+
             st.setString(1, "Reserved");
-            st.setTimestamp(2, reservationTime);
-            st.setInt(3, tableId);
+            st.setTimestamp(2, Timestamp.valueOf(reservationTime));
+            st.setString(3, reservedByName);
+            st.setString(4, reservedByPhone);
+            st.setString(5, reservedByEmail);
+            st.setInt(6, tableId);
+
+            return st.executeUpdate() > 0;
+        }
+    }
+
+    // Clear reservation details when a table becomes available
+    public boolean clearReservationDetails(int tableId) throws SQLException {
+        String sql = "UPDATE table_management SET reservation_time = NULL, reserved_by_name = NULL, reserved_by_phone = NULL, reserved_by_email = NULL WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, tableId);
             return st.executeUpdate() > 0;
         }
     }

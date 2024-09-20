@@ -1,1 +1,3 @@
-SELECT * FROM tables;
+use restaurantdb;
+
+DESCRIBE table_management;
