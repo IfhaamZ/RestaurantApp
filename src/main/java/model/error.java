@@ -7,7 +7,28 @@ public class error {
     private String steps; // Steps to reproduce the error
     private String category; // Error category (e.g., UI, Backend, Database)
     private String severity; // Severity level (Low, Medium, High)
+    private String staffComments; // Comments provided by staff regarding the error
 
+    // Constructor with staff comments
+    public error(int id, String description, String steps, String category, String severity, String staffComments) {
+        this.id = id;
+        this.description = description;
+        this.steps = steps;
+        this.category = category;
+        this.severity = severity;
+        this.staffComments = staffComments;
+    }
+
+    // Constructor without staff comments
+    public error(int id, String description, String steps, String category, String severity) {
+        this.id = id;
+        this.description = description;
+        this.steps = steps;
+        this.category = category;
+        this.severity = severity;
+    }
+
+    // Getter and Setter for ID
     public int getId() {
         return id;
     }
@@ -16,6 +37,7 @@ public class error {
         this.id = id;
     }
 
+    // Getter and Setter for Description
     public String getDescription() {
         return description;
     }
@@ -24,6 +46,7 @@ public class error {
         this.description = description;
     }
 
+    // Getter and Setter for Steps
     public String getSteps() {
         return steps;
     }
@@ -32,6 +55,7 @@ public class error {
         this.steps = steps;
     }
 
+    // Getter and Setter for Category
     public String getCategory() {
         return category;
     }
@@ -40,6 +64,7 @@ public class error {
         this.category = category;
     }
 
+    // Getter and Setter for Severity
     public String getSeverity() {
         return severity;
     }
@@ -48,13 +73,12 @@ public class error {
         this.severity = severity;
     }
 
-    public error(int id, String description, String steps, String category, String severity) {
-
-        this.id = id;
-        this.description = description;
-        this.steps = steps;
-        this.category = category;
-        this.severity = severity;
+    // Getter and Setter for Staff Comments
+    public String getStaffComments() {
+        return staffComments;
     }
 
+    public void setStaffComments(String staffComments) {
+        this.staffComments = staffComments;
+    }
 }

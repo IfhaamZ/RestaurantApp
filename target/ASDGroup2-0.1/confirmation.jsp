@@ -32,6 +32,11 @@
             font-size: 20px;
             color: #28a745;
         }
+        .error-id {
+            font-size: 18px;
+            color: #007bff;
+            margin-top: 15px;
+        }
         a {
             text-decoration: none;
             color: #007bff;
@@ -61,9 +66,11 @@
         <!-- Display the success message dynamically passed from the servlet -->
         <p class="success-message">${successMessage}</p>
         <p>Your error report has been successfully submitted and is being reviewed.</p>
+
+        <!-- Display the error ID for customer tracking -->
+        <p class="error-id">Your error ID is: <strong>${errorId}</strong></p>
+        
         <a href="${pageContext.request.contextPath}/error/dashboard" class="btn">Return to Dashboard</a>
-
-
     </div>
 
 </body>

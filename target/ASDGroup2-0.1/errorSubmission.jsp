@@ -81,10 +81,12 @@
         }
 
         /* Button Styles */
-        .submit-btn {
+        .submit-btn,
+        .view-btn {
             display: block;
             width: 100%;
             padding: 15px;
+            margin-top: 10px;
             background-color: #007bff;
             color: white;
             border: none;
@@ -99,6 +101,14 @@
         .submit-btn:hover {
             background-color: #0056b3;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .view-btn {
+            background-color: #28a745;
+        }
+
+        .view-btn:hover {
+            background-color: #218838;
         }
 
         /* Additional Styling */
@@ -178,7 +188,7 @@
         <div class="form-header">
             <h2>Report an Error</h2>
         </div>
-        <form action="error/submit" method="post" onsubmit="return validateForm()"> <!-- Updated action URL -->
+        <form action="error/submit" method="post" onsubmit="return validateForm()">
             
             <!-- Error Description -->
             <div class="form-group">
@@ -221,6 +231,12 @@
 
             <!-- Submit Button -->
             <button type="submit" id="submit-btn" class="submit-btn">Submit Error Report</button>
+        </form>
+
+        <!-- View Update Button -->
+        <form action="viewError.jsp" method="get">
+            <input type="text" name="id" placeholder="Enter Error ID to View Staff Update" required>
+            <button type="submit" class="view-btn">View Update from Staff</button>
         </form>
 
         <!-- Submitting message -->

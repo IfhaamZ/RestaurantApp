@@ -42,6 +42,12 @@
             margin-bottom: 20px;
         }
 
+        h3 {
+            color: #28a745;
+            font-size: 22px;
+            margin-top: 20px;
+        }
+
         p {
             font-size: 18px;
             margin: 10px 0;

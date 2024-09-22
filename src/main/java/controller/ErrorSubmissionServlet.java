@@ -103,12 +103,20 @@ public class ErrorSubmissionServlet extends HttpServlet {
         }
 
         // Delegate database operation to DBManager
-        boolean success = dbManager.createErrorReport(description, steps, category, severity);
-        if (success) {
-            logger.info("Error report inserted into the database successfully.");
-            response.sendRedirect(request.getContextPath() + "/error/confirmation"); // Redirect to confirmation page
-        } else {
-            logger.warning("Insert operation failed. No rows were inserted.");
+        try {
+            int errorId = dbManager.createErrorReportAndReturnID(description, steps, category, severity);
+            logger.info("Error report inserted into the database successfully with ID: " + errorId);
+
+            // Set success message and error ID for tracking
+            request.setAttribute("successMessage", "Your error report was successfully submitted.");
+            request.setAttribute("errorId", errorId); // Attach the generated error ID to the request
+
+            // Redirect to confirmation page
+            request.setAttribute("errorId", errorId); // Set errorId as a request attribute
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/confirmation.jsp");
+            dispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error occurred while submitting error report", e);
             request.setAttribute("errorMessage", "Failed to submit your error report. Please try again.");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/errorSubmission.jsp");
             dispatcher.forward(request, response);
