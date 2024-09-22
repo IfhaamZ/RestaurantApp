@@ -7,14 +7,12 @@ import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import DAO.DBManager;
 
-@WebServlet("/error/*") // Use a wildcard to handle multiple error-related routes
 public class ErrorSubmissionServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ErrorSubmissionServlet.class.getName());
@@ -31,14 +29,14 @@ public class ErrorSubmissionServlet extends HttpServlet {
         }
     }
 
-    // Handle POST requests and forward to doGet
+    // Handle POST requests by forwarding to doGet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Forwarding POST requests to doGet to handle form submissions similarly
+        doGet(request, response);
     }
 
-    // Handle GET requests and route based on path
+    // Handle GET requests
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -51,16 +49,16 @@ public class ErrorSubmissionServlet extends HttpServlet {
                     submitError(request, response); // Handle error submission
                     break;
                 case "/form":
-                    showForm(request, response); // Show the error submission form
+                    showForm(request, response); // Show error submission form
                     break;
                 case "/confirmation":
-                    showConfirmation(request, response); // Show confirmation after submission
+                    showConfirmation(request, response); // Show confirmation page
                     break;
-                case "/dashboard": // Handle redirect to the dashboard
-                    returnToDashboard(request, response);
+                case "/dashboard":
+                    returnToDashboard(request, response); // Redirect to dashboard
                     break;
                 default:
-                    listErrors(request, response); // Default action, e.g., show list of errors (if needed)
+                    showForm(request, response); // Default action
                     break;
             }
         } catch (SQLException ex) {
@@ -69,7 +67,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
         }
     }
 
-    // Show error submission form
+    // Show the error submission form
     private void showForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("Displaying error submission form.");
@@ -77,7 +75,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    // Submit error report
+    // Submit the error report
     private void submitError(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
 
@@ -109,10 +107,9 @@ public class ErrorSubmissionServlet extends HttpServlet {
 
             // Set success message and error ID for tracking
             request.setAttribute("successMessage", "Your error report was successfully submitted.");
-            request.setAttribute("errorId", errorId); // Attach the generated error ID to the request
+            request.setAttribute("errorId", errorId);
 
             // Redirect to confirmation page
-            request.setAttribute("errorId", errorId); // Set errorId as a request attribute
             RequestDispatcher dispatcher = request.getRequestDispatcher("/confirmation.jsp");
             dispatcher.forward(request, response);
         } catch (SQLException e) {
@@ -135,15 +132,6 @@ public class ErrorSubmissionServlet extends HttpServlet {
     private void returnToDashboard(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("Redirecting to the dashboard.");
-        response.sendRedirect(request.getContextPath() + "/dashboard.jsp"); // Adjust path as needed
-    }
-
-    // (Optional) List submitted errors (not part of original logic, can be used for
-    // error listing)
-    private void listErrors(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        // Placeholder for future expansion, like listing all submitted errors.
-        // For now, it can just redirect to the form
-        response.sendRedirect(request.getContextPath() + "/error/form");
+        response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
     }
 }
