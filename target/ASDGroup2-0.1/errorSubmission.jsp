@@ -188,7 +188,7 @@
         <div class="form-header">
             <h2>Report an Error</h2>
         </div>
-        <form action="error/submit" method="post" onsubmit="return validateForm()">
+        <form action="error/submit" method="post" onsubmit="return validateForm()"> <!-- Updated action URL -->
             
             <!-- Error Description -->
             <div class="form-group">
@@ -234,10 +234,8 @@
         </form>
 
         <!-- View Update Button -->
-        <form action="viewError.jsp" method="get">
-            <input type="text" name="id" placeholder="Enter Error ID to View Staff Update" required>
-            <button type="submit" class="view-btn">View Update from Staff</button>
-        </form>
+        <!-- Instead of requiring input here, just link to the viewError.jsp page -->
+        <button class="view-btn" onclick="window.location.href='viewError.jsp'">View Update from Staff</button>
 
         <!-- Submitting message -->
         <div id="submit-message" class="submit-message">Submitting your error report, please wait...</div>
