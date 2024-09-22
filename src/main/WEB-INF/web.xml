@@ -6,30 +6,20 @@
     <!-- Display Name -->
     <display-name>RestaurantApp</display-name>
 
-<!-- Controller Servlet -->
-<servlet>
-    <servlet-name>ControllerServlet</servlet-name>
-    <servlet-class>controller.ControllerServlet</servlet-class>  <!-- Ensure the class path is correct -->
-</servlet>
+    <!-- ErrorSubmissionServlet to handle error form submissions -->
+    <servlet>
+        <servlet-name>ErrorSubmissionServlet</servlet-name>
+        <servlet-class>controller.ErrorSubmissionServlet</servlet-class>
+    </servlet>
 
-<servlet-mapping>
-    <servlet-name>ControllerServlet</servlet-name>
-    <url-pattern>/dashboard</url-pattern>  <!-- Maps requests to /dashboard -->
-</servlet-mapping>
-<!-- ErrorSubmissionServlet to handle error form submissions -->
-<servlet>
-    <servlet-name>ErrorSubmissionServlet</servlet-name>
-    <servlet-class>controller.ErrorSubmissionServlet</servlet-class>
-</servlet>
-
-<servlet-mapping>
-    <servlet-name>ErrorSubmissionServlet</servlet-name>
-    <url-pattern>/submit</url-pattern>  <!-- To show add event form -->
-    <url-pattern>/form</url-pattern>  <!-- To handle new event insertion -->
-    <url-pattern>/confirmation</url-pattern>  <!-- To show edit event form -->
-    <url-pattern>/submitError</url-pattern>  <!-- To show edit event form -->
-    <url-pattern>/error/dashboard</url-pattern>  <!-- To handle return to dashboard -->
-</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ErrorSubmissionServlet</servlet-name>
+        <url-pattern>/submit</url-pattern>  <!-- To show add event form -->
+        <url-pattern>/form</url-pattern>  <!-- To handle new event insertion -->
+        <url-pattern>/confirmation</url-pattern>  <!-- To show edit event form -->
+        <url-pattern>/submitError</url-pattern>  <!-- To show edit event form -->
+        <url-pattern>/dashboard</url-pattern>  <!-- To handle return to dashboard -->
+    </servlet-mapping>
 
     <!-- FeedbackSubmissionServlet to handle feedback form submissions -->
     <servlet>
