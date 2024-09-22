@@ -19,7 +19,7 @@
         <url-pattern>/confirmation</url-pattern>  <!-- To show edit event form -->
         <url-pattern>/submitError</url-pattern>  <!-- To show edit event form -->
         <url-pattern>/error/dashboard</url-pattern>  <!-- To handle return to dashboard -->
-      </servlet-mapping>
+    </servlet-mapping>
 
     <!-- FeedbackSubmissionServlet to handle feedback form submissions -->
     <servlet>
