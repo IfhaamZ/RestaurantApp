@@ -125,7 +125,7 @@
         <div class="card">
             <h2>Provide Feedback</h2>
             <p>Tell us about your dining experience and let us know how we did!</p>
-            <button onclick="location.href='feedback.jsp'">Give Feedback</button>
+            <button onclick="location.href='/formSubmit'">Give Feedback</button>
         </div>
     </div>
 

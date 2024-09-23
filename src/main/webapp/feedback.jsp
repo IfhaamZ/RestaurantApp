@@ -105,6 +105,22 @@
             font-size: 16px;
         }
 
+        .view-feedback {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .view-feedback a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .view-feedback a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
             .container {
                 width: 90%;
@@ -140,7 +156,7 @@
         <div class="form-header">
             <h2>Submit Feedback</h2>
         </div>
-        <form action="/submitFeedback" method="post" onsubmit="return validateForm()">
+        <form action="/feedbackSubmit" method="post" onsubmit="return validateForm()">
             
             <!-- Name -->
             <div class="form-group">
@@ -179,6 +195,11 @@
 
         <!-- Submitting message -->
         <div id="submit-message" class="submit-message">Submitting your feedback, please wait...</div>
+
+        <!-- Add a section to link to customer feedback view -->
+        <div class="view-feedback">
+            <p>Want to check the status of your feedback? <a href="/lookupFeedback.jsp">View Feedback Status</a></p>
+        </div>
     </div>
 
 </body>

@@ -35,6 +35,12 @@
             margin-bottom: 20px;
         }
 
+        .feedback-id {
+            font-size: 18px;
+            color: #007bff;
+            margin-top: 15px;
+        }
+
         a {
             display: inline-block;
             padding: 10px 20px;
@@ -55,7 +61,11 @@
     <div class="confirmation-box">
         <h2>Thank You for Your Feedback!</h2>
         <p>Your feedback has been submitted successfully.</p>
-        <a href="dashboard.jsp">Go to Dashboard</a>
+        
+        <!-- Display the feedback ID for customer tracking -->
+        <p class="feedback-id">Your feedback ID is: <strong>${feedbackId}</strong></p>
+        
+        <a href="/backDashboard" class="btn">Return to Dashboard</a>
     </div>
 
 </body>

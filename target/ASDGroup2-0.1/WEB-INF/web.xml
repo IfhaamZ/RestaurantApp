@@ -36,15 +36,23 @@
         <url-pattern>/viewError</url-pattern>
         <url-pattern>/update</url-pattern>
     </servlet-mapping>
-</web-app>
 
-    <!-- FeedbackSubmissionServlet to handle feedback form submissions -->
-    <!-- <servlet>
+<!-- FeedbackSubmissionServlet to handle feedback form submissions -->
+    <servlet>
         <servlet-name>FeedbackSubmissionServlet</servlet-name>
         <servlet-class>controller.FeedbackSubmissionServlet</servlet-class>
-    </servlet> -->
+    </servlet>
 
-    <!-- <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>FeedbackSubmissionServlet</servlet-name>
-        <url-pattern>/submitFeedback</url-pattern> 
-    </servlet-mapping> -->
+        <url-pattern>/feedbackSubmit</url-pattern> <!-- To handle feedback form submission -->
+        <url-pattern>/formSubmit</url-pattern>  <!-- To show feedback confirmation page -->
+        <url-pattern>/feedbackConfirmation</url-pattern>  <!-- To show feedback form -->
+        <url-pattern>/backDashboard</url-pattern>
+        <url-pattern>/viewFeedback</url-pattern>
+        <url-pattern>/submitStaffFeedbackResponse</url-pattern>
+        <url-pattern>/viewCustomerFeedback</url-pattern>
+        <url-pattern>/lookupFeedback</url-pattern>
+        <url-pattern>/updateFeedback</url-pattern>
+    </servlet-mapping>
+</web-app>

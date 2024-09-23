@@ -10,8 +10,21 @@ public class feedback {
     private String feedbackText; // Customer's feedback
     private int rating; // Rating (1-5)
     private Timestamp createdAt; // Timestamp when the feedback was created
+    private String staffResponse; // Response from the staff
 
-    // Constructor
+    // Constructor with staff feedback
+    public feedback(int feedbackId, String customerName, String customerEmail, String feedbackText, int rating,
+            String staffResponse, Timestamp createdAt) {
+        this.feedbackId = feedbackId;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+        this.feedbackText = feedbackText;
+        this.rating = rating;
+        this.staffResponse = staffResponse;
+        this.createdAt = createdAt;
+    }
+
+    // Constructor without staff feedback
     public feedback(int feedbackId, String customerName, String customerEmail, String feedbackText, int rating,
             Timestamp createdAt) {
         this.feedbackId = feedbackId;
@@ -69,5 +82,13 @@ public class feedback {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getStaffResponse() {
+        return staffResponse;
+    }
+
+    public void setStaffResponse(String staffResponse) {
+        this.staffResponse = staffResponse;
     }
 }

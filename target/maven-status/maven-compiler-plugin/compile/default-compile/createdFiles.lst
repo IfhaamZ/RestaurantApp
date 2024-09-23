@@ -1,8 +1,6 @@
-controller\FeedbackSubmissionServlet.class
 DAO\DBConnector.class
 model\error.class
 DAO\CreateDB.class
-controller\UpdateErrorServlet.class
 DAO\DBManager.class
 model\feedback.class
 controller\ErrorSubmissionServlet.class

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.error;
+import model.feedback;
 
 public class DBManager {
 
@@ -123,6 +124,104 @@ public class DBManager {
             statement.setInt(4, rating);
 
             // Execute update and return whether the operation was successful
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+    // Method to create feedback and return its generated ID
+    public int createFeedbackAndReturnID(String customerName, String customerEmail, String feedbackText, int rating)
+            throws SQLException {
+        String sql = "INSERT INTO feedback (customer_name, customer_email, feedback_text, rating) VALUES (?, ?, ?, ?)";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql,
+                        PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            // Set parameters for the feedback submission
+            statement.setString(1, customerName);
+            statement.setString(2, customerEmail);
+            statement.setString(3, feedbackText);
+            statement.setInt(4, rating);
+
+            // Execute update
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Feedback submission failed, no rows affected.");
+            }
+
+            // Retrieve the generated ID
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Return the generated ID
+                } else {
+                    throw new SQLException("Feedback submission failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
+    // Method to get feedback by ID
+    public feedback getFeedbackById(int feedbackId) throws SQLException {
+        String sql = "SELECT * FROM feedback WHERE feedback_id = ?"; // Changed from 'id' to 'feedback_id'
+        feedback fb = null;
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, feedbackId);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    // Assuming the feedback table has columns: feedback_id, customer_name, email,
+                    // feedback_text, rating, staff_response
+                    fb = new feedback(
+                            rs.getInt("feedback_id"), // Use feedback_id here
+                            rs.getString("customer_name"),
+                            rs.getString("customer_email"),
+                            rs.getString("feedback_text"),
+                            rs.getInt("rating"),
+                            rs.getString("staff_response"),
+                            rs.getTimestamp("created_at") // Assuming this is a timestamp field
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching feedback by ID", e);
+        }
+        return fb;
+    }
+
+    public List<feedback> getAllFeedback() throws SQLException {
+        String sql = "SELECT * FROM feedback";
+        List<feedback> feedbackList = new ArrayList<>();
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                feedback fb = new feedback(
+                        resultSet.getInt("feedback_id"), // Changed from 'id' to 'feedback_id'
+                        resultSet.getString("customer_name"),
+                        resultSet.getString("customer_email"),
+                        resultSet.getString("feedback_text"),
+                        resultSet.getInt("rating"),
+                        resultSet.getString("staff_response"), // Staff response added
+                        resultSet.getTimestamp("created_at") // Created at timestamp added
+                );
+                feedbackList.add(fb);
+            }
+        }
+        return feedbackList;
+    }
+
+    // Method to update feedback with staff response
+    public boolean updateFeedbackWithResponse(int feedbackId, String staffResponse) throws SQLException {
+        String sql = "UPDATE feedback SET staff_response=? WHERE feedback_id=?"; // Changed from 'id' to 'feedback_id'
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, staffResponse);
+            statement.setInt(2, feedbackId);
+
             return statement.executeUpdate() > 0;
         }
     }

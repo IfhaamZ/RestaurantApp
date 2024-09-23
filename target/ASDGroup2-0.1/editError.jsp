@@ -129,7 +129,7 @@
 
     <h1>Edit Error Report</h1>
 
-    <form action="updateError" method="post" onsubmit="return validateForm()">
+    <form action="/update" method="post" onsubmit="return validateForm()">
         <input type="hidden" name="id" value="<%= err.getId() %>">
 
         <label for="description">Description:</label>
