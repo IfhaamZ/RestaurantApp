@@ -34,6 +34,7 @@
         <url-pattern>/submitError</url-pattern>  <!-- To show edit event form -->
         <url-pattern>/dashboard</url-pattern>  <!-- To handle return to dashboard -->
         <url-pattern>/viewError</url-pattern>
+        <url-pattern>/update</url-pattern>
     </servlet-mapping>
 </web-app>
 
