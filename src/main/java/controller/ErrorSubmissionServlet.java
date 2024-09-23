@@ -7,14 +7,14 @@ import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import DAO.DBManager;
 
-@WebServlet("/error/*") // Use a wildcard to handle multiple error-related routes
+//@WebServlet("/error/*") // Use a wildcard to handle multiple error-related routes
 public class ErrorSubmissionServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ErrorSubmissionServlet.class.getName());
@@ -43,7 +43,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = request.getPathInfo(); // Get the path after /error
+        String action = request.getServletPath(); // Get the path after /error
 
         try {
             switch (action) {
@@ -58,6 +58,9 @@ public class ErrorSubmissionServlet extends HttpServlet {
                     break;
                 case "/dashboard": // Handle redirect to the dashboard
                     returnToDashboard(request, response);
+                    break;
+                case "/viewError": // Handle redirect to the dashboard
+                    viewError(request, response);
                     break;
                 default:
                     listErrors(request, response); // Default action, e.g., show list of errors (if needed)
@@ -74,6 +77,14 @@ public class ErrorSubmissionServlet extends HttpServlet {
             throws ServletException, IOException {
         logger.info("Displaying error submission form.");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/errorSubmission.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    // Show error submission form
+    private void viewError(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("Displaying error submission form.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/viewError.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -144,6 +155,6 @@ public class ErrorSubmissionServlet extends HttpServlet {
             throws ServletException, IOException, SQLException {
         // Placeholder for future expansion, like listing all submitted errors.
         // For now, it can just redirect to the form
-        response.sendRedirect(request.getContextPath() + "/error/form");
+        response.sendRedirect(request.getContextPath() + "/form");
     }
 }

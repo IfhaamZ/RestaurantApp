@@ -120,7 +120,7 @@
         <div class="card">
             <h2>Report an Error</h2>
             <p>If you've encountered an issue, click below to report it to us.</p>
-            <button onclick="location.href='errorSubmission.jsp'">Report an Error</button>
+            <button onclick="location.href='/form'">Report an Error</button>
         </div>
         <div class="card">
             <h2>Provide Feedback</h2>

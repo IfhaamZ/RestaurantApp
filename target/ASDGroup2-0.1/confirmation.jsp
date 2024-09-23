@@ -70,7 +70,7 @@
         <!-- Display the error ID for customer tracking -->
         <p class="error-id">Your error ID is: <strong>${errorId}</strong></p>
         
-        <a href="${pageContext.request.contextPath}/error/dashboard" class="btn">Return to Dashboard</a>
+        <a href="/dashboard" class="btn">Return to Dashboard</a>
     </div>
 
 </body>
