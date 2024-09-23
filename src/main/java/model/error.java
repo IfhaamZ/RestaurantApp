@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Timestamp;
+
 public class error {
 
     private int id; // Unique identifier for the error
@@ -8,24 +10,28 @@ public class error {
     private String category; // Error category (e.g., UI, Backend, Database)
     private String severity; // Severity level (Low, Medium, High)
     private String staffComments; // Comments provided by staff regarding the error
+    private Timestamp createdAt; // Timestamp when the error was created
 
-    // Constructor with staff comments
-    public error(int id, String description, String steps, String category, String severity, String staffComments) {
+    // Constructor with staff comments and createdAt timestamp
+    public error(int id, String description, String steps, String category, String severity, String staffComments,
+            Timestamp createdAt) {
         this.id = id;
         this.description = description;
         this.steps = steps;
         this.category = category;
         this.severity = severity;
         this.staffComments = staffComments;
+        this.createdAt = createdAt; // Initialize createdAt timestamp
     }
 
-    // Constructor without staff comments
-    public error(int id, String description, String steps, String category, String severity) {
+    // Constructor without staff comments, but with createdAt timestamp
+    public error(int id, String description, String steps, String category, String severity, Timestamp createdAt) {
         this.id = id;
         this.description = description;
         this.steps = steps;
         this.category = category;
         this.severity = severity;
+        this.createdAt = createdAt; // Initialize createdAt timestamp
     }
 
     // Getter and Setter for ID
@@ -80,5 +86,14 @@ public class error {
 
     public void setStaffComments(String staffComments) {
         this.staffComments = staffComments;
+    }
+
+    // Getter and Setter for CreatedAt
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 }

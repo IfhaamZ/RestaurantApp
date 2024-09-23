@@ -2,6 +2,8 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,10 +118,12 @@ public class ErrorSubmissionServlet extends HttpServlet {
             dispatcher.forward(request, response);
             return;
         }
+        // Generate the current timestamp
+        Timestamp createdAt = Timestamp.from(Instant.now());
 
         // Delegate database operation to DBManager
         try {
-            int errorId = dbManager.createErrorReportAndReturnID(description, steps, category, severity);
+            int errorId = dbManager.createErrorReportAndReturnID(description, steps, category, severity, createdAt);
             logger.info("Error report inserted into the database successfully with ID: " + errorId);
 
             // Set success message and error ID for tracking
@@ -159,13 +163,13 @@ public class ErrorSubmissionServlet extends HttpServlet {
 
         // Proceed to update the error report
         int id = Integer.parseInt(idStr);
-        error error = new error(id, description, steps, category, severity, staffComments); // Pass staff comments
+        error error = new error(id, description, steps, category, severity, staffComments, null); // Pass staff comments
 
         try {
             boolean success = dbManager.updateErrorReport(error); // Include staff comments in the update
             if (success) {
                 logger.info("Error report updated successfully with ID: " + id);
-                response.sendRedirect("staffDashboard.jsp"); // Redirect back to dashboard
+                response.sendRedirect("/staffDashboard.jsp"); // Redirect back to dashboard
             } else {
                 logger.warning("Failed to update error report with ID: " + id);
                 handleError(request, response, "Failed to update the error report.");

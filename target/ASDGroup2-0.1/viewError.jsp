@@ -174,6 +174,8 @@
         <p><strong>Category:</strong> <%= err.getCategory() != null ? err.getCategory() : "Uncategorized" %></p>
         <p><strong>Severity:</strong> <%= err.getSeverity() != null ? err.getSeverity() : "Unknown" %></p>
 
+<!-- Display createdAt field -->
+        <p><strong>Date Submitted:</strong> <%= err.getCreatedAt() != null ? err.getCreatedAt() : "N/A" %></p> <!-- Display Created At -->
         <!-- Display staff comments to the customer -->
         <h3>Update from Staff</h3>
         <p><%= err.getStaffComments() != null ? err.getStaffComments() : "No updates yet." %></p>

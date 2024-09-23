@@ -92,7 +92,7 @@
     %>
         <h2>Error: No feedback ID provided</h2>
         <div class="input-container">
-            <form action="lookupfeedback.jsp" method="get">
+            <form action="lookupFeedback.jsp" method="get">
                 <label for="feedbackId">Enter Feedback ID:</label>
                 <input type="text" id="feedbackId" name="id" required>
                 <input type="submit" value="View Feedback">

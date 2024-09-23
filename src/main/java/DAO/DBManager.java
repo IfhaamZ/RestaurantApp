@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +14,10 @@ import model.feedback;
 public class DBManager {
 
     // Method to create a new error report and return its generated ID
-    public int createErrorReportAndReturnID(String description, String steps, String category, String severity)
+    public int createErrorReportAndReturnID(String description, String steps, String category, String severity,
+            Timestamp createdAt)
             throws SQLException {
-        String sql = "INSERT INTO errors (description, steps, category, severity) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO errors (description, steps, category, severity, created_at) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql,
                         PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -25,6 +27,7 @@ public class DBManager {
             statement.setString(2, steps);
             statement.setString(3, category);
             statement.setString(4, severity);
+            statement.setTimestamp(5, createdAt); // Set the created_at timestamp
 
             // Execute update
             int affectedRows = statement.executeUpdate();
@@ -59,7 +62,8 @@ public class DBManager {
                         resultSet.getString("description"),
                         resultSet.getString("steps"),
                         resultSet.getString("category"),
-                        resultSet.getString("severity"));
+                        resultSet.getString("severity"),
+                        resultSet.getTimestamp("created_at")); // Retrieve createdAt
                 errorReport.setStaffComments(resultSet.getString("staff_comments")); // Retrieve staff comments
                 errorReports.add(errorReport);
             }
@@ -80,7 +84,7 @@ public class DBManager {
             statement.setString(3, errorReport.getCategory());
             statement.setString(4, errorReport.getSeverity());
             statement.setString(5, errorReport.getStaffComments()); // Update staff comments
-            statement.setInt(6, errorReport.getId());
+            statement.setInt(6, errorReport.getId()); // Error ID for the WHERE clause
 
             // Execute update and return whether the operation was successful
             return statement.executeUpdate() > 0;
@@ -102,8 +106,9 @@ public class DBManager {
                             resultSet.getString("description"),
                             resultSet.getString("steps"),
                             resultSet.getString("category"),
-                            resultSet.getString("severity"));
-                    errorReport.setStaffComments(resultSet.getString("staff_comments")); // Retrieve staff comments
+                            resultSet.getString("severity"),
+                            resultSet.getTimestamp("created_at"));
+                    errorReport.setStaffComments(resultSet.getString("staff_comments"));
                 }
             }
         }

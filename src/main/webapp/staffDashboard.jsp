@@ -121,6 +121,7 @@
             <th>Category</th>
             <th>Severity</th>
             <th>Staff Comments</th>
+            <th>Date Submitted</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -138,6 +139,7 @@
             <td><%= err.getCategory() %></td>
             <td><%= err.getSeverity() %></td>
             <td><%= err.getStaffComments() != null ? err.getStaffComments() : "No comments yet" %></td>
+            <td><%= err.getCreatedAt() != null ? err.getCreatedAt() : "N/A" %></td> <!-- Display Created At -->
             <td><a href="editError.jsp?id=<%= err.getId() %>" class="btn">Edit</a></td>
         </tr>
         <%

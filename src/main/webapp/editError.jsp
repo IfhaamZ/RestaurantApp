@@ -147,6 +147,10 @@
         <label for="staffComments">Staff Comments:</label>
         <textarea id="staffComments" name="staffComments"><%= err.getStaffComments() != null ? err.getStaffComments() : "" %></textarea>
 
+<!-- Display the createdAt field as non-editable information -->
+    <label for="createdAt">Date Submitted:</label>
+    <input id="createdAt" type="text" name="createdAt" value="<%= err.getCreatedAt() != null ? err.getCreatedAt() : "N/A" %>" readonly>
+        
         <input type="submit" value="Update Error Report">
     </form>
 
