@@ -36,14 +36,14 @@ public class ErrorSubmissionServlet extends HttpServlet {
 
     // Handle POST requests and forward to doGet
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request, response); // Forwarding POST requests to doGet to handle form submissions similarly
     }
 
     // Handle GET requests and route based on path
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String action = request.getServletPath(); // Get the path after /error
