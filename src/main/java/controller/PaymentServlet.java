@@ -7,7 +7,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import DAO.DBManager;
+
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
 
 @WebServlet("/managePayment")
 public class PaymentServlet extends HttpServlet {
@@ -25,33 +30,44 @@ public class PaymentServlet extends HttpServlet {
         String paymentDate = request.getParameter("paymentDate");
         String action = request.getParameter("action"); // "cancel" or "submit"
 
-        // Create or retrieve the Payment object from the session (if it exists)
-        Payment payment = (Payment) request.getSession().getAttribute("payment");
+        // DBManager instance
+        DBManager dbManager = new DBManager();
 
-        if (payment == null) {
-            payment = new Payment();
-        }
+        try {
+            // Check if the payment already exists in the session
+            Payment payment = (Payment) request.getSession().getAttribute("payment");
 
-        // Set payment details
-        payment.setMethod(method);
-        payment.setCardNum(cardNum);
-        payment.setExpMonth(expMonth);
-        payment.setExpYear(expYear);
-        payment.setCVN(cvn);
-        payment.setPaymentAmount(paymentAmount);
-        payment.setPaymentDate(paymentDate);
+            if (payment == null) {
+                // If no payment exists in the session, create a new Payment object
+                payment = new Payment(null, method, cardNum, expMonth, expYear, cvn, paymentAmount, paymentDate, null);
+            }
 
-        // Handle action (either submit or cancel payment)
-        if ("cancel".equals(action)) {
-            payment.cancelPayment();
+            // Set payment details
+            payment.setMethod(method);
+            payment.setCardNum(cardNum); // Encrypt the cardNum here
+            payment.setExpMonth(expMonth);
+            payment.setExpYear(expYear);
+            payment.setCVN(cvn); // Encrypt the CVN here
+            payment.setPaymentAmount(paymentAmount);
+            payment.setPaymentDate(paymentDate);
+
+            if ("cancel".equals(action)) {
+                payment.cancelPayment();
+                request.setAttribute("message", "Payment has been cancelled.");
+            } else {
+                dbManager.createPayment(payment);
+                payment.processPayment();
+                request.setAttribute("message", "Payment processed successfully.");
+            }
+
+            // Update session and redirect to status page
             request.getSession().setAttribute("payment", payment);
-            request.setAttribute("message", "Payment has been cancelled.");
             request.getRequestDispatcher("paymentStatus.jsp").forward(request, response);
-        } else {
-            // Process the payment (in real applications, you'd save to a database)
-            request.getSession().setAttribute("payment", payment);
-            request.setAttribute("message", "Payment processed successfully.");
-            request.getRequestDispatcher("paymentStatus.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "There was an issue processing the payment.");
+            request.getRequestDispatcher("paymentError.jsp").forward(request, response);
         }
     }
 }

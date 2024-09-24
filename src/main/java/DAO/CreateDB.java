@@ -9,8 +9,10 @@ public class CreateDB {
 
     protected static final String db_url = "jdbc:mysql://localhost:3306/";
     protected static final String db_user = "root";
-    protected static final String db_pass = "Lama1234!";
+    protected static final String db_pass = "password123";
     protected static final String db_name = "restaurantdb";
+    // Group DB password
+    // protected static final String db_pass = "Lama1234!";
 
     public static void main(String[] args) {
         try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pass);
@@ -48,5 +50,21 @@ public class CreateDB {
                     "reservation_time TIMESTAMP)");
             System.out.println("Table Management table creation successful.");
         }
+
+        // Create payment table
+        try (Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Payment (" +
+                    "paymentID INT AUTO_INCREMENT PRIMARY KEY," +
+                    "method VARCHAR(50)," +
+                    "cardNum VARBINARY(255)," + // Use VARBINARY for encrypted data
+                    "expMonth VARCHAR(2)," +
+                    "expYear VARCHAR(4)," +
+                    "cvn VARBINARY(255)," + // Use VARBINARY for encrypted data
+                    "paymentAmount DECIMAL(10, 2)," +
+                    "paymentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                    "isCancelled BOOLEAN DEFAULT FALSE)");
+            System.out.println("Payment table creation successful.");
+        }
+
     }
 }
