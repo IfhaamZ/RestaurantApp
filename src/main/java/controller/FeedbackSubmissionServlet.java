@@ -167,7 +167,7 @@ public class FeedbackSubmissionServlet extends HttpServlet {
     }
 
     // Staff access: update feedback with staff responses for multiple feedbacks
-    private void submitStaffFeedbackResponse(HttpServletRequest request, HttpServletResponse response)
+    public void submitStaffFeedbackResponse(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         logger.info("Processing staff feedback responses.");
 

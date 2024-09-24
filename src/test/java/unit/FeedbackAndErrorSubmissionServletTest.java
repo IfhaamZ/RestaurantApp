@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import DAO.DBManager;
 import controller.ErrorSubmissionServlet;
 import controller.FeedbackSubmissionServlet;
+import model.feedback;
 
 public class FeedbackAndErrorSubmissionServletTest {
     private FeedbackSubmissionServlet feedbackServlet;
@@ -107,6 +109,34 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
+    @Test
+    public void testRespondToCustomerFeedback()
+            throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
+        // Mock servlet path to simulate the action "/submitStaffFeedbackResponse"
+        when(request.getServletPath()).thenReturn("/submitStaffFeedbackResponse");
+
+        // Mock parameters and request dispatcher
+        when(request.getParameter("staffResponse_1")).thenReturn("Staff feedback response");
+        when(request.getRequestDispatcher(anyString())).thenReturn(rd);
+        when(request.getContextPath()).thenReturn("/restaurantApp"); // Mocking the context path
+
+        // Mock the DBManager and inject it
+        DBManager dbManager = mock(DBManager.class);
+        when(dbManager.getAllFeedback()).thenReturn(
+                Collections.singletonList(new feedback(1, "John", "john@example.com", "Good service", 5, null, null)));
+
+        // Inject the mocked DBManager using reflection
+        Field dbManagerField = FeedbackSubmissionServlet.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true); // Make the private field accessible
+        dbManagerField.set(feedbackServlet, dbManager); // Set the mocked dbManager
+
+        // Call the Feedback servlet method for submitting staff feedback
+        feedbackServlet.submitStaffFeedbackResponse(request, response);
+
+        // Verify the redirect is called with the correct path
+        verify(response).sendRedirect("/restaurantApp/viewFeedback");
+    }
+
     // Error Management Tests
     @Test
     public void testValidErrorSubmission()
@@ -167,5 +197,36 @@ public class FeedbackAndErrorSubmissionServletTest {
         // Verify that the correct JSP is displayed
         verify(request).getRequestDispatcher("/viewError.jsp");
         verify(rd).forward(request, response);
+    }
+
+    @Test
+    public void testUpdateErrorReport()
+            throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
+        // Mock servlet path to simulate the action "/update"
+        when(request.getServletPath()).thenReturn("/update");
+
+        // Mock valid parameters for updating the error report
+        when(request.getParameter("id")).thenReturn("1");
+        when(request.getParameter("description")).thenReturn("Updated error description");
+        when(request.getParameter("steps")).thenReturn("Updated steps to reproduce");
+        when(request.getParameter("category")).thenReturn("UI Bug");
+        when(request.getParameter("severity")).thenReturn("Critical");
+        when(request.getParameter("staffComments")).thenReturn("This issue has been fixed");
+
+        // Mock the DBManager and inject it
+        DBManager dbManager = mock(DBManager.class);
+        when(dbManager.updateErrorReport(any())).thenReturn(true); // Mock success
+
+        // Inject the mocked DBManager using reflection
+        Field dbManagerField = ErrorSubmissionServlet.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true); // Make the private field accessible
+        dbManagerField.set(errorServlet, dbManager); // Set the mocked dbManager
+
+        // Call the Error servlet
+        errorServlet.doPost(request, response);
+
+        // Verify that the request was processed and the user was redirected to the
+        // dashboard
+        verify(response).sendRedirect("/staffDashboard.jsp");
     }
 }
