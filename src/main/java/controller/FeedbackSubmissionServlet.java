@@ -72,6 +72,12 @@ public class FeedbackSubmissionServlet extends HttpServlet {
                 case "/updateFeedback":
                     updateFeedback(request, response);
                     break;
+                case "/feedbackDashboard":
+                    showFeedback(request, response);
+                    break;
+                case "/StaffDashboard":
+                    returnFeedbackDashboard(request, response);
+                    break;
                 default:
                     showForm(request, response);
                     break;
@@ -235,11 +241,27 @@ public class FeedbackSubmissionServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    // Redirect to the dashboard
+    private void returnFeedbackDashboard(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("Displaying staff dashboard.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/mainStaffDashboard.jsp");
+        dispatcher.forward(request, response);
+    }
+
     // New method to handle customer lookup
     private void lookupFeedback(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("Redirecting to feedback lookup page.");
         forwardRequest(request, response, "/lookupFeedback.jsp");
+    }
+
+    // New method to handle customer lookup
+    private void showFeedback(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("Redirecting to Staff feedback page.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/viewFeedback.jsp");
+        dispatcher.forward(request, response);
     }
 
     // Staff access: update feedback with new staff responses for a single feedback

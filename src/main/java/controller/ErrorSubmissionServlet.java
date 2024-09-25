@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-// import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import DAO.DBManager;
 import model.error;
 
-// @WebServlet("/error/*") // Use a wildcard to handle multiple error-related routes
 public class ErrorSubmissionServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ErrorSubmissionServlet.class.getName());
@@ -67,6 +65,12 @@ public class ErrorSubmissionServlet extends HttpServlet {
                     break;
                 case "/update": // Handle updating an error
                     updateError(request, response); // Newly added logic for updating errors
+                    break;
+                case "/staffDashboard": // Handle updating an error
+                    showStaffDashboard(request, response); // Newly added logic for updating errors
+                    break;
+                case "/mainStaffDashboard": // Handle redirect to the dashboard
+                    returnToStaffDashboard(request, response);
                     break;
                 default:
                     listErrors(request, response); // Default action, e.g., show list of errors (if needed)
@@ -223,6 +227,22 @@ public class ErrorSubmissionServlet extends HttpServlet {
             throws ServletException, IOException {
         logger.info("Redirecting to the dashboard.");
         response.sendRedirect(request.getContextPath() + "/dashboard.jsp"); // Adjust path as needed
+    }
+
+    // Show staff dashboard
+    private void showStaffDashboard(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("Displaying staff dashboard.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/staffDashboard.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    // Redirect to the dashboard
+    private void returnToStaffDashboard(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("Displaying staff dashboard.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/mainStaffDashboard.jsp");
+        dispatcher.forward(request, response);
     }
 
     // List submitted errors (not part of original logic, can be used for error

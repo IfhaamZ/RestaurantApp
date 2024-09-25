@@ -18,6 +18,7 @@
     <servlet-name>ControllerServlet</servlet-name>
     <url-pattern>/ControllerServlet</url-pattern>
     <url-pattern>/error</url-pattern>
+    <url-pattern>/feedback</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -35,6 +36,8 @@
         <url-pattern>/dashboard</url-pattern>  <!-- To handle return to dashboard -->
         <url-pattern>/viewError</url-pattern>
         <url-pattern>/update</url-pattern>
+        <url-pattern>/staffDashboard</url-pattern>
+        <url-pattern>/mainStaffDashboard</url-pattern>
     </servlet-mapping>
 
 <!-- FeedbackSubmissionServlet to handle feedback form submissions -->
@@ -54,5 +57,7 @@
         <url-pattern>/viewCustomerFeedback</url-pattern>
         <url-pattern>/lookupFeedback</url-pattern>
         <url-pattern>/updateFeedback</url-pattern>
+        <url-pattern>/showFeedback</url-pattern>
+        <url-pattern>/StaffDashboard</url-pattern>
     </servlet-mapping>
 </web-app>

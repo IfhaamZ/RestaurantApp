@@ -7,106 +7,123 @@
 <head>
     <title>Staff Feedback View and Update</title>
     <style>
-        /* Basic reset and layout */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+       /* General Button Styling */
+.btn {
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
 
-        .container {
-            width: 90%;
-            margin: 40px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+/* Blue button (for the Back to Main Dashboard) */
+.btn-blue {
+    background-color: #007bff; /* Blue color */
+    color: white;
+    border: 1px solid #007bff;
+}
 
-        h1 {
-            color: #333;
-            font-size: 36px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+.btn-blue:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3;
+    transform: translateY(-2px); /* Slight hover effect */
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+/* Green button (for the Edit buttons) */
+.btn-green {
+    background-color: #28a745; /* Green color */
+    color: white;
+    border: 1px solid #28a745;
+}
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+.btn-green:hover {
+    background-color: #218838; /* Darker green on hover */
+    border-color: #1e7e34;
+    transform: translateY(-2px); /* Slight hover effect */
+}
 
-        th {
-            background-color: #007bff;
-            color: white;
-        }
+/* Center the Back to Main Dashboard button */
+.button-container {
+    width: 100%; /* Ensure full width */
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Center the button horizontally */
+    margin-top: 20px;
+}
 
-        tr:hover {
-            background-color: #f1f1f1;
-        }
+/* Basic reset and layout */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-        td {
-            color: #333;
-        }
+.container {
+    width: 90%;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            margin-bottom: 20px;
-            resize: vertical;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+h1 {
+    color: #333;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        .submit-btn {
-            padding: 8px 16px;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
 
-        .submit-btn:hover {
-            background-color: #218838;
-        }
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
 
-        .edit-btn {
-            background-color: #007bff;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 5px;
-            text-decoration: none;
-        }
+th {
+    background-color: #007bff;
+    color: white;
+}
 
-        .edit-btn:hover {
-            background-color: #0056b3;
-        }
+tr:hover {
+    background-color: #f1f1f1;
+}
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                width: 100%;
-                padding: 10px;
-            }
+td {
+    color: #333;
+}
 
-            th, td {
-                padding: 8px;
-            }
-        }
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    resize: vertical;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
     </style>
 </head>
 <body>
@@ -145,7 +162,7 @@
                     <td><%= fb.getStaffResponse() != null ? fb.getStaffResponse() : "No response yet" %></td>
                     <td><%= fb.getCreatedAt() %></td>
                     <td>
-                        <a href="editFeedback.jsp?id=<%= fb.getFeedbackId() %>" class="edit-btn">Edit</a>
+                        <a href="editFeedback.jsp?id=<%= fb.getFeedbackId() %>" class="btn btn-green">Edit</a>
                     </td>
                 </tr>
             <%
@@ -154,11 +171,11 @@
             </tbody>
         </table>
 
-        <!-- Submit button to send all responses -->
-        <div>
-            <button type="submit" class="submit-btn">Submit All Responses</button>
-        </div>
     </form>
+
+    <div class="button-container">
+        <button class="btn btn-blue" onclick="window.location.href='/StaffDashboard'">Back to Main Dashboard</button>
+    </div>
 </div>
 
 </body>
