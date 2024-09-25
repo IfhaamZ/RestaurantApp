@@ -229,4 +229,67 @@ public class FeedbackAndErrorSubmissionServletTest {
         // dashboard
         verify(response).sendRedirect("/staffDashboard.jsp");
     }
+
+    // Additional Test 1: Test SQL Exception during feedback submission
+    @Test
+    public void testFeedbackSubmissionWithSQLException() throws Exception {
+        // Mock servlet path to simulate the action "/feedbackSubmit"
+        when(request.getServletPath()).thenReturn("/feedbackSubmit");
+
+        // Mock valid parameters
+        when(request.getParameter("name")).thenReturn("John Doe");
+        when(request.getParameter("email")).thenReturn("john@example.com");
+        when(request.getParameter("rating")).thenReturn("5");
+        when(request.getParameter("comments")).thenReturn("Excellent service");
+
+        // Mock DBManager to throw SQLException
+        DBManager dbManager = mock(DBManager.class);
+        when(dbManager.createFeedbackAndReturnID(anyString(), anyString(), anyString(), anyInt()))
+                .thenThrow(new SQLException("Database error"));
+
+        // Inject the mocked DBManager using reflection
+        Field dbManagerField = FeedbackSubmissionServlet.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true);
+        dbManagerField.set(feedbackServlet, dbManager);
+
+        // Call the Feedback servlet
+        feedbackServlet.doPost(request, response);
+
+        // Verify that an error message is set and the request is forwarded to the form
+        verify(request).setAttribute(eq("errorMessage"), eq("Failed to submit your feedback. Please try again."));
+        verify(request).getRequestDispatcher("/feedback.jsp");
+        verify(rd).forward(request, response);
+    }
+
+    // Additional Test 2: Test SQL Exception during error submission
+    @Test
+    public void testErrorSubmissionWithSQLException() throws Exception {
+        // Mock servlet path to simulate the action "/submit"
+        when(request.getServletPath()).thenReturn("/submit");
+
+        // Mock valid parameters
+        when(request.getParameter("description")).thenReturn("Error description");
+        when(request.getParameter("steps")).thenReturn("Steps to reproduce");
+        when(request.getParameter("category")).thenReturn("UI Bug");
+        when(request.getParameter("severity")).thenReturn("High");
+
+        // Mock DBManager to throw SQLException
+        DBManager dbManager = mock(DBManager.class);
+        when(dbManager.createErrorReportAndReturnID(anyString(), anyString(), anyString(), anyString(),
+                any(Timestamp.class)))
+                .thenThrow(new SQLException("Database error"));
+
+        // Inject the mocked DBManager using reflection
+        Field dbManagerField = ErrorSubmissionServlet.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true);
+        dbManagerField.set(errorServlet, dbManager);
+
+        // Call the Error servlet
+        errorServlet.doPost(request, response);
+
+        // Verify that an error message is set and the request is forwarded to the form
+        verify(request).setAttribute(eq("errorMessage"), eq("Failed to submit your error report. Please try again."));
+        verify(request).getRequestDispatcher("/errorSubmission.jsp");
+        verify(rd).forward(request, response);
+    }
 }
