@@ -1,4 +1,6 @@
+controller\FeedbackSubmissionServlet.class
 DAO\DBConnector.class
+controller\ControllerServlet.class
 model\error.class
 DAO\CreateDB.class
 DAO\DBManager.class
