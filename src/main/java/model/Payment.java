@@ -174,4 +174,15 @@ public class Payment implements Serializable {
     public void setStaffRole(String staffRole) {
         this.staffRole = staffRole;
     }
+
+    @Override
+    public String toString() {
+        return "Payment ID: " + this.getPaymentID() +
+                ", Method: " + this.getMethod() +
+                ", Card Number: " + this.getCardNum() +
+                ", Amount: " + this.getPaymentAmount() +
+                ", Date: " + this.getPaymentDate() +
+                ", Is Cancelled: " + this.isCancelled();
+    }
+
 }

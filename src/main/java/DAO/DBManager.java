@@ -202,7 +202,7 @@ public class DBManager {
 
     // Create Payment
     public boolean createPayment(Payment payment) throws Exception {
-        String sql = "INSERT INTO Payment (method, cardNum, expMonth, expYear, cvn, paymentAmount, isCancelled) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO payments (method, cardNum, expMonth, expYear, cvn, paymentAmount, isCancelled) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, payment.getMethod());
@@ -216,26 +216,9 @@ public class DBManager {
         }
     }
 
-    // Old create payment method for backup
-    // public boolean createPayment(Payment payment) throws Exception {
-    // String sql = "INSERT INTO Payment (method, cardNum, expMonth, expYear, cvn,
-    // paymentAmount, isCancelled) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    // try (Connection connection = DBConnector.getConnection();
-    // PreparedStatement st = connection.prepareStatement(sql)) {
-    // st.setString(1, payment.getMethod());
-    // st.setString(2, payment.getCardNum()); // Encrypted
-    // st.setString(3, payment.getExpMonth());
-    // st.setString(4, payment.getExpYear());
-    // st.setString(5, payment.getCVN()); // Encrypted
-    // st.setBigDecimal(6, new BigDecimal(payment.getPaymentAmount()));
-    // st.setBoolean(7, payment.isCancelled());
-    // return st.executeUpdate() > 0;
-    // }
-    // }
-
     // Fetch Payment by ID
     public Payment getPaymentById(int paymentID) throws Exception {
-        String sql = "SELECT * FROM Payment WHERE paymentID = ?";
+        String sql = "SELECT * FROM payments WHERE paymentID = ?";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, paymentID);
@@ -261,7 +244,7 @@ public class DBManager {
 
     // Update Payment Status
     public boolean cancelPayment(int paymentID) throws SQLException {
-        String sql = "UPDATE Payment SET isCancelled = TRUE WHERE paymentID = ?";
+        String sql = "UPDATE payments SET isCancelled = TRUE WHERE paymentID = ?";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, paymentID);
@@ -272,7 +255,7 @@ public class DBManager {
     // Fetch All Payments
     public List<Payment> fetchAllPayments() throws Exception {
         List<Payment> payments = new ArrayList<>();
-        String sql = "SELECT * FROM Payment";
+        String sql = "SELECT * FROM payments";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql);
                 ResultSet rs = st.executeQuery()) {
@@ -292,6 +275,6 @@ public class DBManager {
             }
         }
         return payments;
-    }
 
+    }
 }

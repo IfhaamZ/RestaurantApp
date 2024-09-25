@@ -1,18 +1,15 @@
 package controller;
 
 import model.Payment;
+import DAO.DBManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import DAO.DBManager;
-
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/managePayment")
 public class PaymentServlet extends HttpServlet {
@@ -62,11 +59,35 @@ public class PaymentServlet extends HttpServlet {
 
             // Update session and redirect to status page
             request.getSession().setAttribute("payment", payment);
+            request.setAttribute("payment", payment);
             request.getRequestDispatcher("paymentStatus.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "There was an issue processing the payment.");
+            request.getRequestDispatcher("paymentError.jsp").forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Add this section for fetching payments to be displayed
+        DBManager dbManager = new DBManager();
+
+        try {
+            // Fetch all payments from the database
+            List<Payment> payments = dbManager.fetchAllPayments();
+
+            // Pass payments list to the JSP page
+            request.setAttribute("payments", payments);
+
+            // Forward to JSP page to display the payments
+            request.getRequestDispatcher("paymentStatus.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "There was an issue fetching payments.");
             request.getRequestDispatcher("paymentError.jsp").forward(request, response);
         }
     }
