@@ -1,3 +1,4 @@
+/* Body styling */
 body {
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
@@ -8,6 +9,7 @@ body {
   margin: 0;
 }
 
+/* Main container */
 .container {
   background-color: #ffffff;
   padding: 30px;
@@ -17,28 +19,34 @@ body {
   text-align: center;
 }
 
+/* Heading styling */
 h1 {
   margin-bottom: 20px;
   font-size: 24px;
   color: #343a40;
 }
 
+/* Success message */
 .message {
   font-size: 20px;
   color: green;
   margin-bottom: 20px;
 }
 
+/* Error message */
 .error {
   font-size: 20px;
   color: red;
 }
 
+/* Payment details styling */
 .payment-details {
   font-size: 18px;
   color: #495057;
   margin-top: 20px;
   text-align: left;
+  word-wrap: break-word;
+  word-break: break-all; /* Ensures long card numbers don't overflow */
 }
 
 .payment-details h2 {
@@ -52,6 +60,7 @@ h1 {
   font-weight: bold;
 }
 
+/* Return to Home button styling */
 .return-home {
   margin-top: 20px;
   display: inline-block;
@@ -62,6 +71,7 @@ h1 {
   border: none;
   border-radius: 5px;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .return-home:hover {
