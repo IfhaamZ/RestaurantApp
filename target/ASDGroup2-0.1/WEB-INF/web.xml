@@ -77,4 +77,25 @@
     <url-pattern>/tablenew</url-pattern>
   </servlet-mapping>
 
+  <!-- MenuServlet to handle all menu-related operations -->
+  <servlet>
+    <servlet-name>MenuServlet</servlet-name>
+    <servlet-class>controller.MenuServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>MenuServlet</servlet-name>
+    <url-pattern>/menuDisplay</url-pattern>        <!-- Display menu items for customers -->
+    <url-pattern>/staffMenuDisplay</url-pattern>   <!-- Display menu items for staff with add, edit, delete options -->
+    <url-pattern>/menulist</url-pattern>            <!-- Show form to add a new menu item -->
+    <url-pattern>/menuinsert</url-pattern>         <!-- Insert a new menu item -->
+    <url-pattern>/menuedit</url-pattern>           <!-- Show form to edit an existing menu item -->
+    <url-pattern>/menuupdate</url-pattern>         <!-- Update an existing menu item -->
+    <url-pattern>/menudelete</url-pattern>         <!-- Delete a menu item -->
+    <url-pattern>/menuform</url-pattern>         <!-- Delete a menu item -->
+    <url-pattern>/menusearch</url-pattern>         <!-- Delete a menu item -->
+    <url-pattern>/staffmenusearch</url-pattern>         <!-- Delete a menu item -->
+    
+  </servlet-mapping>
+
 </web-app>

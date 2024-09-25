@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import model.Event;
+import model.MenuItem;
 import model.Table;
 
 public class DBManager {
@@ -270,6 +271,127 @@ public class DBManager {
         String sql = "DELETE FROM table_management WHERE id = ?";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            return st.executeUpdate() > 0;
+        }
+    }
+
+    // Insert a new menu item
+    public boolean insertMenuItem(MenuItem item) throws SQLException {
+        String sql = "INSERT INTO menu (name, description, price, category) VALUES (?, ?, ?, ?)";
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.setDouble(3, item.getPrice());
+            st.setString(4, item.getCategory());
+            return st.executeUpdate() > 0;
+        }
+    }
+
+    // Fetch all menu items
+    public List<MenuItem> fetchAllMenuItems() throws SQLException {
+        List<MenuItem> menuItems = new ArrayList<>();
+        String sql = "SELECT * FROM menu";
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                MenuItem item = new MenuItem(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getDouble("price"),
+                        rs.getString("category"));
+                menuItems.add(item);
+            }
+        }
+        return menuItems;
+    }
+
+    // Fetch a menu item by ID
+    public MenuItem getMenuItemById(int id) throws SQLException {
+        String sql = "SELECT * FROM menu WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return new MenuItem(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getDouble("price"),
+                            rs.getString("category"));
+                }
+            }
+        }
+        return null;
+    }
+
+    // Update an existing menu item
+    public boolean updateMenuItem(MenuItem item) throws SQLException {
+        String sql = "UPDATE menu SET name = ?, description = ?, price = ?, category = ? WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.setDouble(3, item.getPrice());
+            st.setString(4, item.getCategory());
+            st.setInt(5, item.getId());
+            return st.executeUpdate() > 0;
+        }
+    }
+    
+    // Fetch menu items based on category
+    public List<MenuItem> fetchMenuItemsByCategory(String category) throws SQLException {
+        List<MenuItem> menuItems = new ArrayList<>();
+        String sql = "SELECT * FROM menu WHERE category LIKE ?";
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, "%" + category + "%"); // Supports partial matches for more flexible searching
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    MenuItem menuItem = new MenuItem(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getDouble("price"),
+                            rs.getString("category"));
+                    menuItems.add(menuItem);
+                }
+            }
+        }
+        return menuItems;
+    }
+
+    // Method to fetch all unique categories from the menu table
+    public List<String> fetchAllCategories() throws SQLException {
+        List<String> categories = new ArrayList<>();
+        String sql = "SELECT DISTINCT category FROM menu";
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                categories.add(rs.getString("category"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching categories: " + e.getMessage());
+            throw e;
+        }
+
+        return categories;
+    }
+
+    // Delete a menu item
+    public boolean deleteMenuItem(int id) throws SQLException {
+        String sql = "DELETE FROM menu WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
             return st.executeUpdate() > 0;
         }

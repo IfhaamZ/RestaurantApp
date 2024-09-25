@@ -31,6 +31,9 @@ public class ControllerServlet extends HttpServlet {
                 case "/table":
                     handleTableRequests(request, response); // New case for handling table-related requests
                     break;
+                case "/menu":
+                    handleMenuRequests(request, response); // New case for handling table-related requests
+                    break;
                 default:
                     showDefaultPage(request, response);
                     break;
@@ -51,6 +54,13 @@ public class ControllerServlet extends HttpServlet {
     private void handleTableRequests(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/TableServlet"); // Forwarding to TableServlet
+        dispatcher.forward(request, response);
+    }
+
+    // Handle requests related to menu management
+    private void handleMenuRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/MenuServlet"); // Forwarding to TableServlet
         dispatcher.forward(request, response);
     }
 
