@@ -1,8 +1,14 @@
 C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\controller\ControllerServlet.java
 C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\controller\ErrorSubmissionServlet.java
+C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\controller\EventServlet.java
 C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\controller\FeedbackSubmissionServlet.java
+C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\controller\MenuServlet.java
+C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\controller\TableServlet.java
 C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\DAO\CreateDB.java
 C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\DAO\DBConnector.java
 C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\DAO\DBManager.java
 C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\model\error.java
+C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\model\Event.java
 C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\model\feedback.java
+C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\model\MenuItem.java
+C:\Users\Karthigeyan Sekar\OneDrive\Documents\GitHub\RestaurantApp\src\main\java\model\Table.java

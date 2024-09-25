@@ -623,5 +623,5 @@ public class DBManager {
 
             return statement.executeUpdate() > 0;
         }
-    }<<<<<<<HEAD
-}=======}>>>>>>>main
+    }
+}
