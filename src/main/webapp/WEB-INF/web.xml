@@ -37,6 +37,10 @@
     <servlet-name>ControllerServlet</servlet-name>
     <url-pattern>/ControllerServlet</url-pattern>
     <url-pattern>/event</url-pattern>
+    <url-pattern>/table</url-pattern>
+    <url-pattern>/menu</url-pattern>
+    <url-pattern>/error</url-pattern>
+    <url-pattern>/feedback</url-pattern>
   </servlet-mapping>
 
   <!-- EventServlet to handle all event-related operations -->
@@ -95,7 +99,46 @@
     <url-pattern>/menuform</url-pattern>         <!-- Delete a menu item -->
     <url-pattern>/menusearch</url-pattern>         <!-- Delete a menu item -->
     <url-pattern>/staffmenusearch</url-pattern>         <!-- Delete a menu item -->
-    
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ErrorSubmissionServlet</servlet-name>
+    <servlet-class>controller.ErrorSubmissionServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ErrorSubmissionServlet</servlet-name>
+    <url-pattern>/errorSubmissionServlet</url-pattern>
+    <url-pattern>/submit</url-pattern>  <!-- To show add event form -->
+    <url-pattern>/form</url-pattern>  <!-- To handle new event insertion -->
+    <url-pattern>/confirmation</url-pattern>  <!-- To show edit event form -->
+    <url-pattern>/submitError</url-pattern>  <!-- To show edit event form -->
+    <url-pattern>/dashboard</url-pattern>  <!-- To handle return to dashboard -->
+    <url-pattern>/viewError</url-pattern>
+    <url-pattern>/update</url-pattern>
+    <url-pattern>/staffDashboard</url-pattern>
+    <url-pattern>/mainStaffDashboard</url-pattern>
+  </servlet-mapping>
+
+  <!-- FeedbackSubmissionServlet to handle feedback form submissions -->
+  <servlet>
+    <servlet-name>FeedbackSubmissionServlet</servlet-name>
+    <servlet-class>controller.FeedbackSubmissionServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>FeedbackSubmissionServlet</servlet-name>
+    <url-pattern>/feedbackSubmit</url-pattern> <!-- To handle feedback form submission -->
+    <url-pattern>/formSubmit</url-pattern>  <!-- To show feedback confirmation page -->
+    <url-pattern>/feedbackConfirmation</url-pattern>  <!-- To show feedback form -->
+    <url-pattern>/backDashboard</url-pattern>
+    <url-pattern>/viewFeedback</url-pattern>
+    <url-pattern>/submitStaffFeedbackResponse</url-pattern>
+    <url-pattern>/viewCustomerFeedback</url-pattern>
+    <url-pattern>/lookupFeedback</url-pattern>
+    <url-pattern>/updateFeedback</url-pattern>
+    <url-pattern>/showFeedback</url-pattern>
+    <url-pattern>/StaffDashboard</url-pattern>
   </servlet-mapping>
 
 </web-app>

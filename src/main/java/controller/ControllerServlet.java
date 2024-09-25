@@ -34,6 +34,12 @@ public class ControllerServlet extends HttpServlet {
                 case "/menu":
                     handleMenuRequests(request, response); // New case for handling table-related requests
                     break;
+                case "/error":
+                    handleErrorRequest(request, response); // Show the dashboard
+                    break;
+                case "/feedback":
+                    handleFeedbackRequest(request, response); // Show the dashboard
+                    break;
                 default:
                     showDefaultPage(request, response);
                     break;
@@ -54,6 +60,20 @@ public class ControllerServlet extends HttpServlet {
     private void handleTableRequests(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/TableServlet"); // Forwarding to TableServlet
+        dispatcher.forward(request, response);
+    }
+
+    // Show a default or error page (optional)
+    private void handleErrorRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorSubmissionServlet");
+        dispatcher.forward(request, response);
+    }
+
+    // Show a default or error page (optional)
+    private void handleFeedbackRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/FeedbackSubmissionServlet");
         dispatcher.forward(request, response);
     }
 
