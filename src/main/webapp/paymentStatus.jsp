@@ -4,24 +4,7 @@ import="model.Payment" %>
 <html>
   <head>
     <title>Payment Status</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-      }
-      .message {
-        font-size: 20px;
-        color: green;
-      }
-      .error {
-        font-size: 20px;
-        color: red;
-      }
-      .payment-details {
-        font-size: 18px;
-        margin-top: 20px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="./css/paymentStatus.css" />
   </head>
   <body>
     <h1>Payment Status</h1>
@@ -35,11 +18,16 @@ import="model.Payment" %>
     <div class="payment-details">
       <h2>Payment Details</h2>
       <p><strong>Method:</strong> <%= payment.getMethod() %></p>
+
+      <!-- Only display card details if the payment method is "card" -->
+      <% if ("card".equalsIgnoreCase(payment.getMethod())) { %>
       <p><strong>Card Number:</strong> <%= payment.getCardNum() %></p>
       <p>
         <strong>Expiry Date:</strong> <%= payment.getExpMonth() %> / <%=
         payment.getExpYear() %>
       </p>
+      <% } %>
+
       <p><strong>Amount:</strong> <%= payment.getPaymentAmount() %></p>
       <p><strong>Date:</strong> <%= payment.getPaymentDate() %></p>
     </div>
