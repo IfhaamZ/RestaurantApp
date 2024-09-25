@@ -198,7 +198,7 @@
 
         <!-- Add a section to link to customer feedback view -->
         <div class="view-feedback">
-            <p>Want to check the status of your feedback? <a href="/lookupFeedback.jsp">View Feedback Status</a></p>
+            <p>Want to check the status of your feedback? <a href="/lookupFeedback">View Feedback Status</a></p>
         </div>
     </div>
 

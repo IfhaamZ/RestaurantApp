@@ -3,61 +3,145 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
     version="3.0">
 
-    <!-- Display Name -->
-    <display-name>RestaurantApp</display-name>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1">
+  <servlet>
+    <servlet-name>index.jsp</servlet-name>
+    <jsp-file>/index.jsp</jsp-file>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>index.jsp</servlet-name>
+    <url-pattern>/index/*</url-pattern>
+  </servlet-mapping>
 
-    <!-- ErrorSubmissionServlet to handle error form submissions -->
-    
-    
-    <servlet>
-        <servlet-name>ControllerServlet</servlet-name>
-        <servlet-class>controller.ControllerServlet</servlet-class>
-    </servlet>
+  <!-- DB Connection Parameters -->
+  <context-param>
+    <param-name>jdbcURL</param-name>
+    <param-value>jdbc:mysql://localhost:3306/restaurantdb</param-value>
+  </context-param>
+  <context-param>
+    <param-name>jdbcUsername</param-name>
+    <param-value>root</param-value>
+  </context-param>
+  <context-param>
+    <param-name>jdbcPassword</param-name>
+    <param-value>Lama1234!</param-value>
+  </context-param>
 
-    <servlet-mapping>
+  <!-- Controller Servlet -->
+  <servlet>
+    <servlet-name>ControllerServlet</servlet-name>
+    <servlet-class>controller.ControllerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
     <servlet-name>ControllerServlet</servlet-name>
     <url-pattern>/ControllerServlet</url-pattern>
+    <url-pattern>/event</url-pattern>
+    <url-pattern>/table</url-pattern>
+    <url-pattern>/menu</url-pattern>
     <url-pattern>/error</url-pattern>
     <url-pattern>/feedback</url-pattern>
-    </servlet-mapping>
+  </servlet-mapping>
 
-    <servlet>
-        <servlet-name>ErrorSubmissionServlet</servlet-name>
-        <servlet-class>controller.ErrorSubmissionServlet</servlet-class>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>ErrorSubmissionServlet</servlet-name>
-        <url-pattern>/errorSubmissionServlet</url-pattern>
-        <url-pattern>/submit</url-pattern>  <!-- To show add event form -->
-        <url-pattern>/form</url-pattern>  <!-- To handle new event insertion -->
-        <url-pattern>/confirmation</url-pattern>  <!-- To show edit event form -->
-        <url-pattern>/submitError</url-pattern>  <!-- To show edit event form -->
-        <url-pattern>/dashboard</url-pattern>  <!-- To handle return to dashboard -->
-        <url-pattern>/viewError</url-pattern>
-        <url-pattern>/update</url-pattern>
-        <url-pattern>/staffDashboard</url-pattern>
-        <url-pattern>/mainStaffDashboard</url-pattern>
-    </servlet-mapping>
+  <!-- EventServlet to handle all event-related operations -->
+  <servlet>
+    <servlet-name>EventServlet</servlet-name>
+    <servlet-class>controller.EventServlet</servlet-class>
+  </servlet>
 
-<!-- FeedbackSubmissionServlet to handle feedback form submissions -->
-    <servlet>
-        <servlet-name>FeedbackSubmissionServlet</servlet-name>
-        <servlet-class>controller.FeedbackSubmissionServlet</servlet-class>
-    </servlet>
+  <servlet-mapping>
+    <servlet-name>EventServlet</servlet-name>
+    <url-pattern>/eventnew</url-pattern>  <!-- To show add event form -->
+    <url-pattern>/eventinsert</url-pattern>  <!-- To handle new event insertion -->
+    <url-pattern>/eventedit</url-pattern>  <!-- To show edit event form -->
+    <url-pattern>/eventupdate</url-pattern>  <!-- To handle event update -->
+    <url-pattern>/eventdelete</url-pattern>  <!-- To handle event deletion -->
+    <url-pattern>/eventlist</url-pattern>  <!-- To list all events (e.g., EventCalendarStaff.jsp) -->
+    <url-pattern>/eventsearch</url-pattern>
+    <url-pattern>/staffeventsearch</url-pattern>
+    <url-pattern>/staffeventlist</url-pattern>
+  </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>FeedbackSubmissionServlet</servlet-name>
-        <url-pattern>/feedbackSubmit</url-pattern> <!-- To handle feedback form submission -->
-        <url-pattern>/formSubmit</url-pattern>  <!-- To show feedback confirmation page -->
-        <url-pattern>/feedbackConfirmation</url-pattern>  <!-- To show feedback form -->
-        <url-pattern>/backDashboard</url-pattern>
-        <url-pattern>/viewFeedback</url-pattern>
-        <url-pattern>/submitStaffFeedbackResponse</url-pattern>
-        <url-pattern>/viewCustomerFeedback</url-pattern>
-        <url-pattern>/lookupFeedback</url-pattern>
-        <url-pattern>/updateFeedback</url-pattern>
-        <url-pattern>/showFeedback</url-pattern>
-        <url-pattern>/StaffDashboard</url-pattern>
-    </servlet-mapping>
+  <!-- TableServlet to handle all table-related operations -->
+  <servlet>
+    <servlet-name>TableServlet</servlet-name>
+    <servlet-class>controller.TableServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>TableServlet</servlet-name>
+    <url-pattern>/tablelist</url-pattern>
+    <url-pattern>/tableinsert</url-pattern>
+    <url-pattern>/tabledelete</url-pattern>
+    <url-pattern>/tableupdate</url-pattern>
+    <url-pattern>/tableavailability</url-pattern>
+    <url-pattern>/tablereserve</url-pattern>
+    <url-pattern>/tablereserveform</url-pattern>
+    <url-pattern>/tableedit</url-pattern>
+    <url-pattern>/tablenew</url-pattern>
+  </servlet-mapping>
+
+  <!-- MenuServlet to handle all menu-related operations -->
+  <servlet>
+    <servlet-name>MenuServlet</servlet-name>
+    <servlet-class>controller.MenuServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>MenuServlet</servlet-name>
+    <url-pattern>/menuDisplay</url-pattern>        <!-- Display menu items for customers -->
+    <url-pattern>/staffMenuDisplay</url-pattern>   <!-- Display menu items for staff with add, edit, delete options -->
+    <url-pattern>/menulist</url-pattern>            <!-- Show form to add a new menu item -->
+    <url-pattern>/menuinsert</url-pattern>         <!-- Insert a new menu item -->
+    <url-pattern>/menuedit</url-pattern>           <!-- Show form to edit an existing menu item -->
+    <url-pattern>/menuupdate</url-pattern>         <!-- Update an existing menu item -->
+    <url-pattern>/menudelete</url-pattern>         <!-- Delete a menu item -->
+    <url-pattern>/menuform</url-pattern>         <!-- Delete a menu item -->
+    <url-pattern>/menusearch</url-pattern>         <!-- Delete a menu item -->
+    <url-pattern>/staffmenusearch</url-pattern>         <!-- Delete a menu item -->
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ErrorSubmissionServlet</servlet-name>
+    <servlet-class>controller.ErrorSubmissionServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ErrorSubmissionServlet</servlet-name>
+    <url-pattern>/errorSubmissionServlet</url-pattern>
+    <url-pattern>/submit</url-pattern>  <!-- To show add event form -->
+    <url-pattern>/form</url-pattern>  <!-- To handle new event insertion -->
+    <url-pattern>/confirmation</url-pattern>  <!-- To show edit event form -->
+    <url-pattern>/submitError</url-pattern>  <!-- To show edit event form -->
+    <url-pattern>/dashboard</url-pattern>  <!-- To handle return to dashboard -->
+    <url-pattern>/viewError</url-pattern>
+    <url-pattern>/update</url-pattern>
+    <url-pattern>/staffDashboard</url-pattern>
+    <url-pattern>/mainStaffDashboard</url-pattern>
+  </servlet-mapping>
+
+  <!-- FeedbackSubmissionServlet to handle feedback form submissions -->
+  <servlet>
+    <servlet-name>FeedbackSubmissionServlet</servlet-name>
+    <servlet-class>controller.FeedbackSubmissionServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>FeedbackSubmissionServlet</servlet-name>
+    <url-pattern>/feedbackSubmit</url-pattern> <!-- To handle feedback form submission -->
+    <url-pattern>/formSubmit</url-pattern>  <!-- To show feedback confirmation page -->
+    <url-pattern>/feedbackConfirmation</url-pattern>  <!-- To show feedback form -->
+    <url-pattern>/backDashboard</url-pattern>
+    <url-pattern>/viewFeedback</url-pattern>
+    <url-pattern>/submitStaffFeedbackResponse</url-pattern>
+    <url-pattern>/viewCustomerFeedback</url-pattern>
+    <url-pattern>/lookupFeedback</url-pattern>
+    <url-pattern>/updateFeedback</url-pattern>
+    <url-pattern>/showFeedback</url-pattern>
+    <url-pattern>/StaffDashboard</url-pattern>
+  </servlet-mapping>
+
 </web-app>

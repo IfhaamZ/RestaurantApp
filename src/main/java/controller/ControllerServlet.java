@@ -9,19 +9,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ControllerServlet extends HttpServlet {
-    @Override
+    private static final long serialVersionUID = 1L;
+
+    // Handle POST requests by forwarding to doGet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Handle POST requests the same way as GET requests
+        doGet(request, response);
     }
 
-    @Override
+    // Handle GET requests
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getServletPath(); // Get the action from the request path
+        // Get the action from the request path
+        String action = request.getServletPath();
+
         try {
-            // Route to the appropriate method based on the action
+            // Route to appropriate method based on action
             switch (action) {
+                case "/event":
+                    handleEventRequests(request, response);
+                    break;
+                case "/table":
+                    handleTableRequests(request, response); // New case for handling table-related requests
+                    break;
+                case "/menu":
+                    handleMenuRequests(request, response); // New case for handling table-related requests
+                    break;
                 case "/error":
                     handleErrorRequest(request, response); // Show the dashboard
                     break;
@@ -29,12 +42,26 @@ public class ControllerServlet extends HttpServlet {
                     handleFeedbackRequest(request, response); // Show the dashboard
                     break;
                 default:
-                    showDefaultPage(request, response); // Handle other or invalid routes
+                    showDefaultPage(request, response);
                     break;
             }
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
+    }
+
+    // Handle requests related to event management
+    private void handleEventRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/EventServlet");
+        dispatcher.forward(request, response);
+    }
+
+    // Handle requests related to table management
+    private void handleTableRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/TableServlet"); // Forwarding to TableServlet
+        dispatcher.forward(request, response);
     }
 
     // Show a default or error page (optional)
@@ -51,9 +78,17 @@ public class ControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    // Show a default or error page (optional)
+    // Handle requests related to menu management
+    private void handleMenuRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/MenuServlet"); // Forwarding to TableServlet
+        dispatcher.forward(request, response);
+    }
+
+    // Show the default page (index.jsp)
     private void showDefaultPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Page not found.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);
     }
 }
