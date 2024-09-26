@@ -32,6 +32,7 @@ public class InventoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        String role = request.getParameter("role"); // Get role from request
 
         if (action == null) {
             action = "view"; // Default action
@@ -40,16 +41,27 @@ public class InventoryServlet extends HttpServlet {
         try {
             switch (action) {
                 case "view":
-                    viewStockLevels(request, response);
+                    viewStockLevels(request, response, role);
                     break;
                 case "update":
-                    updateStockLevel(request, response);
+                    if ("Manager".equals(role)) {
+                        updateStockLevel(request, response, role);
+                    } else {
+                        request.setAttribute("message", "Access Denied: Only managers can update stock levels.");
+                        viewStockLevels(request, response, role);
+                    }
                     break;
                 case "lowStockNotification":
-                    showLowStockNotification(request, response);
+                    if ("Manager".equals(role)) {
+                        showLowStockNotification(request, response);
+                    } else {
+                        request.setAttribute("message",
+                                "Access Denied: Only managers can view low stock notifications.");
+                        viewStockLevels(request, response, role);
+                    }
                     break;
                 default:
-                    viewStockLevels(request, response);
+                    viewStockLevels(request, response, role);
                     break;
             }
         } catch (Exception ex) {
@@ -58,31 +70,32 @@ public class InventoryServlet extends HttpServlet {
     }
 
     // U136 - View and monitor stock levels
-    private void viewStockLevels(HttpServletRequest request, HttpServletResponse response)
+    private void viewStockLevels(HttpServletRequest request, HttpServletResponse response, String role)
             throws ServletException, IOException {
         Map<String, Integer> stockLevels = inventory.viewStockLevels();
         request.setAttribute("stockLevels", stockLevels);
+        request.setAttribute("role", role); // Pass the role to the JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("viewStockLevels.jsp");
         dispatcher.forward(request, response);
     }
 
-    // U139 - Update stock levels manually
-    private void updateStockLevel(HttpServletRequest request, HttpServletResponse response)
+    // U139 - Update stock levels manually (only for Managers)
+    private void updateStockLevel(HttpServletRequest request, HttpServletResponse response, String role)
             throws ServletException, IOException {
         String productID = request.getParameter("productID");
         int newStock = Integer.parseInt(request.getParameter("newStock"));
 
         boolean isUpdated = inventory.updateStockLevel(productID, newStock);
         if (isUpdated) {
-            request.setAttribute("message", "Stock updated successfully.");
+            request.setAttribute("message", "Stock updated successfully by " + role + ".");
         } else {
             request.setAttribute("message", "Failed to update stock. Invalid product ID or stock quantity.");
         }
 
-        viewStockLevels(request, response);
+        viewStockLevels(request, response, role);
     }
 
-    // U137 - Receive a stock level notification
+    // U137 - Receive a stock level notification (only for Managers)
     private void showLowStockNotification(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String lowStockMessage = inventory.checkLowStockLevels();
