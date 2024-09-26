@@ -3,7 +3,7 @@ package model;
 import java.sql.Timestamp;
 
 public class error {
-
+    // Fields to store error details
     private int id; // Unique identifier for the error
     private String description; // Detailed description of the error
     private String steps; // Steps to reproduce the error

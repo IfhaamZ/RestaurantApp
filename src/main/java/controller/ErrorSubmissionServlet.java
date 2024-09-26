@@ -17,16 +17,18 @@ import DAO.DBManager;
 import model.error;
 
 public class ErrorSubmissionServlet extends HttpServlet {
-
+    // Logger to log important events
     private static final Logger logger = Logger.getLogger(ErrorSubmissionServlet.class.getName());
     private DBManager dbManager;
 
+    // Initialize the servlet and set up DBManager
     @Override
     public void init() throws ServletException {
         try {
             dbManager = new DBManager(); // Initialize DBManager
             logger.info("DBManager initialized successfully.");
         } catch (Exception e) {
+            // Log initialization failure
             logger.log(Level.SEVERE, "Error initializing DBManager", e);
             throw new ServletException("Error initializing DBManager", e);
         }
@@ -63,13 +65,13 @@ public class ErrorSubmissionServlet extends HttpServlet {
                 case "/viewError": // Handle viewing a specific error
                     viewError(request, response);
                     break;
-                case "/update": // Handle updating an error
-                    updateError(request, response); // Newly added logic for updating errors
+                case "/update": // Handles updating an error report
+                    updateError(request, response);
                     break;
-                case "/staffDashboard": // Handle updating an error
-                    showStaffDashboard(request, response); // Newly added logic for updating errors
+                case "/staffDashboard": // Displays the staff dashboard
+                    showStaffDashboard(request, response);
                     break;
-                case "/mainStaffDashboard": // Handle redirect to the dashboard
+                case "/mainStaffDashboard": // Redirects to the main staff dashboard
                     returnToStaffDashboard(request, response);
                     break;
                 default:

@@ -230,7 +230,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(response).sendRedirect("/staffDashboard.jsp");
     }
 
-    // Additional Test 1: Test SQL Exception during feedback submission
+    // Test SQL Exception during feedback submission
     @Test
     public void testFeedbackSubmissionWithSQLException() throws Exception {
         // Mock servlet path to simulate the action "/feedbackSubmit"
@@ -261,7 +261,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
-    // Additional Test 2: Test SQL Exception during error submission
+    // Test SQL Exception during error submission
     @Test
     public void testErrorSubmissionWithSQLException() throws Exception {
         // Mock servlet path to simulate the action "/submit"

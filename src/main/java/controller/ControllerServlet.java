@@ -26,26 +26,27 @@ public class ControllerServlet extends HttpServlet {
         try {
             // Route to appropriate method based on action
             switch (action) {
-                case "/event":
+                case "/event": // Handle event-related requests
                     handleEventRequests(request, response);
                     break;
-                case "/table":
+                case "/table": // Handle table management requests
                     handleTableRequests(request, response); // New case for handling table-related requests
                     break;
-                case "/menu":
+                case "/menu": // Handle menu-related requests
                     handleMenuRequests(request, response); // New case for handling table-related requests
                     break;
-                case "/error":
+                case "/error": // Handle error submission requests
                     handleErrorRequest(request, response); // Show the dashboard
                     break;
-                case "/feedback":
+                case "/feedback": // Handle feedback submission requests
                     handleFeedbackRequest(request, response); // Show the dashboard
                     break;
-                default:
+                default: // If no specific action is found, show the default page
                     showDefaultPage(request, response);
                     break;
             }
         } catch (Exception ex) {
+            // Handle any exceptions that occur during the request processing
             throw new ServletException(ex);
         }
     }

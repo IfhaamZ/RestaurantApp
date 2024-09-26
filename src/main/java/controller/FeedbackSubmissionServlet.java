@@ -16,10 +16,11 @@ import DAO.DBManager;
 import model.feedback;
 
 public class FeedbackSubmissionServlet extends HttpServlet {
-
+    // Logger to track important events
     private static final Logger logger = Logger.getLogger(FeedbackSubmissionServlet.class.getName());
     private DBManager dbManager;
 
+    // Initialize the servlet and DBManager
     @Override
     public void init() throws ServletException {
         try {
@@ -31,58 +32,62 @@ public class FeedbackSubmissionServlet extends HttpServlet {
         }
     }
 
+    // Handle POST requests and forward to doGet for uniform handling
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request, response); // Forward POST requests to doGet for uniform handling
     }
 
+    // Handle GET requests and route based on action
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Get the specific action from the path
         String action = request.getServletPath();
 
         try {
             switch (action) {
-                case "/feedbackSubmit":
+                case "/feedbackSubmit": // Handle feedback submission
                     submitFeedback(request, response);
                     break;
                 case "/formSubmit":
                     showForm(request, response); // Show the feedback submission form
                     break;
                 case "/feedbackConfirmation":
-                    showConfirmation(request, response);
+                    showConfirmation(request, response); // Show feedback confirmation page
                     break;
-                case "/backDashboard": // Handle redirect to the dashboard
+                case "/backDashboard": // Redirect to dashboard
                     backToDashboard(request, response);
                     break;
-                case "/viewFeedback": // Handle feedback view for staff
+                case "/viewFeedback": // View all feedback for staff
                     viewFeedback(request, response);
                     break;
-                case "/submitStaffFeedbackResponse": // Handle feedback update from staff
+                case "/submitStaffFeedbackResponse": // Staff updates feedback responses
                     submitStaffFeedbackResponse(request, response);
                     break;
-                case "/viewCustomerFeedback": // Handle feedback view for customer
+                case "/viewCustomerFeedback": // Customer views specific feedback by ID
                     viewCustomerFeedback(request, response);
                     break;
                 case "/lookupFeedback": // Handle customer lookup of feedback by ID
                     lookupFeedback(request, response);
                     break;
-                case "/updateFeedback":
+                case "/updateFeedback": // Update specific feedback entry
                     updateFeedback(request, response);
                     break;
-                case "/feedbackDashboard":
+                case "/feedbackDashboard": // Show feedback dashboard for staff
                     showFeedback(request, response);
                     break;
-                case "/StaffDashboard":
+                case "/StaffDashboard": // Redirect to main staff dashboard
                     returnFeedbackDashboard(request, response);
                     break;
-                default:
+                default: // Show feedback form by default
                     showForm(request, response);
                     break;
             }
         } catch (SQLException ex) {
+            // Log SQL-related exceptions
             logger.log(Level.SEVERE, "SQL error occurred", ex);
             throw new ServletException(ex);
         }
@@ -210,6 +215,7 @@ public class FeedbackSubmissionServlet extends HttpServlet {
 
         int feedbackId;
         try {
+            // Parse feedback ID as an integer
             feedbackId = Integer.parseInt(feedbackIdStr);
         } catch (NumberFormatException e) {
             logger.warning("Invalid feedback ID format: " + feedbackIdStr);
