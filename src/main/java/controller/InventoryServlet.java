@@ -19,9 +19,9 @@ public class InventoryServlet extends HttpServlet {
     // Initialize the Inventory object
     public void init() throws ServletException {
         inventory = new Inventory();
-        // Add some sample products for testing
-        inventory.addProduct(new Product("P001", "Apple", 50));
-        inventory.addProduct(new Product("P002", "Orange", 30));
+        // Add some sample products for testing (pass "system" as the updatedBy value)
+        inventory.addProduct(new Product("P001", "Apple", 50), "system");
+        inventory.addProduct(new Product("P002", "Orange", 30), "system");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -33,6 +33,8 @@ public class InventoryServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         String role = request.getParameter("role"); // Get role from request
+        String updatedBy = request.getParameter("updatedBy"); // Get the updatedBy parameter (user performing the
+                                                              // action)
 
         if (action == null) {
             action = "view"; // Default action
@@ -44,22 +46,10 @@ public class InventoryServlet extends HttpServlet {
                     viewStockLevels(request, response, role);
                     break;
                 case "update":
-                    // if ("Manager".equals(role)) {
-                    updateStockLevel(request, response, role);
-                    // } else {
-                    // request.setAttribute("message", "Access Denied: Only managers can update
-                    // stock levels.");
-                    // viewStockLevels(request, response, role);
-                    // }
+                    updateStockLevel(request, response, role, updatedBy);
                     break;
                 case "lowStockNotification":
-                    // if ("Manager".equals(role)) {
                     showLowStockNotification(request, response);
-                    // } else {
-                    // request.setAttribute("message",
-                    // "Access Denied: Only managers can view low stock notifications.");
-                    // viewStockLevels(request, response, role);
-                    // }
                     break;
                 default:
                     viewStockLevels(request, response, role);
@@ -81,14 +71,15 @@ public class InventoryServlet extends HttpServlet {
     }
 
     // U139 - Update stock levels manually (only for Managers)
-    private void updateStockLevel(HttpServletRequest request, HttpServletResponse response, String role)
+    private void updateStockLevel(HttpServletRequest request, HttpServletResponse response, String role,
+            String updatedBy)
             throws ServletException, IOException {
         String productID = request.getParameter("productID");
         int newStock = Integer.parseInt(request.getParameter("newStock"));
 
-        boolean isUpdated = inventory.updateStockLevel(productID, newStock);
+        boolean isUpdated = inventory.updateStockLevel(productID, newStock, updatedBy);
         if (isUpdated) {
-            request.setAttribute("message", "Stock updated successfully by " + role + ".");
+            request.setAttribute("message", "Stock updated successfully by " + updatedBy + ".");
         } else {
             request.setAttribute("message", "Failed to update stock. Invalid product ID or stock quantity.");
         }
