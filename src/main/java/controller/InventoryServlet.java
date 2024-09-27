@@ -23,7 +23,7 @@ public class InventoryServlet extends HttpServlet {
         // Retrieve products from the database and add them to the in-memory list
         try {
             inventory.loadProductsFromDB(); // Load products from DB into memory
-            System.out.println("Products loaded from database.");
+            System.out.println("Products loaded from database: " + inventory.viewStockLevels());
         } catch (Exception e) {
             throw new ServletException("Failed to load products from the database", e);
         }
@@ -45,6 +45,9 @@ public class InventoryServlet extends HttpServlet {
             action = "view"; // Default action
         }
 
+        // Logging action and role for debugging
+        System.out.println("Action: " + action + ", Role: " + role);
+
         try {
             switch (action) {
                 case "view":
@@ -64,6 +67,7 @@ public class InventoryServlet extends HttpServlet {
                     break;
             }
         } catch (Exception ex) {
+            ex.printStackTrace(); // Log the full stack trace if there is an exception
             throw new ServletException(ex);
         }
     }
@@ -71,9 +75,25 @@ public class InventoryServlet extends HttpServlet {
     // U136 - View and monitor stock levels
     private void viewStockLevels(HttpServletRequest request, HttpServletResponse response, String role)
             throws ServletException, IOException {
+        // Log fetching of stock levels
         Map<String, Integer> stockLevels = inventory.viewStockLevels();
+        System.out.println("Stock levels fetched: " + stockLevels); // Log to check the data
+
+        // Log if the stockLevels map is empty or null
+        if (stockLevels == null || stockLevels.isEmpty()) {
+            System.out.println("No stock levels found.");
+        } else {
+            System.out.println("Stock levels found: " + stockLevels.size() + " items.");
+        }
+
+        // Log the role
+        System.out.println("User role: " + role);
+
+        // Set attributes for the JSP
         request.setAttribute("stockLevels", stockLevels);
         request.setAttribute("role", role); // Pass the role to the JSP
+
+        // Forward to JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("viewStockLevels.jsp");
         dispatcher.forward(request, response);
     }
@@ -81,8 +101,14 @@ public class InventoryServlet extends HttpServlet {
     // View stock details for all products
     private void viewStockDetail(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Log fetching of stock details
         Map<String, Integer> stockDetails = inventory.viewStockLevels();
+        System.out.println("Stock details fetched: " + stockDetails);
+
+        // Set stock details in request attribute
         request.setAttribute("stockDetails", stockDetails);
+
+        // Forward to JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("viewStockDetail.jsp");
         dispatcher.forward(request, response);
     }
@@ -91,12 +117,28 @@ public class InventoryServlet extends HttpServlet {
     private void updateStockLevel(HttpServletRequest request, HttpServletResponse response, String role,
             String updatedBy) throws ServletException, IOException {
         String productID = request.getParameter("productID");
-        int newStock = Integer.parseInt(request.getParameter("newStock"));
+        int newStock;
+
+        try {
+            newStock = Integer.parseInt(request.getParameter("newStock"));
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid stock input: " + request.getParameter("newStock"));
+            request.setAttribute("message", "Invalid stock quantity.");
+            viewStockLevels(request, response, role);
+            return;
+        }
+
+        // Log the update attempt
+        System.out.println(
+                "Attempting to update product ID: " + productID + " with new stock: " + newStock + " by " + updatedBy);
 
         boolean isUpdated = inventory.updateStockLevel(productID, newStock, updatedBy);
+
         if (isUpdated) {
+            System.out.println("Stock updated successfully by " + updatedBy);
             request.setAttribute("message", "Stock updated successfully by " + updatedBy + ".");
         } else {
+            System.out.println("Failed to update stock. Invalid product ID or stock quantity.");
             request.setAttribute("message", "Failed to update stock. Invalid product ID or stock quantity.");
         }
 
@@ -107,7 +149,10 @@ public class InventoryServlet extends HttpServlet {
     private void showLowStockNotification(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String lowStockMessage = inventory.checkLowStockLevels();
+        System.out.println("Low stock notification: " + lowStockMessage);
+
         request.setAttribute("lowStockMessage", lowStockMessage);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("lowStockNotification.jsp");
         dispatcher.forward(request, response);
     }
