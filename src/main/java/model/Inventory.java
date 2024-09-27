@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Inventory class to manage the products and track stock levels.
+ */
 public class Inventory implements Serializable {
 
     // HashMap to store Product objects with their productID as the key
@@ -19,27 +22,47 @@ public class Inventory implements Serializable {
         this.productList = new HashMap<>();
     }
 
-    // Add a new product to the inventory with updatedBy parameter
+    /**
+     * Adds a new product to the inventory.
+     * 
+     * @param product   Product object to be added.
+     * @param updatedBy The user who is adding the product.
+     */
     public void addProduct(Product product, String updatedBy) {
         productList.put(product.getProductID(), product);
         logAudit(product.getProductID(), "add", 0, product.getStockQuantity(), updatedBy); // Log audit for adding a
                                                                                            // product
     }
 
-    // Remove a product from the inventory by productID with updatedBy parameter
+    /**
+     * Removes a product from the inventory by its productID.
+     * 
+     * @param productID ID of the product to remove.
+     * @param updatedBy The user who is removing the product.
+     */
     public void removeProduct(String productID, String updatedBy) {
         Product removedProduct = productList.remove(productID);
         if (removedProduct != null) {
-            logAudit(productID, "remove", removedProduct.getStockQuantity(), 0, updatedBy); // Log audit for removal
+            logAudit(productID, "remove", removedProduct.getStockQuantity(), 0, updatedBy); // Log audit for product
+                                                                                            // removal
         }
     }
 
-    // Get product details by productID
+    /**
+     * Get product details by productID.
+     * 
+     * @param productID The ID of the product to get.
+     * @return The Product object if found, or null.
+     */
     public Product getProductByID(String productID) {
         return productList.get(productID);
     }
 
-    // U136 - View and monitor stock levels
+    /**
+     * U136 - View and monitor stock levels.
+     * 
+     * @return A map of product names and their current stock levels.
+     */
     public Map<String, Integer> viewStockLevels() {
         Map<String, Integer> stockLevels = new HashMap<>();
         for (Product product : productList.values()) {
@@ -48,7 +71,11 @@ public class Inventory implements Serializable {
         return stockLevels;
     }
 
-    // U137 - Receive a stock level notification
+    /**
+     * U137 - Check for low stock levels.
+     * 
+     * @return A message showing which products are low on stock.
+     */
     public String checkLowStockLevels() {
         StringBuilder lowStockMessage = new StringBuilder();
         for (Product product : productList.values()) {
@@ -63,14 +90,23 @@ public class Inventory implements Serializable {
         return lowStockMessage.length() > 0 ? lowStockMessage.toString() : "All stock levels are sufficient.";
     }
 
-    // U139 - Update stock levels manually for a product with updatedBy parameter
+    /**
+     * U139 - Updates the stock level for a product manually.
+     * Updates the stock both in-memory and in the database.
+     * 
+     * @param productID The ID of the product to update.
+     * @param newStock  The new stock quantity.
+     * @param updatedBy The user who is updating the stock.
+     * @return true if the stock was successfully updated, false otherwise.
+     */
     public boolean updateStockLevel(String productID, int newStock, String updatedBy) {
         Product product = productList.get(productID);
         if (product != null && newStock >= 0) {
-            int oldStock = product.getStockQuantity();
-            product.setStockQuantity(newStock);
+            System.out.println("Updating product: " + productID + " with new stock: " + newStock);
 
-            // Perform SQL update as well
+            int oldStock = product.getStockQuantity();
+
+            // Perform SQL update first
             Connection connection = null;
             PreparedStatement statement = null;
 
@@ -83,10 +119,15 @@ public class Inventory implements Serializable {
 
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated > 0) {
+                    System.out.println("Successfully updated product in DB: " + productID);
+                    product.setStockQuantity(newStock); // Update in-memory product
                     logAudit(productID, "update", oldStock, newStock, updatedBy); // Log audit for stock update
+                    return true;
+                } else {
+                    System.out.println("Product not updated in DB: " + productID);
                 }
-                return rowsUpdated > 0;
             } catch (SQLException e) {
+                System.err.println("Error updating product in DB: " + productID);
                 e.printStackTrace();
                 return false;
             } finally {
@@ -106,11 +147,21 @@ public class Inventory implements Serializable {
                     }
                 }
             }
+        } else {
+            System.out.println("Product not found in memory or invalid stock quantity: " + productID);
         }
         return false;
     }
 
-    // Audit logging method
+    /**
+     * Logs audit information when any stock changes occur.
+     * 
+     * @param productID The ID of the product.
+     * @param action    The action performed (add, remove, update).
+     * @param oldStock  The old stock quantity.
+     * @param newStock  The new stock quantity.
+     * @param updatedBy The user who performed the action.
+     */
     private void logAudit(String productID, String action, int oldStock, int newStock, String updatedBy) {
         Connection connection = null;
         PreparedStatement statement = null;

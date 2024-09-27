@@ -16,12 +16,17 @@ import java.util.Map;
 public class InventoryServlet extends HttpServlet {
     private Inventory inventory;
 
-    // Initialize the Inventory object
+    // Initialize the Inventory object and load products from the database
     public void init() throws ServletException {
         inventory = new Inventory();
-        // Add some sample products for testing (pass "system" as the updatedBy value)
-        inventory.addProduct(new Product("P001", "Apple", 50), "system");
-        inventory.addProduct(new Product("P002", "Orange", 30), "system");
+
+        // Retrieve products from the database and add them to the in-memory list
+        try {
+            inventory.loadProductsFromDB(); // Load products from DB into memory
+            System.out.println("Products loaded from database.");
+        } catch (Exception e) {
+            throw new ServletException("Failed to load products from the database", e);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
