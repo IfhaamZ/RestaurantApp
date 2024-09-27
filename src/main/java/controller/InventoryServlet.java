@@ -72,8 +72,7 @@ public class InventoryServlet extends HttpServlet {
 
     // U139 - Update stock levels manually (only for Managers)
     private void updateStockLevel(HttpServletRequest request, HttpServletResponse response, String role,
-            String updatedBy)
-            throws ServletException, IOException {
+            String updatedBy) throws ServletException, IOException {
         String productID = request.getParameter("productID");
         int newStock = Integer.parseInt(request.getParameter("newStock"));
 

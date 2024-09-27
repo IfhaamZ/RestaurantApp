@@ -112,7 +112,38 @@ public class Inventory implements Serializable {
 
     // Audit logging method
     private void logAudit(String productID, String action, int oldStock, int newStock, String updatedBy) {
-        // Code to insert audit record into audit table
-        // You may already have this implemented from earlier code
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = DBConnector.getConnection(); // Get the database connection
+            String insertAuditQuery = "INSERT INTO inventory_audit (productID, action, oldStock, newStock, updatedBy, timestamp) "
+                    + "VALUES (?, ?, ?, ?, ?, NOW())";
+            statement = connection.prepareStatement(insertAuditQuery);
+            statement.setString(1, productID);
+            statement.setString(2, action);
+            statement.setInt(3, oldStock);
+            statement.setInt(4, newStock);
+            statement.setString(5, updatedBy);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Close the resources
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
