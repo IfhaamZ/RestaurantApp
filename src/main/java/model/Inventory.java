@@ -136,6 +136,7 @@ public class Inventory implements Serializable {
      */
     public String checkLowStockLevels() {
         StringBuilder lowStockMessage = new StringBuilder();
+        boolean hasLowStock = false; // Flag to check if any product has low stock
 
         // Loop through products to check stock levels
         for (Product product : productList.values()) {
@@ -145,12 +146,13 @@ public class Inventory implements Serializable {
                         .append(" is low on stock! Current level: ")
                         .append(product.getStockQuantity())
                         .append("\n");
+                hasLowStock = true; // Set flag to true if a low stock product is found
             }
         }
 
-        // If no low stock warnings were generated, display the "All stock levels are
-        // sufficient" message
-        if (lowStockMessage.length() == 0) {
+        // If there are no low stock products, only then return the "All stock levels
+        // are sufficient" message
+        if (!hasLowStock) {
             return "All stock levels are sufficient.";
         }
 
