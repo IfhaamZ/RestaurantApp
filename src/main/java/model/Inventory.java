@@ -149,26 +149,17 @@ public class Inventory implements Serializable {
                 hasLowStock = true; // Set flag to true if a low stock product is found
             }
         }
+        System.out.println("Has Low Stock: " + hasLowStock);
 
-        // If there are no low stock products, return the "All stock levels are
-        // sufficient" message
+        // If there are no low stock products, return "All stock levels are sufficient"
         if (!hasLowStock) {
             return "All stock levels are sufficient.";
         }
 
-        // Return only the low stock warnings if there are any
+        // Return the low stock warnings if there are any
         return lowStockMessage.toString();
     }
 
-    /**
-     * U139 - Updates the stock level for a product manually.
-     * Updates the stock both in-memory and in the database.
-     * 
-     * @param productID The ID of the product to update.
-     * @param newStock  The new stock quantity.
-     * @param updatedBy The user who is updating the stock.
-     * @return true if the stock was successfully updated, false otherwise.
-     */
     public boolean updateStockLevel(String productID, int newStock, String updatedBy) {
         Product product = productList.get(productID);
         if (product != null && newStock >= 0) {
