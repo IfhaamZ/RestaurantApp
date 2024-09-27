@@ -11,10 +11,10 @@
       <pre>${lowStockMessage}</pre>
     </c:if>
 
-    <!-- Display message if all stock levels are sufficient -->
+    <!-- Display message if all stock levels are sufficient
     <c:if test="${empty lowStockMessage}">
       <p>All stock levels are sufficient.</p>
-    </c:if>
+    </c:if> -->
 
     <!-- Button to go back to view stock levels -->
     <a href="inventory?action=view" class="home-button"
