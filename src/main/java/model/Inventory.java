@@ -22,13 +22,18 @@ public class Inventory implements Serializable {
     }
 
     // Add a new product to the inventory
-    public void addProduct(Product product) {
+    public void addProduct(Product product, String updatedBy) {
         productList.put(product.getProductID(), product);
+        logAudit(product.getProductID(), "add", 0, product.getStockQuantity(), updatedBy);
     }
 
     // Remove a product from the inventory by productID
-    public void removeProduct(String productID) {
-        productList.remove(productID);
+    public void removeProduct(String productID, String updatedBy) {
+        Product product = productList.get(productID);
+        if (product != null) {
+            logAudit(productID, "delete", product.getStockQuantity(), 0, updatedBy);
+            productList.remove(productID);
+        }
     }
 
     // Get product details by productID
@@ -61,13 +66,14 @@ public class Inventory implements Serializable {
     }
 
     // U139 - Update stock levels manually for a product
-    public boolean updateStockLevel(String productID, int newStock) {
+    public boolean updateStockLevel(String productID, int newStock, String updatedBy) {
         // Update the in-memory map first
         Product product = productList.get(productID);
         if (product != null && newStock >= 0) {
+            int oldStock = product.getStockQuantity();
             product.setStockQuantity(newStock);
 
-            // Perform SQL update as well
+            // Perform SQL update and log the action
             Connection connection = null;
             PreparedStatement statement = null;
 
@@ -79,7 +85,10 @@ public class Inventory implements Serializable {
                 statement.setString(2, productID);
 
                 int rowsUpdated = statement.executeUpdate();
-                return rowsUpdated > 0;
+                if (rowsUpdated > 0) {
+                    logAudit(productID, "update", oldStock, newStock, updatedBy); // Log the audit
+                    return true;
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
                 return false;
@@ -102,6 +111,43 @@ public class Inventory implements Serializable {
             }
         }
         return false;
+    }
+
+    // Log changes in the inventory_audit table
+    private void logAudit(String productID, String action, int oldValue, int newValue, String updatedBy) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = DBConnector.getConnection(); // Get the database connection
+            String insertAuditQuery = "INSERT INTO inventory_audit (product_id, action, old_value, new_value, updated_by) VALUES (?, ?, ?, ?, ?)";
+            statement = connection.prepareStatement(insertAuditQuery);
+            statement.setString(1, productID);
+            statement.setString(2, action);
+            statement.setInt(3, oldValue);
+            statement.setInt(4, newValue);
+            statement.setString(5, updatedBy);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Close the resources
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }
