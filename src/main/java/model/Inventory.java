@@ -1,12 +1,13 @@
 package model;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import DAO.DBConnector;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * Inventory class to manage the products and track stock levels.
@@ -20,6 +21,63 @@ public class Inventory implements Serializable {
     // Constructor initializing the product list
     public Inventory() {
         this.productList = new HashMap<>();
+    }
+
+    /**
+     * Loads products from the database and populates the in-memory product list.
+     */
+    public void loadProductsFromDB() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DBConnector.getConnection();
+            String query = "SELECT * FROM Product"; // Query to fetch all products from DB
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
+
+            // Clear the in-memory product list
+            productList.clear();
+
+            // Iterate over the results and populate the product list
+            while (resultSet.next()) {
+                String productID = resultSet.getString("productID");
+                String productName = resultSet.getString("productName");
+                int stockQuantity = resultSet.getInt("stockQuantity");
+
+                // Create a Product object and add it to the in-memory productList
+                Product product = new Product(productID, productName, stockQuantity);
+                productList.put(productID, product);
+            }
+
+            System.out.println("Products successfully loaded from the database.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
