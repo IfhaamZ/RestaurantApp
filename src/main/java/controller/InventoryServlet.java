@@ -44,21 +44,22 @@ public class InventoryServlet extends HttpServlet {
                     viewStockLevels(request, response, role);
                     break;
                 case "update":
-                    if ("Manager".equals(role)) {
-                        updateStockLevel(request, response, role);
-                    } else {
-                        request.setAttribute("message", "Access Denied: Only managers can update stock levels.");
-                        viewStockLevels(request, response, role);
-                    }
+                    // if ("Manager".equals(role)) {
+                    updateStockLevel(request, response, role);
+                    // } else {
+                    // request.setAttribute("message", "Access Denied: Only managers can update
+                    // stock levels.");
+                    // viewStockLevels(request, response, role);
+                    // }
                     break;
                 case "lowStockNotification":
-                    if ("Manager".equals(role)) {
-                        showLowStockNotification(request, response);
-                    } else {
-                        request.setAttribute("message",
-                                "Access Denied: Only managers can view low stock notifications.");
-                        viewStockLevels(request, response, role);
-                    }
+                    // if ("Manager".equals(role)) {
+                    showLowStockNotification(request, response);
+                    // } else {
+                    // request.setAttribute("message",
+                    // "Access Denied: Only managers can view low stock notifications.");
+                    // viewStockLevels(request, response, role);
+                    // }
                     break;
                 default:
                     viewStockLevels(request, response, role);
