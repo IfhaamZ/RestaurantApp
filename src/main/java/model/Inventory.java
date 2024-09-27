@@ -150,13 +150,14 @@ public class Inventory implements Serializable {
             }
         }
 
-        // If there are no low stock products, only then return the "All stock levels
-        // are sufficient" message
+        // If there are no low stock products, return the "All stock levels are
+        // sufficient" message
         if (!hasLowStock) {
             return "All stock levels are sufficient.";
         }
 
-        return lowStockMessage.toString(); // Return only the low stock warnings
+        // Return only the low stock warnings if there are any
+        return lowStockMessage.toString();
     }
 
     /**
