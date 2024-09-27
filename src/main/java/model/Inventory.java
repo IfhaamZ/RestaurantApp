@@ -3,7 +3,12 @@ package model;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import model.Product; // Importing Product class
+
+import DAO.DBConnector;
+import model.Product;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Inventory implements Serializable {
 
@@ -57,10 +62,44 @@ public class Inventory implements Serializable {
 
     // U139 - Update stock levels manually for a product
     public boolean updateStockLevel(String productID, int newStock) {
+        // Update the in-memory map first
         Product product = productList.get(productID);
         if (product != null && newStock >= 0) {
             product.setStockQuantity(newStock);
-            return true;
+
+            // Perform SQL update as well
+            Connection connection = null;
+            PreparedStatement statement = null;
+
+            try {
+                connection = DBConnector.getConnection(); // Get the database connection
+                String updateQuery = "UPDATE Product SET stockQuantity = ? WHERE productID = ?";
+                statement = connection.prepareStatement(updateQuery);
+                statement.setInt(1, newStock);
+                statement.setString(2, productID);
+
+                int rowsUpdated = statement.executeUpdate();
+                return rowsUpdated > 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                // Close the resources
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
         return false;
     }
