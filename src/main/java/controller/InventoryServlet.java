@@ -56,6 +56,9 @@ public class InventoryServlet extends HttpServlet {
                 case "lowStockNotification":
                     showLowStockNotification(request, response);
                     break;
+                case "viewStockDetail":
+                    viewStockDetail(request, response);
+                    break;
                 default:
                     viewStockLevels(request, response, role);
                     break;
@@ -72,6 +75,15 @@ public class InventoryServlet extends HttpServlet {
         request.setAttribute("stockLevels", stockLevels);
         request.setAttribute("role", role); // Pass the role to the JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("viewStockLevels.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    // View stock details for all products
+    private void viewStockDetail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Map<String, Integer> stockDetails = inventory.viewStockLevels();
+        request.setAttribute("stockDetails", stockDetails);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("viewStockDetail.jsp");
         dispatcher.forward(request, response);
     }
 
