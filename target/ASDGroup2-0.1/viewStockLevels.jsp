@@ -33,7 +33,20 @@
       <!-- Only Managers can update stock levels -->
       <c:if test="${role == 'Manager'}">
         
-        <h3>Update Stock Levels</h3>
+      <form action="inventory" method="post" class="update-stock-form">
+        <input type="hidden" name="action" value="update" />
+        <label>Product ID: 
+          <input type="text" name="productID" pattern="^[Pp]\d+$" required title="Product ID must start with 'P' or 'p' followed by digits" />
+        </label><br />
+        
+        <label>New Stock: 
+          <input type="number" name="newStock" min="1" required title="Please enter a positive stock quantity." />
+        </label><br />
+        
+        <input type="submit" value="Update Stock" class="form-button" />
+      </form>
+      
+        <!-- <h3>Update Stock Levels</h3>
         <form action="inventory" method="post" class="update-stock-form">
           <input type="hidden" name="action" value="update" />
           <label>Product ID: <input type="text" name="productID" /></label
@@ -42,7 +55,7 @@
           ><br />
           <a href="inventory?action=viewStockDetail" class="form-button">View Stock Detail</a>
           <input type="submit" value="Update Stock" class="form-button" />
-        </form>
+        </form> -->
 
         <!-- Button to Check Inventory Usage Trend (S126) -->
         <h3>View Inventory Usage Trend</h3>

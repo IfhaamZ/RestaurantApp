@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Low Stock Notification</title>
+    <link rel="stylesheet" href="css/lowStockNotification.css" />
   </head>
   <body>
     <h2>Low Stock Notification</h2>
