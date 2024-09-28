@@ -167,27 +167,49 @@ public class InventoryServlet extends HttpServlet {
     // S126 - View Inventory Audit Trail (Show Inventory Usage Trend Data)
     private void viewInventoryAuditTrail(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Get the product ID from the request parameter
         String productID = request.getParameter("productID");
 
+        // Log the product ID to ensure it's being captured
+        System.out.println("Viewing audit trail for product ID: " + productID);
+
+        // Ensure the productID is not null or empty
+        if (productID == null || productID.isEmpty()) {
+            request.setAttribute("error", "Product ID is missing.");
+            // Redirect or forward back to the inventory page or an error page
+            RequestDispatcher dispatcher = request.getRequestDispatcher("viewStockLevels.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+
+        // Create an instance of DBManager to interact with the database
         DBManager dbManager = new DBManager();
         try {
-            // Fetch inventory audit data for the product
+            // Fetch the inventory audit data for the specific product
             List<InventoryAudit> auditList = dbManager.getInventoryAuditByProduct(productID);
 
-            // Log the audit data fetched
+            // Log the audit data fetched for debugging
             System.out.println("Audit trail for product ID " + productID + ": " + auditList);
 
-            // Set audit list as request attribute
-            request.setAttribute("auditList", auditList);
-            request.setAttribute("productID", productID);
+            // Check if audit data was returned
+            if (auditList == null || auditList.isEmpty()) {
+                request.setAttribute("message", "No audit trail found for product ID: " + productID);
+            } else {
+                // Set audit list and product ID as request attributes to be used in the JSP
+                request.setAttribute("auditList", auditList);
+                request.setAttribute("productID", productID);
+            }
 
-            // Forward to JSP to display audit trail
+            // Forward the request to the JSP page to display the audit trail
             RequestDispatcher dispatcher = request.getRequestDispatcher("inventoryAudit.jsp");
             dispatcher.forward(request, response);
 
         } catch (SQLException e) {
+            // Log any SQL exceptions
             e.printStackTrace();
+            // Send an internal server error response with a message
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching audit data.");
         }
     }
+
 }
