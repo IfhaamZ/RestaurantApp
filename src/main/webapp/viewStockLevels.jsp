@@ -41,8 +41,15 @@
           <label>New Stock: <input type="number" name="newStock" /></label
           ><br />
           <a href="inventory?action=viewStockDetail" class="form-button">View Stock Detail</a>
-
           <input type="submit" value="Update Stock" class="form-button" />
+        </form>
+
+        <!-- Button to Check Inventory Usage Trend (S126) -->
+        <h3>View Inventory Usage Trend</h3>
+        <form action="inventory" method="get">
+          <input type="hidden" name="action" value="viewAuditTrail" />
+          <label>Product ID: <input type="text" name="productID" /></label><br />
+          <input type="submit" value="View Usage Trend" class="form-button" />
         </form>
       </c:if>
 

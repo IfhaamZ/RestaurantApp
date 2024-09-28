@@ -7,6 +7,7 @@ import java.util.List;
 import model.Event;
 import model.Payment;
 import model.Table;
+import model.InventoryAudit;
 
 public class DBManager {
 
@@ -275,6 +276,40 @@ public class DBManager {
             }
         }
         return payments;
+    }
 
+    public List<InventoryAudit> getInventoryAuditByProduct(String productID) throws SQLException {
+        List<InventoryAudit> auditList = new ArrayList<>();
+
+        String sql = "SELECT productID, oldStockLevel, newStockLevel, timestamp, updatedBy " +
+                "FROM InventoryAudit " +
+                "WHERE productID = ? " +
+                "ORDER BY timestamp DESC " +
+                "LIMIT 10";
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+
+            // Set the parameter for the prepared statement
+            st.setString(1, productID);
+
+            // Execute the query
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    // Create an InventoryAudit object and set its properties
+                    InventoryAudit audit = new InventoryAudit();
+                    audit.setProductID(rs.getString("productID"));
+                    audit.setOldStock(rs.getInt("oldStockLevel"));
+                    audit.setNewStock(rs.getInt("newStockLevel"));
+                    audit.setTimestamp(rs.getTimestamp("timestamp"));
+                    audit.setUpdatedBy(rs.getString("updatedBy"));
+
+                    // Add to the list
+                    auditList.add(audit);
+                }
+            }
+        }
+
+        return auditList;
     }
 }

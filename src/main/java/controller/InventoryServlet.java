@@ -1,6 +1,8 @@
 package controller;
 
+import DAO.DBManager;
 import model.Inventory;
+import model.InventoryAudit;
 import model.Product;
 
 import javax.servlet.RequestDispatcher;
@@ -10,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet("/inventory")
@@ -61,6 +65,9 @@ public class InventoryServlet extends HttpServlet {
                     break;
                 case "viewStockDetail":
                     viewStockDetail(request, response);
+                    break;
+                case "viewAuditTrail":
+                    viewInventoryAuditTrail(request, response); // New action for S126
                     break;
                 default:
                     viewStockLevels(request, response, role);
@@ -155,5 +162,32 @@ public class InventoryServlet extends HttpServlet {
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("lowStockNotification.jsp");
         dispatcher.forward(request, response);
+    }
+
+    // S126 - View Inventory Audit Trail (Show Inventory Usage Trend Data)
+    private void viewInventoryAuditTrail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String productID = request.getParameter("productID");
+
+        DBManager dbManager = new DBManager();
+        try {
+            // Fetch inventory audit data for the product
+            List<InventoryAudit> auditList = dbManager.getInventoryAuditByProduct(productID);
+
+            // Log the audit data fetched
+            System.out.println("Audit trail for product ID " + productID + ": " + auditList);
+
+            // Set audit list as request attribute
+            request.setAttribute("auditList", auditList);
+            request.setAttribute("productID", productID);
+
+            // Forward to JSP to display audit trail
+            RequestDispatcher dispatcher = request.getRequestDispatcher("inventoryAudit.jsp");
+            dispatcher.forward(request, response);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching audit data.");
+        }
     }
 }
