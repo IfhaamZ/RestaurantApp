@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import DAO.DBConnector;
 
@@ -20,7 +20,7 @@ public class Inventory implements Serializable {
 
     // Constructor initializing the product list
     public Inventory() {
-        this.productList = new HashMap<>();
+        this.productList = new LinkedHashMap<>();
     }
 
     /**
@@ -122,11 +122,15 @@ public class Inventory implements Serializable {
      * @return A map of product names and their current stock levels.
      */
     public Map<String, Integer> viewStockLevels() {
-        Map<String, Integer> stockLevels = new HashMap<>();
+        Map<String, Integer> stockLevels = new LinkedHashMap<>();
         for (Product product : productList.values()) {
             stockLevels.put(product.getName(), product.getStockQuantity());
         }
         return stockLevels;
+    }
+
+    public Map<String, Product> viewStockLevelsWithProductID() {
+        return new LinkedHashMap<>(productList);
     }
 
     /**

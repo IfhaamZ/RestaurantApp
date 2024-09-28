@@ -102,7 +102,7 @@ public class InventoryServlet extends HttpServlet {
     private void viewStockDetail(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Log fetching of stock details
-        Map<String, Integer> stockDetails = inventory.viewStockLevels();
+        Map<String, Product> stockDetails = inventory.viewStockLevelsWithProductID();
         System.out.println("Stock details fetched: " + stockDetails);
 
         // Set stock details in request attribute

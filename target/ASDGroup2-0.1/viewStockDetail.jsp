@@ -10,19 +10,13 @@ uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <div class="container">
       <h2>Current Stock Details</h2>
 
-      <!-- Debugging stockDetails and role -->
-      <p>Debugging Information:</p>
-      <p>
-        Stock details attribute: <%= request.getAttribute("stockDetails") %>
-      </p>
-      <p>Role: <%= request.getAttribute("role") %></p>
-
       <!-- Check if stockDetails is null or empty -->
       <c:choose>
         <c:when test="${not empty stockDetails}">
           <!-- Stock table -->
           <table class="stock-table">
             <tr>
+              <th>Product ID</th>
               <th>Product Name</th>
               <th>Stock Quantity</th>
             </tr>
@@ -31,7 +25,8 @@ uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
             <c:forEach var="entry" items="${stockDetails}">
               <tr>
                 <td>${entry.key}</td>
-                <td>${entry.value}</td>
+                <td>${entry.value.name}</td>
+                <td>${entry.value.stockQuantity}</td>
               </tr>
             </c:forEach>
           </table>
