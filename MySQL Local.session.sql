@@ -1,14 +1,10 @@
 use restaurantdb;
 
--- Insert sample menu items into the menu table
-INSERT INTO menu (name, description, price, category) VALUES
-('Margherita Pizza', 'Classic pizza with tomato sauce, mozzarella, and fresh basil.', 12.99, 'Main Course'),
-('Caesar Salad', 'Crisp romaine lettuce, Caesar dressing, croutons, and Parmesan cheese.', 8.99, 'Appetizer'),
-('Spaghetti Carbonara', 'Spaghetti with creamy sauce, pancetta, egg, and Parmesan cheese.', 14.99, 'Main Course'),
-('Garlic Bread', 'Toasted bread with garlic butter and herbs.', 4.99, 'Appetizer'),
-('Grilled Chicken', 'Grilled chicken breast served with steamed vegetables and mashed potatoes.', 16.99, 'Main Course'),
-('Chocolate Lava Cake', 'Warm chocolate cake with a gooey center, served with vanilla ice cream.', 7.99, 'Dessert'),
-('Tiramisu', 'Classic Italian dessert with layers of coffee-soaked ladyfingers, mascarpone, and cocoa.', 6.99, 'Dessert'),
-('Margarita', 'Refreshing cocktail with tequila, lime juice, and a salted rim.', 9.99, 'Beverage'),
-('Espresso', 'Strong and rich coffee served in a small cup.', 2.99, 'Beverage'),
-('Iced Tea', 'Chilled black tea served with lemon.', 3.99, 'Beverage');
+-- Inserting sample feedback entries into the feedback table
+INSERT INTO feedback (customer_name, customer_email, feedback_text, rating, staff_response) VALUES
+('John Doe', 'john.doe@example.com', 'Great service and amazing food!', 5, 'Thank you for the positive feedback!'),
+('Jane Smith', 'jane.smith@example.com', 'Food was cold when delivered.', 2, 'We are sorry for the inconvenience, we will improve our service.'),
+('Alice Johnson', 'alice.johnson@example.com', 'The ambiance was perfect, but the food was average.', 3, NULL),
+('Bob Brown', 'bob.brown@example.com', 'Fantastic experience! Will definitely come again.', 5, 'We look forward to seeing you again!'),
+('Emily Davis', 'emily.davis@example.com', 'Wait time was too long, but the food was good.', 4, 'We apologize for the wait time and are working to speed things up.'),
+('Chris Lee', 'chris.lee@example.com', 'Loved the desserts, but the main course was lacking flavor.', 3, 'We appreciate your feedback and will work on improving our main courses.')
