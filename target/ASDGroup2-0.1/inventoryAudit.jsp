@@ -3,6 +3,7 @@
   <head>
     <title>Inventory Audit Trail</title>
     <link rel="stylesheet" href="css/inventoryAudit.css" />
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
   </head>
   <body>
     <div class="container">

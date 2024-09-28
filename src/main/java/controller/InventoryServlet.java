@@ -191,6 +191,12 @@ public class InventoryServlet extends HttpServlet {
             // Log the audit data fetched for debugging
             System.out.println("Audit trail for product ID " + productID + ": " + auditList);
 
+            // Debugging log for individual audit entries
+            for (InventoryAudit audit : auditList) {
+                System.out.println("Old Stock: " + audit.getOldStock() + ", New Stock: " + audit.getNewStock()
+                        + ", Timestamp: " + audit.getTimestamp() + ", Updated By: " + audit.getUpdatedBy());
+            }
+
             // Check if audit data was returned
             if (auditList == null || auditList.isEmpty()) {
                 request.setAttribute("message", "No audit trail found for product ID: " + productID);
