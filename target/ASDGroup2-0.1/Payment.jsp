@@ -31,6 +31,7 @@ pageEncoding="UTF-8"%>
             placeholder="Enter Card Number"
             pattern="\d{16}"
             title="Please enter a valid 16-digit card number."
+            autocomplete="off"
           />
         </div>
 
