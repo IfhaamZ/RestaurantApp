@@ -1,11 +1,14 @@
 package DAO;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import model.Event;
+import model.InventoryAudit;
 import model.MenuItem;
+import model.Payment;
 import model.Table;
 import model.error;
 import model.feedback;
@@ -258,12 +261,12 @@ public class DBManager {
         }
     }
 
-    // Clear reservation details when a table becomes available
     public boolean clearReservationDetails(int tableId) throws SQLException {
-        String sql = "UPDATE table_management SET reservation_time = NULL, reserved_by_name = NULL, reserved_by_phone = NULL, reserved_by_email = NULL WHERE id = ?";
+        String sql = "UPDATE table_management SET status = ?, reservation_time = NULL, reserved_by_name = NULL, reserved_by_phone = NULL, reserved_by_email = NULL WHERE id = ?";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, tableId);
+            st.setString(1, "Available"); // Set status to Available
+            st.setInt(2, tableId);
             return st.executeUpdate() > 0;
         }
     }
@@ -278,11 +281,12 @@ public class DBManager {
         }
     }
 
+    // Menu Management Tests
     // Insert a new menu item
     public boolean insertMenuItem(MenuItem item) throws SQLException {
         String sql = "INSERT INTO menu (name, description, price, category) VALUES (?, ?, ?, ?)";
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement st = connection.prepareStatement(sql)) {
+                PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, item.getName());
             st.setString(2, item.getDescription());
             st.setDouble(3, item.getPrice());
@@ -296,8 +300,8 @@ public class DBManager {
         List<MenuItem> menuItems = new ArrayList<>();
         String sql = "SELECT * FROM menu";
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement st = connection.prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 MenuItem item = new MenuItem(
                         rs.getInt("id"),
@@ -315,7 +319,7 @@ public class DBManager {
     public MenuItem getMenuItemById(int id) throws SQLException {
         String sql = "SELECT * FROM menu WHERE id = ?";
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement st = connection.prepareStatement(sql)) {
+                PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
@@ -344,7 +348,7 @@ public class DBManager {
             return st.executeUpdate() > 0;
         }
     }
-    
+
     // Fetch menu items based on category
     public List<MenuItem> fetchMenuItemsByCategory(String category) throws SQLException {
         List<MenuItem> menuItems = new ArrayList<>();
@@ -398,7 +402,7 @@ public class DBManager {
             return st.executeUpdate() > 0;
         }
     }
-    
+
     // Error and Feedback
     // Method to create a new error report and return its generated ID
     public int createErrorReportAndReturnID(String description, String steps, String category, String severity,
@@ -616,5 +620,119 @@ public class DBManager {
 
             return statement.executeUpdate() > 0;
         }
+    }
+
+    // Payment Management Methods
+
+    // Create Payment
+    public boolean createPayment(Payment payment) throws Exception {
+        String sql = "INSERT INTO payments (method, cardNum, expMonth, expYear, cvn, paymentAmount, isCancelled) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, payment.getMethod());
+            st.setString(2, payment.getCardNum()); // Encrypt before saving
+            st.setString(3, payment.getExpMonth());
+            st.setString(4, payment.getExpYear());
+            st.setString(5, payment.getCVN()); // Encrypt before saving
+            st.setBigDecimal(6, new BigDecimal(payment.getPaymentAmount())); // Handle decimals correctly
+            st.setBoolean(7, payment.isCancelled());
+            return st.executeUpdate() > 0;
+        }
+    }
+
+    // Fetch Payment by ID
+    public Payment getPaymentById(int paymentID) throws Exception {
+        String sql = "SELECT * FROM payments WHERE paymentID = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, paymentID);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    Payment payment = new Payment(
+                            rs.getString("paymentID"),
+                            rs.getString("method"),
+                            Payment.decrypt(rs.getString("cardNum")), // Decrypt
+                            rs.getString("expMonth"),
+                            rs.getString("expYear"),
+                            Payment.decrypt(rs.getString("cvn")), // Decrypt
+                            rs.getString("paymentAmount"),
+                            rs.getTimestamp("paymentDate").toString(),
+                            null // No staff role here
+                    );
+                    return payment;
+                }
+            }
+        }
+        return null;
+    }
+
+    // Update Payment Status
+    public boolean cancelPayment(int paymentID) throws SQLException {
+        String sql = "UPDATE payments SET isCancelled = TRUE WHERE paymentID = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, paymentID);
+            return st.executeUpdate() > 0;
+        }
+    }
+
+    // Fetch All Payments
+    public List<Payment> fetchAllPayments() throws Exception {
+        List<Payment> payments = new ArrayList<>();
+        String sql = "SELECT * FROM payments";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                Payment payment = new Payment(
+                        rs.getString("paymentID"),
+                        rs.getString("method"),
+                        Payment.decrypt(rs.getString("cardNum")), // Decrypt
+                        rs.getString("expMonth"),
+                        rs.getString("expYear"),
+                        Payment.decrypt(rs.getString("cvn")), // Decrypt
+                        rs.getString("paymentAmount"),
+                        rs.getTimestamp("paymentDate").toString(),
+                        null // No staff role here
+                );
+                payments.add(payment);
+            }
+        }
+        return payments;
+    }
+
+    public List<InventoryAudit> getInventoryAuditByProduct(String productID) throws SQLException {
+        List<InventoryAudit> auditList = new ArrayList<>();
+
+        String sql = "SELECT productID, oldStockLevel, newStockLevel, timestamp, updatedBy " +
+                "FROM InventoryAudit " +
+                "WHERE productID = ? " +
+                "ORDER BY timestamp DESC " +
+                "LIMIT 10";
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+
+            // Set the parameter for the prepared statement
+            st.setString(1, productID);
+
+            // Execute the query
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    // Create an InventoryAudit object and set its properties
+                    InventoryAudit audit = new InventoryAudit();
+                    audit.setProductID(rs.getString("productID"));
+                    audit.setOldStock(rs.getInt("oldStockLevel"));
+                    audit.setNewStock(rs.getInt("newStockLevel"));
+                    audit.setTimestamp(rs.getTimestamp("timestamp"));
+                    audit.setUpdatedBy(rs.getString("updatedBy"));
+
+                    // Add to the list
+                    auditList.add(audit);
+                }
+            }
+        }
+
+        return auditList;
     }
 }
