@@ -40,6 +40,9 @@ public class ControllerServlet extends HttpServlet {
                 case "/feedback":
                     handleFeedbackRequest(request, response); // Show the dashboard
                     break;
+                case "/payment":
+                    handlePaymentRequests(request, response);
+                    break;
                 default:
                     showDefaultPage(request, response);
                     break;
@@ -81,6 +84,12 @@ public class ControllerServlet extends HttpServlet {
     private void handleMenuRequests(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/MenuServlet"); // Forwarding to TableServlet
+        dispatcher.forward(request, response);
+    }
+
+    private void handlePaymentRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/PaymentServlet");
         dispatcher.forward(request, response);
     }
 

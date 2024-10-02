@@ -624,11 +624,11 @@ public class DBManager {
 
     // Payment Management Methods
 
-    // Create Payment
-    public boolean createPayment(Payment payment) throws Exception {
+    // Create Payment and return the generated paymentID
+    public int createPayment(Payment payment) throws Exception {
         String sql = "INSERT INTO payments (method, cardNum, expMonth, expYear, cvn, paymentAmount, isCancelled) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DBConnector.getConnection();
-                PreparedStatement st = connection.prepareStatement(sql)) {
+                PreparedStatement st = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             st.setString(1, payment.getMethod());
             st.setString(2, payment.getCardNum()); // Encrypt before saving
             st.setString(3, payment.getExpMonth());
@@ -636,7 +636,19 @@ public class DBManager {
             st.setString(5, payment.getCVN()); // Encrypt before saving
             st.setBigDecimal(6, new BigDecimal(payment.getPaymentAmount())); // Handle decimals correctly
             st.setBoolean(7, payment.isCancelled());
-            return st.executeUpdate() > 0;
+            int affectedRows = st.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating payment failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Return the generated paymentID
+                } else {
+                    throw new SQLException("Creating payment failed, no ID obtained.");
+                }
+            }
         }
     }
 

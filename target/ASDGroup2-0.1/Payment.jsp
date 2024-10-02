@@ -13,7 +13,7 @@ pageEncoding="UTF-8"%>
     <div class="container">
       <h2>Payment Form</h2>
 
-      <form action="managePayment" method="post">
+      <form action="paymentinsert" method="post">
         <div class="form-group">
           <label for="method">Payment Method:</label>
           <select id="method" name="method" required>
