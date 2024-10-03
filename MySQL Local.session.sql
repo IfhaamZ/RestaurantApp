@@ -1,8 +1,10 @@
+use restaurantdb;
 
- 
-INSERT INTO InventoryAudit (productID, action, oldStockLevel, newStockLevel, updatedBy) 
-VALUES
-('P001', 'Stock Update', 20, 30, 'JohnDoe'),
-('P002', 'Stock Check', 15, 15, 'JaneSmith'),
-('P003', 'Stock Decrease', 40, 35, 'Staff'),
-('P001', 'Stock Increase', 30, 40, 'JohnDoe');
+ALTER TABLE users ADD COLUMN role VARCHAR(50) NOT NULL;
+
+-- Mock data
+INSERT INTO users (name, email, password, role) 
+VALUES 
+('John Doe', 'john@example.com', 'password123', 'customer'),
+('Jane Smith', 'jane@example.com', 'password456', 'staff'),
+('Admin User', 'admin@example.com', 'adminpass', 'admin');

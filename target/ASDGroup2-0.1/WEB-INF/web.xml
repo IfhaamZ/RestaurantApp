@@ -168,4 +168,23 @@
     <url-pattern>/inventoryviewStockDetail</url-pattern>
     <url-pattern>/inventoryviewAuditTrail</url-pattern>
   </servlet-mapping>
+
+  <!-- UserServlet to handle user login, logout, and registration -->
+  <servlet>
+    <servlet-name>UserServlet</servlet-name>
+    <servlet-class>controller.UserServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>UserServlet</servlet-name>
+    <url-pattern>/userlogin</url-pattern>  <!-- Handle login requests -->
+    <url-pattern>/userlogout</url-pattern>  <!-- Handle logout requests -->
+    <url-pattern>/userregister</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/adminadduser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/admininsertuser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/adminedituser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/admindeleteuser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/adminlistuser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/adminupdateuser</url-pattern>  <!-- Handle registration requests -->
+  </servlet-mapping>
 </web-app>

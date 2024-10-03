@@ -10,6 +10,7 @@ import model.InventoryAudit;
 import model.MenuItem;
 import model.Payment;
 import model.Table;
+import model.User;
 import model.error;
 import model.feedback;
 
@@ -748,7 +749,6 @@ public class DBManager {
         return auditList;
     }
 
-    // Validate user for login
     public User validateUser(String email, String password) throws SQLException {
         String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
         try (Connection connection = DBConnector.getConnection();
@@ -757,7 +757,8 @@ public class DBManager {
             st.setString(2, password);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
-                    return new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
+                    return new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"),
+                            rs.getString("password"), rs.getString("role")); // Include role
                 }
             }
         }
@@ -766,13 +767,14 @@ public class DBManager {
 
     // Register a new user
     public boolean registerUser(User user) throws SQLException {
-        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, user.getName());
             st.setString(2, user.getEmail());
             st.setString(3, user.getPassword());
-            return st.executeUpdate() > 0; // returns true if registration is successful
+            st.setString(4, user.getRole()); // Set role
+            return st.executeUpdate() > 0;
         }
     }
 
@@ -789,20 +791,6 @@ public class DBManager {
 
     }
 
-    public List<User> getAllUsers() throws SQLException {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users";
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement st = connection.prepareStatement(sql);
-                ResultSet rs = st.executeQuery()) {
-            while (rs.next()) {
-                User user = new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
-                users.add(user);
-            }
-        }
-        return users;
-    }
-
     // Get user by ID
     public User getUserById(int id) throws SQLException {
         String sql = "SELECT * FROM users WHERE id = ?";
@@ -811,20 +799,39 @@ public class DBManager {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
+                return new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("password"),
+                        rs.getString("role"));
             }
         }
         return null;
     }
 
-    // Update an existing user
+    // Get all users
+    public List<User> getAllUsers() throws SQLException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                User user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"),
+                        rs.getString("password"), rs.getString("role"));
+                users.add(user);
+            }
+        }
+        return users;
+    }
+
+    // Update user
     public boolean updateUser(User user) throws SQLException {
-        String sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
+        String sql = "UPDATE users SET name = ?, email = ?, password = ?, role = ? WHERE id = ?";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, user.getName());
             st.setString(2, user.getEmail());
             st.setString(3, user.getPassword());
+            st.setString(4, user.getRole()); // Set role
+            st.setInt(5, user.getId());
             return st.executeUpdate() > 0;
         }
     }

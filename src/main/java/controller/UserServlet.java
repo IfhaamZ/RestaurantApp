@@ -75,7 +75,6 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-    // Login user
     private void loginUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String email = request.getParameter("email");
@@ -86,7 +85,13 @@ public class UserServlet extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user); // Store the user object in the session
-            response.sendRedirect("welcome.jsp");
+
+            // Redirect based on the user's role
+            if ("customer".equals(user.getRole())) {
+                response.sendRedirect("index.jsp");
+            } else if ("staff".equals(user.getRole())) {
+                response.sendRedirect("staffIndex.jsp");
+            }
         } else {
             response.sendRedirect("login.jsp?error=invalid");
         }
@@ -100,15 +105,15 @@ public class UserServlet extends HttpServlet {
         response.sendRedirect("login.jsp");
     }
 
-    // Register user
+    // Register a new user
     private void registerUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String role = request.getParameter("role"); // Get role from form
 
-        User newUser = new User(name, email, password);
-
+        User newUser = new User(0, name, email, password, role); // Add role
         boolean isExistingUser = dbManager.checkIfUserExists(email);
 
         if (isExistingUser) {
@@ -131,14 +136,15 @@ public class UserServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    // Insert a new user
+    // Insert a new user (admin functionality)
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String role = request.getParameter("role"); // Get role from form
 
-        User newUser = new User(name, email, password);
+        User newUser = new User(0, name, email, password, role); // Add role
         dbManager.registerUser(newUser);
         response.sendRedirect("adminlistuser");
     }
@@ -153,15 +159,24 @@ public class UserServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    // Update an existing user
+    // Update an existing user in the UserServlet
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter("id")); // Retrieve the user ID from the form
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String role = request.getParameter("role");
+        
+        // Fetch the current user to retain the password if it's not updated
+        User currentUser = dbManager.getUserById(id);
 
-        User updatedUser = new User(name, email, password);
+        // If the password field is empty, retain the current password
+        if (password == null || password.isEmpty()) {
+            password = currentUser.getPassword();
+        }
+
+        User updatedUser = new User(id, name, email, password, role); // Add role
         dbManager.updateUser(updatedUser);
         response.sendRedirect("adminlistuser");
     }

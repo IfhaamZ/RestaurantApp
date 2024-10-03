@@ -155,7 +155,7 @@ public class MenuServlet extends HttpServlet {
 
         MenuItem newItem = new MenuItem(0, name, description, price, category);
         dbManager.insertMenuItem(newItem);
-        response.sendRedirect("menulist");
+        response.sendRedirect("staffMenuDisplay");
     }
 
     // Show form for editing a menu item
