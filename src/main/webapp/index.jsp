@@ -3,10 +3,44 @@
 <head>
     <title>Restaurant Management System</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
+    <style>
+        /* Styling for login and register buttons */
+        .auth-buttons {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+        }
+
+        .auth-buttons a {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #ff6b6b; /* Matches header background */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: 2px solid #ff6b6b; /* Matches button to header */
+        }
+
+        .auth-buttons a:hover {
+            background-color: white;
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b; /* Matches button hover effect */
+        }
+
+        .auth-buttons a:first-child {
+            margin-left: 0;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>Welcome to the Restaurant Management System</h1>
+        <!-- Login and Register Buttons -->
+        <div class="auth-buttons">
+            <a href="${pageContext.request.contextPath}/login.jsp" class="btn-auth">Login</a>
+            <a href="${pageContext.request.contextPath}/register.jsp" class="btn-auth">Register</a>
+        </div>
     </header>
 
     <nav>
@@ -27,15 +61,6 @@
             <h2>Discover Exquisite Dining</h2>
             <p>Experience the finest flavors and impeccable service at our restaurant. From cozy reservations to lively events, we have everything you need for the perfect dining experience.</p>
             <a href="reservation.jsp" class="btn-hero">Make a Reservation</a>
-        </div>
-    </section>
-
-    <!-- Login/Register Section -->
-    <section class="auth-section">
-        <div class="auth-buttons">
-            <h3>Manage Your Account</h3>
-            <a href="${pageContext.request.contextPath}/login.jsp" class="btn-auth">Login</a>
-            <a href="${pageContext.request.contextPath}/register.jsp" class="btn-auth">Register</a>
         </div>
     </section>
 
