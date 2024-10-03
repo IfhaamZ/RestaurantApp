@@ -46,6 +46,9 @@ public class ControllerServlet extends HttpServlet {
                 case "/inventory":
                     handleInventoryRequests(request, response);
                     break;
+                case "/user":
+                    handleUserRequests(request, response);
+                    break;
                 default:
                     showDefaultPage(request, response);
                     break;
@@ -80,6 +83,12 @@ public class ControllerServlet extends HttpServlet {
     private void handleFeedbackRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/FeedbackSubmissionServlet");
+        dispatcher.forward(request, response);
+    }
+
+    private void handleUserRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/UserServlet");
         dispatcher.forward(request, response);
     }
 

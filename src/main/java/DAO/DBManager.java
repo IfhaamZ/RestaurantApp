@@ -747,4 +747,95 @@ public class DBManager {
 
         return auditList;
     }
+
+    // Validate user for login
+    public User validateUser(String email, String password) throws SQLException {
+        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, email);
+            st.setString(2, password);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
+                }
+            }
+        }
+        return null; // Return null if user is not found
+    }
+
+    // Register a new user
+    public boolean registerUser(User user) throws SQLException {
+        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, user.getName());
+            st.setString(2, user.getEmail());
+            st.setString(3, user.getPassword());
+            return st.executeUpdate() > 0; // returns true if registration is successful
+        }
+    }
+
+    // Check if user exists by email during registration
+    public boolean checkIfUserExists(String email) throws SQLException {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, email);
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next(); // returns true if a user with the same email exists
+            }
+        }
+
+    }
+
+    public List<User> getAllUsers() throws SQLException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                User user = new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
+                users.add(user);
+            }
+        }
+        return users;
+    }
+
+    // Get user by ID
+    public User getUserById(int id) throws SQLException {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
+            }
+        }
+        return null;
+    }
+
+    // Update an existing user
+    public boolean updateUser(User user) throws SQLException {
+        String sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, user.getName());
+            st.setString(2, user.getEmail());
+            st.setString(3, user.getPassword());
+            return st.executeUpdate() > 0;
+        }
+    }
+
+    // Delete a user
+    public boolean deleteUser(int id) throws SQLException {
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            return st.executeUpdate() > 0;
+        }
+    }
 }
