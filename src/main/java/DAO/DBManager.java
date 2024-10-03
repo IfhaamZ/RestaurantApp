@@ -237,4 +237,54 @@ public class DBManager {
             }
 
 }
+
+public List<User> getAllUsers() throws SQLException {
+    List<User> users = new ArrayList<>();
+    String sql = "SELECT * FROM users";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql);
+         ResultSet rs = st.executeQuery()) {
+        while (rs.next()) {
+            User user = new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
+            users.add(user);
+        }
+    }
+    return users;
+}
+
+// Get user by ID
+public User getUserById(int id) throws SQLException {
+    String sql = "SELECT * FROM users WHERE id = ?";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql)) {
+        st.setInt(1, id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            return new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
+        }
+    }
+    return null;
+}
+
+// Update an existing user
+public boolean updateUser(User user) throws SQLException {
+    String sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql)) {
+        st.setString(1, user.getName());
+        st.setString(2, user.getEmail());
+        st.setString(3, user.getPassword());
+        return st.executeUpdate() > 0;
+    }
+}
+
+// Delete a user
+public boolean deleteUser(int id) throws SQLException {
+    String sql = "DELETE FROM users WHERE id = ?";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql)) {
+        st.setInt(1, id);
+        return st.executeUpdate() > 0;
+    }
+}
 }

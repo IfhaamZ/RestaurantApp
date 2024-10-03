@@ -1,42 +1,26 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.User" %> <!-- Import the User class -->
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Add New User</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <meta charset="UTF-8">
+    <title>User Form</title>
+    <link rel="stylesheet" href="css/form.css">
 </head>
 <body>
-    <header>
-        <h1>Add New User</h1>
-        <nav>
-            <ul>
-                <li><a href="index.jsp">Home</a></li>
-                <li><a href="register.jsp">Register</a></li>
-                <c:choose>
-                    <c:when test="${sessionScope.user != null}">
-                        <li><a href="logout.jsp">Logout</a></li>
-                    </c:when>
-                    <c:otherwise>
-                        <li><a href="login.jsp">Login</a></li>
-                    </c:otherwise>
-                </c:choose>
-            </ul>
-        </nav>
-    </header>
-
-    <section>
-        <form action="usersave" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required><br>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required><br>
-
-            <input type="submit" value="Save">
-        </form>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 Restaurant Management System. All Rights Reserved.</p>
-    </footer>
+    <h2><%=(request.getAttribute("user") != null) ? "Edit" : "Create" %> User</h2>
+    <form action="<%=(request.getAttribute("user") != null) ? "adminupdateuser" : "admininsertuser" %>" method="post">
+        
+        <label for="name">Name:</label>
+        <input type="text" name="name" value="<%= (request.getAttribute("user") != null) ? ((User)request.getAttribute("user")).getName() : "" %>" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="<%= (request.getAttribute("user") != null) ? ((User)request.getAttribute("user")).getEmail() : "" %>" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

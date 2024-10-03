@@ -1,52 +1,38 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.List" %>
+<%@page import="model.User" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>User Management</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <link rel="stylesheet" href="css/list.css">
 </head>
 <body>
-    <header>
-        <h1>User Management</h1>
-        <nav>
-            <ul>
-                <li><a href="index.jsp">Home</a></li>
-                <li><a href="usernew">Add New User</a></li>
-                <li><a href="register.jsp">Register</a></li>
-                <c:choose>
-                    <c:when test="${sessionScope.user != null}">
-                        <li><a href="logout.jsp">Logout</a></li>
-                    </c:when>
-                    <c:otherwise>
-                        <li><a href="login.jsp">Login</a></li>
-                    </c:otherwise>
-                </c:choose>
-            </ul>
-        </nav>
-    </header>
-
-    <section>
-        <h2>User List</h2>
-        <table border="1">
-            <thead>
+    <h2>User Management</h2>
+    <a href="adminnewuser">Create New User</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="user" items="${users}">
                 <tr>
-                    <th>User ID</th>
-                    <th>Username</th>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <a href="adminedituser?id=${user.id}">Edit</a>
+                        <a href="admindeleteuser?id=${user.id}" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="user" items="${users}">
-                    <tr>
-                        <td>${user.userId}</td>
-                        <td>${user.username}</td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 Restaurant Management System. All Rights Reserved.</p>
-    </footer>
+            </c:forEach>
+        </tbody>
+    </table>
 </body>
 </html>
