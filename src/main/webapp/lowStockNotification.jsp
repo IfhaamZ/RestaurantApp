@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Low Stock Notification</title>
-    <link rel="stylesheet" href="css/lowStockNotification.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/lowStockNotification.css" />
   </head>
   <body>
     <h2>Low Stock Notification</h2>
@@ -13,8 +13,8 @@
     </c:if>
 
     <!-- Button to go back to view stock levels -->
-    <a href="inventory?action=view" class="home-button"
-      >Back to View Stock Levels</a
-    >
+    <a href="inventoryview" class="home-button">
+      Back to View Stock Levels
+    </a>
   </body>
 </html>

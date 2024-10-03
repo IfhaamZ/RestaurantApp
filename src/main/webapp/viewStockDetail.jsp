@@ -1,10 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %> <%@ taglib
-uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
   <head>
     <title>Current Stock Details</title>
-    <link rel="stylesheet" href="css/ViewStockLevel.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ViewStockLevel.css" />
   </head>
   <body>
     <div class="container">
@@ -32,16 +32,14 @@ uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
           </table>
         </c:when>
         <c:otherwise>
-          <p>
-            No stock details available. StockDetails might be null or empty.
-          </p>
+          <p>No stock details available. StockDetails might be null or empty.</p>
         </c:otherwise>
       </c:choose>
 
       <!-- Back button -->
-      <a href="inventory?action=view&role=${role}" class="form-button"
-        >Back to Stock Levels</a
-      >
+      <a href="inventoryview?role=${role}" class="form-button">
+        Back to Stock Levels
+      </a>
     </div>
   </body>
 </html>

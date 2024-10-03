@@ -41,6 +41,8 @@
     <url-pattern>/menu</url-pattern>
     <url-pattern>/error</url-pattern>
     <url-pattern>/feedback</url-pattern>
+    <url-pattern>/payment</url-pattern>
+    <url-pattern>/inventory</url-pattern>
   </servlet-mapping>
 
   <!-- EventServlet to handle all event-related operations -->
@@ -153,4 +155,17 @@
     <url-pattern>/paymentcancel</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>InventoryServlet</servlet-name>
+    <servlet-class>controller.InventoryServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>InventoryServlet</servlet-name>
+    <url-pattern>/inventoryview</url-pattern>
+    <url-pattern>/inventoryupdate</url-pattern>
+    <url-pattern>/inventorylowStockNotification</url-pattern>
+    <url-pattern>/inventoryviewStockDetail</url-pattern>
+    <url-pattern>/inventoryviewAuditTrail</url-pattern>
+  </servlet-mapping>
 </web-app>

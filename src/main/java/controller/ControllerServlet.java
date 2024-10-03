@@ -43,6 +43,9 @@ public class ControllerServlet extends HttpServlet {
                 case "/payment":
                     handlePaymentRequests(request, response);
                     break;
+                case "/inventory":
+                    handleInventoryRequests(request, response);
+                    break;
                 default:
                     showDefaultPage(request, response);
                     break;
@@ -84,6 +87,13 @@ public class ControllerServlet extends HttpServlet {
     private void handleMenuRequests(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/MenuServlet"); // Forwarding to TableServlet
+        dispatcher.forward(request, response);
+    }
+
+    // Handle requests related to inventory management
+    private void handleInventoryRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/InventoryServlet");
         dispatcher.forward(request, response);
     }
 

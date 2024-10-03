@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Inventory Audit Trail</title>
-    <link rel="stylesheet" href="css/inventoryAudit.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/inventoryAudit.css" />
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
   </head>
   <body>
@@ -28,7 +28,7 @@
       </table>
 
       <!-- Back to Product List or Inventory -->
-      <a href="inventory">Back to Inventory</a>
+      <a href="inventoryview" class="form-button">Back to Inventory</a>
     </div>
   </body>
 </html>

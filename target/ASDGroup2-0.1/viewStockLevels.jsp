@@ -9,7 +9,7 @@
       <h2>Stock Levels</h2>
 
       <!-- Role Selection Form -->
-      <form action="inventory" method="get" class="role-form">
+      <form action="inventoryview" method="get" class="role-form">
         <label for="role">Select Role:</label>
         <select name="role" id="role">
           <option value="Manager">Manager</option>
@@ -33,7 +33,7 @@
       <!-- Only Managers can update stock levels -->
       <c:if test="${role == 'Manager'}">
         
-      <form action="inventory" method="post" class="update-stock-form">
+      <form action="inventoryupdate" method="post" class="update-stock-form">
         <input type="hidden" name="action" value="update" />
         <label>Product ID: 
           <input type="text" name="productID" pattern="^[Pp]\d+$" required title="Product ID must start with 'P' or 'p' followed by digits" />
@@ -59,7 +59,7 @@
 
         <!-- Button to Check Inventory Usage Trend (S126) -->
         <h3>View Inventory Usage Trend</h3>
-<form action="inventory" method="get">
+<form action="inventoryviewAuditTrail" method="get">
   <input type="hidden" name="action" value="viewAuditTrail" />
   <label>Product ID: 
     <input type="text" name="productID" pattern="^[Pp]\d+$" required title="Product ID must start with 'P' or 'p' followed by digits" />
@@ -70,7 +70,7 @@
 
       <!-- Home Button -->
       <a
-        href="inventory?action=lowStockNotification&role=${role}"
+        href="inventorylowStockNotification?role=${role}"
         class="form-button low-stock-button"
         >Check Low Stock Notification</a
       >
