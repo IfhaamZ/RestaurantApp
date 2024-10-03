@@ -22,6 +22,19 @@
       "username": "root",
       "password": "Lama1234!",
       "connectionTimeout": 100
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "MySqlData",
+      "username": "root",
+      "database": "restaurantdb"
     }
   ]
 }

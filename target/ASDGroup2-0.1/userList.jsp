@@ -8,14 +8,22 @@
 <body>
     <header>
         <h1>User Management</h1>
+        <nav>
+            <ul>
+                <li><a href="index.jsp">Home</a></li>
+                <li><a href="usernew">Add New User</a></li>
+                <li><a href="register.jsp">Register</a></li>
+                <c:choose>
+                    <c:when test="${sessionScope.user != null}">
+                        <li><a href="logout.jsp">Logout</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a href="login.jsp">Login</a></li>
+                    </c:otherwise>
+                </c:choose>
+            </ul>
+        </nav>
     </header>
-
-    <nav>
-        <ul>
-            <li><a href="index.jsp">Home</a></li>
-            <li><a href="usernew">Add New User</a></li>
-        </ul>
-    </nav>
 
     <section>
         <h2>User List</h2>

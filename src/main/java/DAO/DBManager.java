@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Event;
 import model.Table;
+import model.User;
 
 public class DBManager {
 
@@ -195,4 +196,45 @@ public class DBManager {
             return st.executeUpdate() > 0;
         }
     }
+
+        // Validate user for login
+        public User validateUser(String email, String password) throws SQLException {
+            String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+            try (Connection connection = DBConnector.getConnection();
+                 PreparedStatement st = connection.prepareStatement(sql)) {
+                st.setString(1, email);
+                st.setString(2, password);
+                try (ResultSet rs = st.executeQuery()) {
+                    if (rs.next()) {
+                        return new User(rs.getString("name"), rs.getString("email"), rs.getString("password"));
+                    }
+                }
+            }
+            return null; // Return null if user is not found
+        }
+    
+        // Register a new user
+        public boolean registerUser(User user) throws SQLException {
+            String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+            try (Connection connection = DBConnector.getConnection();
+                 PreparedStatement st = connection.prepareStatement(sql)) {
+                st.setString(1, user.getName());
+                st.setString(2, user.getEmail());
+                st.setString(3, user.getPassword());
+                return st.executeUpdate() > 0; // returns true if registration is successful
+            }
+        }
+    
+        // Check if user exists by email during registration
+        public boolean checkIfUserExists(String email) throws SQLException {
+            String sql = "SELECT * FROM users WHERE email = ?";
+            try (Connection connection = DBConnector.getConnection();
+                 PreparedStatement st = connection.prepareStatement(sql)) {
+                st.setString(1, email);
+                try (ResultSet rs = st.executeQuery()) {
+                    return rs.next(); // returns true if a user with the same email exists
+                }
+            }
+
+}
 }

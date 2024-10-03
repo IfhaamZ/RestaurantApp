@@ -7,6 +7,20 @@
 <body>
     <header>
         <h1>Add New User</h1>
+        <nav>
+            <ul>
+                <li><a href="index.jsp">Home</a></li>
+                <li><a href="register.jsp">Register</a></li>
+                <c:choose>
+                    <c:when test="${sessionScope.user != null}">
+                        <li><a href="logout.jsp">Logout</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a href="login.jsp">Login</a></li>
+                    </c:otherwise>
+                </c:choose>
+            </ul>
+        </nav>
     </header>
 
     <section>
