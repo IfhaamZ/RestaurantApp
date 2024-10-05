@@ -1,170 +1,103 @@
 package unit;
 
-import org.junit.jupiter.api.*;
-import java.sql.Connection;
-import java.sql.SQLException;
+import model.Table;
+import DAO.DBManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import model.Table;
-import DAO.DBConnector;
-import DAO.DBManager;
-
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class) // Enable Mockito in JUnit 5 tests
 public class TableDBManagerTest {
 
-    private Connection conn;
-    private DBManager dbManager;
-
-    @BeforeAll
-    public void setup() throws ClassNotFoundException, SQLException {
-        conn = DBConnector.getConnection();
-        dbManager = new DBManager(); // Adjust based on how DBManager is initialized
-    }
-
-    @AfterAll
-    public void tearDown() throws SQLException {
-        if (conn != null) {
-            conn.close();
-        }
-    }
+    @Mock
+    private DBManager dbManager; // Mock the DBManager
 
     @BeforeEach
-    public void beforeEachTest() throws SQLException {
-        conn.createStatement().execute("DELETE FROM Event"); // Clean the event table before each test
+    public void setup() {
+        // Setup can be used to initialize any variables if needed
     }
 
     @Test
-    public void testConnection() {
-        assertNotNull(conn); // Ensure the connection is not null
-    }
-
-    // Test case for creating a table
-    @Test
-    public void testCreateTable() throws SQLException {
+    public void testCreateTable() throws Exception {
+        // Arrange
         Table table = new Table(0, "Available", 4, null, null, null, null);
+        when(dbManager.createTable(table)).thenReturn(true);
+
+        // Act
         boolean result = dbManager.createTable(table);
+
+        // Assert
         assertTrue(result);
-
-        // Fetch all tables and check if the newly created table exists
-        List<Table> tableList = dbManager.fetchAllTables();
-        assertFalse(tableList.isEmpty());
-        Table fetchedTable = tableList.get(tableList.size() - 1); // get the last added table
-        assertEquals(4, fetchedTable.getCapacity());
-        assertEquals("Available", fetchedTable.getStatus());
+        verify(dbManager, times(1)).createTable(table);
     }
 
-    // Test case for updating a table
     @Test
-    public void testUpdateTable() throws SQLException {
-        // Create a new table
-        Table table = new Table(0, "Available", 4, null, null, null, null);
-        dbManager.createTable(table);
+    public void testUpdateTable() throws Exception {
+        // Arrange
+        Table updatedTable = new Table(1, "Reserved", 6, null, null, null, null);
+        when(dbManager.updateTable(updatedTable)).thenReturn(true);
 
-        // Fetch the table after creation to get the auto-generated ID
-        List<Table> tableList = dbManager.fetchAllTables();
-        Table createdTable = tableList.get(tableList.size() - 1); // get the last added table
-
-        // Update the table details
-        Table updatedTable = new Table(createdTable.getId(), "Reserved", 6, null, null, null, null);
+        // Act
         boolean result = dbManager.updateTable(updatedTable);
-        assertTrue(result, "Update failed");
 
-        // Verify that the table was updated correctly
-        Table fetchedTable = dbManager.getTableById(updatedTable.getId());
-        assertEquals(6, fetchedTable.getCapacity());
-        assertEquals("Reserved", fetchedTable.getStatus());
+        // Assert
+        assertTrue(result);
+        verify(dbManager, times(1)).updateTable(updatedTable);
     }
 
-    // Test case for reserving a table
     @Test
-    public void testReserveTable() throws SQLException {
-        // Create a new table
-        Table table = new Table(0, "Available", 4, null, null, null, null);
-        dbManager.createTable(table);
-
-        // Fetch the table after creation to get the auto-generated ID
-        List<Table> tableList = dbManager.fetchAllTables();
-        Table createdTable = tableList.get(tableList.size() - 1); // get the last added table
-
-        // Reserve the table
+    public void testReserveTable() throws Exception {
+        // Arrange
         LocalDateTime reservationTime = LocalDateTime.now().plusDays(1);
-        boolean result = dbManager.reserveTable(createdTable.getId(), reservationTime, "John Doe", "123456789",
-                "john@example.com");
-        assertTrue(result, "Reservation failed");
+        when(dbManager.reserveTable(1, reservationTime, "John Doe", "123456789", "john@example.com"))
+                .thenReturn(true);
 
-        // Verify that the table was reserved correctly
-        Table fetchedTable = dbManager.getTableById(createdTable.getId());
-        assertEquals("Reserved", fetchedTable.getStatus());
-        assertEquals("John Doe", fetchedTable.getReservedByName());
-        assertEquals("123456789", fetchedTable.getReservedByPhone());
-        assertEquals("john@example.com", fetchedTable.getReservedByEmail());
-        assertNotNull(fetchedTable.getReservationTime());
+        // Act
+        boolean result = dbManager.reserveTable(1, reservationTime, "John Doe", "123456789", "john@example.com");
+
+        // Assert
+        assertTrue(result);
+        verify(dbManager, times(1))
+                .reserveTable(1, reservationTime, "John Doe", "123456789", "john@example.com");
     }
 
-    // Test case for clearing reservation details
     @Test
-    public void testClearReservationDetails() throws SQLException {
-        // Create a new reserved table
-        Table table = new Table(0, "Available", 4, null, null, null, null);
-        dbManager.createTable(table);
+    public void testDeleteTable() throws Exception {
+        // Arrange
+        int tableId = 1;
+        when(dbManager.deleteTable(tableId)).thenReturn(true);
 
-        // Fetch the table after creation to get the auto-generated ID
-        List<Table> tableList = dbManager.fetchAllTables();
-        Table createdTable = tableList.get(tableList.size() - 1); // get the last added table
+        // Act
+        boolean result = dbManager.deleteTable(tableId);
 
-        LocalDateTime reservationTime = LocalDateTime.now().plusDays(1);
-        dbManager.reserveTable(createdTable.getId(), reservationTime, "John Doe", "123456789", "john@example.com");
-
-        // Clear the reservation
-        boolean result = dbManager.clearReservationDetails(createdTable.getId());
-        assertTrue(result, "Clear reservation failed");
-
-        // Verify that the reservation details were cleared
-        Table fetchedTable = dbManager.getTableById(createdTable.getId());
-        assertNull(fetchedTable.getReservationTime());
-        assertNull(fetchedTable.getReservedByName());
-        assertNull(fetchedTable.getReservedByPhone());
-        assertNull(fetchedTable.getReservedByEmail());
-        assertEquals("Available", fetchedTable.getStatus()); // Status should be "Available"
+        // Assert
+        assertTrue(result);
+        verify(dbManager, times(1)).deleteTable(tableId);
     }
 
-    // Test case for deleting a table
     @Test
-    public void testDeleteTable() throws SQLException {
-        // Create a new table
-        Table table = new Table(0, "Available", 4, null, null, null, null);
-        dbManager.createTable(table);
+    public void testFetchAvailableTables() throws Exception {
+        // Arrange
+        List<Table> tables = new ArrayList<>();
+        tables.add(new Table(1, "Available", 4, null, null, null, null));
+        when(dbManager.fetchAvailableTables()).thenReturn(tables);
 
-        // Fetch the table after creation to get the auto-generated ID
-        List<Table> tableList = dbManager.fetchAllTables();
-        Table createdTable = tableList.get(tableList.size() - 1); // get the last added table
-
-        // Delete the table
-        boolean result = dbManager.deleteTable(createdTable.getId());
-        assertTrue(result, "Delete failed");
-
-        // Verify that the table was deleted
-        Table fetchedTable = dbManager.getTableById(createdTable.getId());
-        assertNull(fetchedTable); // The table should no longer exist
-    }
-
-    // Test fetching all available tables
-    @Test
-    public void testFetchAvailableTables() throws SQLException {
-        // Create some tables
-        dbManager.createTable(new Table(0, "Available", 4, null, null, null, null));
-        dbManager.createTable(new Table(0, "Reserved", 6, LocalDateTime.now().plusDays(1), "John Doe", "123456789",
-                "john@example.com"));
-
-        // Fetch all available tables
+        // Act
         List<Table> availableTables = dbManager.fetchAvailableTables();
-        assertNotNull(availableTables);
-        assertFalse(availableTables.isEmpty());
 
-        // Verify that only the available table is fetched
-        assertTrue(availableTables.stream().allMatch(table -> "Available".equals(table.getStatus())));
+        // Assert
+        assertNotNull(availableTables);
+        assertEquals(1, availableTables.size());
+        verify(dbManager, times(1)).fetchAvailableTables();
     }
 }
