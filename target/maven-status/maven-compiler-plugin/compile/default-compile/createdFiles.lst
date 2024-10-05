@@ -1,13 +1,4 @@
 controller\FeedbackSubmissionServlet.class
-model\error.class
-model\feedback.class
-model\MenuItem.class
-model\Event.class
-DAO\DBConnector.class
-controller\ControllerServlet.class
 controller\MenuServlet.class
-model\Table.class
-DAO\CreateDB.class
 controller\TableServlet.class
-DAO\DBManager.class
 controller\ErrorSubmissionServlet.class
