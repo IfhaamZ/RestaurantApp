@@ -91,6 +91,9 @@ public class UserServlet extends HttpServlet {
                 response.sendRedirect("index.jsp");
             } else if ("staff".equals(user.getRole())) {
                 response.sendRedirect("staffIndex.jsp");
+            } 
+            else if ("admin".equals(user.getRole())) {
+                response.sendRedirect("adminIndex.jsp");
             }
         } else {
             response.sendRedirect("login.jsp?error=invalid");
