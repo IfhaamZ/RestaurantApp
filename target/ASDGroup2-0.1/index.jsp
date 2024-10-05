@@ -50,8 +50,7 @@
             <li><a href="eventlist">Events</a></li>
             <li><a href="TableManagement.jsp">Table Management</a></li>
             <li><a href="contact.jsp">Contact Us</a></li>
-            <li><a href="${pageContext.request.contextPath}/userlist">User Management</a></li>
-            <li><a href="${pageContext.request.contextPath}/orderlist">Order Management</a></li>
+            <li><a href="orderOption.jsp">Order</a></li>
         </ul>
     </nav>
 
