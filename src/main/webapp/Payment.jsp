@@ -93,13 +93,8 @@ pageEncoding="UTF-8"%>
           <button type="submit" name="action" value="submit" class="submit-btn">
             Submit Payment
           </button>
-          <button
-            type="submit"
-            name="action"
-            value="cancel"
-            class="cancel-btn"
-            formnovalidate
-          >
+
+          <button type="button" class="cancel-btn" onclick="cancelPayment()">
             Cancel Payment
           </button>
         </div>
@@ -125,6 +120,11 @@ pageEncoding="UTF-8"%>
           expDetails.style.display = "flex";
         }
       });
+
+        function cancelPayment() {
+          alert('You have canceled the payment.');
+          window.location.href = 'index.jsp'; // Redirect to index.jsp
+        }
     </script>
   </body>
 </html>

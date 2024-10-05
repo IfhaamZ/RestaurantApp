@@ -33,7 +33,7 @@ public class Inventory implements Serializable {
 
         try {
             connection = DBConnector.getConnection();
-            String query = "SELECT * FROM Product"; // Query to fetch all products from DB
+            String query = "SELECT * FROM product"; // Query to fetch all products from DB
             statement = connection.prepareStatement(query);
             resultSet = statement.executeQuery();
 
@@ -177,7 +177,7 @@ public class Inventory implements Serializable {
 
             try {
                 connection = DBConnector.getConnection(); // Get the database connection
-                String updateQuery = "UPDATE Product SET stockQuantity = ? WHERE productID = ?";
+                String updateQuery = "UPDATE product SET stockQuantity = ? WHERE productID = ?";
                 statement = connection.prepareStatement(updateQuery);
                 statement.setInt(1, newStock);
                 statement.setString(2, productID);
@@ -233,7 +233,7 @@ public class Inventory implements Serializable {
 
         try {
             connection = DBConnector.getConnection(); // Get the database connection
-            String insertAuditQuery = "INSERT INTO inventory_audit (productID, action, oldStock, newStock, updatedBy, timestamp) "
+            String insertAuditQuery = "INSERT INTO inventoryaudit (productID, action, oldStockLevel, newStockLevel, updatedBy, timestamp) "
                     + "VALUES (?, ?, ?, ?, ?, NOW())";
             statement = connection.prepareStatement(insertAuditQuery);
             statement.setString(1, productID);

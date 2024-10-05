@@ -718,7 +718,7 @@ public class DBManager {
         List<InventoryAudit> auditList = new ArrayList<>();
 
         String sql = "SELECT productID, oldStockLevel, newStockLevel, timestamp, updatedBy " +
-                "FROM InventoryAudit " +
+                "FROM inventoryaudit " +
                 "WHERE productID = ? " +
                 "ORDER BY timestamp DESC " +
                 "LIMIT 10";

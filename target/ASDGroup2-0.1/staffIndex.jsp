@@ -29,20 +29,24 @@ if (user == null || !user.getRole().equals("staff")) {
         <!-- Card links for Event Management, Table Management, and Menu Management -->
         <div class="staff-links">
             <div class="card">
-                <i class="fas fa-calendar-alt"></i> <!-- Example icon for Event Management -->
+                <i class="fas fa-calendar-alt"></i> <!-- con for Event Management -->
                 <a href="staffeventlist">Event Management</a>
             </div>
             <div class="card">
-                <i class="fas fa-chair"></i> <!-- Example icon for Table Management -->
+                <i class="fas fa-chair"></i> <!-- icon for Table Management -->
                 <a href="tablelist">Table Management</a>
             </div>
             <div class="card">
-                <i class="fas fa-utensils"></i> <!-- Example icon for Menu Management -->
+                <i class="fas fa-utensils"></i> <!--icon for Menu Management -->
                 <a href="staffMenuDisplay">Menu Management</a>
             </div>
             <div class="card">
                 <i class="fas fa-comments"></i> <i class="fas fa-exclamation-circle"></i>                
                 <a href="mainStaffDashboard">Error & Feedback Management</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-boxes"></i> <!-- Icon for Inventory Management -->
+                <a href="inventoryview">Inventory Management</a>
             </div>
         </div>
 

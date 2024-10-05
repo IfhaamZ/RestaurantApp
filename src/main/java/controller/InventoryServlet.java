@@ -4,13 +4,15 @@ import DAO.DBManager;
 import model.Inventory;
 import model.InventoryAudit;
 import model.Product;
+import model.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -36,8 +38,18 @@ public class InventoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath(); // Using request.getPathInfo() to extract action from the URL path
-        String role = request.getParameter("role");
-        String updatedBy = request.getParameter("updatedBy");
+        
+        // Get the logged-in user from the session
+    HttpSession session = request.getSession();
+    User loggedInUser = (User) session.getAttribute("user");
+
+    if (loggedInUser == null) {
+        response.sendRedirect("login.jsp"); // Redirect to login if not logged in
+        return;
+    }
+
+    String role = loggedInUser.getRole(); // Get the role of the logged-in user
+    String updatedBy = loggedInUser.getName(); // Get the name of the user who is performing the action
 
         if (action == null || action.equals("/")) {
             action = "/inventoryview"; // Default action
@@ -91,6 +103,13 @@ public class InventoryServlet extends HttpServlet {
     // U139 - Update stock levels manually (only for Managers)
     private void updateStockLevel(HttpServletRequest request, HttpServletResponse response, String role,
             String updatedBy) throws ServletException, IOException {
+        // Check if the logged-in user is allowed to update the stock (only staff)
+        if (!"staff".equals(role)) {
+            request.setAttribute("message", "You do not have permission to update the stock.");
+            viewStockLevels(request, response, role);
+            return;
+        }
+
         String productID = request.getParameter("productID");
         int newStock;
         try {
@@ -100,6 +119,7 @@ public class InventoryServlet extends HttpServlet {
             viewStockLevels(request, response, role);
             return;
         }
+
         boolean isUpdated = inventory.updateStockLevel(productID, newStock, updatedBy);
         if (isUpdated) {
             request.setAttribute("message", "Stock updated successfully by " + updatedBy + ".");
