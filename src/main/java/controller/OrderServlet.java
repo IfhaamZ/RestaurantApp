@@ -1,24 +1,26 @@
 package controller;
 
+import DAO.DBManager;
 import model.Order;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/orderlist", "/ordernew", "/ordersave"})  // 경로 수정
 public class OrderServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private List<Order> orders;
+    private DBManager dbManager;
 
-    public void init() {
-        orders = new ArrayList<>();
+    public void init() throws ServletException {
+        try {
+            dbManager = new DBManager();
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -32,45 +34,102 @@ public class OrderServlet extends HttpServlet {
 
         try {
             switch (action) {
-                case "/ordernew":
-                    showNewOrderForm(request, response);
+                // Customer Actions
+                case "/placeorder":
+                    showOrderForm(request, response);
                     break;
-                case "/ordersave":
-                    saveOrder(request, response);
+                case "/insertorder":
+                    insertOrder(request, response);
                     break;
-                case "/orderlist":
+                case "/confirmorder":
+                    showOrderConfirmation(request, response);
+                    break;
+
+                // Staff Actions
+                case "/stafforders":
                     listOrders(request, response);
                     break;
+                case "/staffeditorder":
+                    showEditOrderForm(request, response);
+                    break;
+                case "/staffupdateorder":
+                    updateOrder(request, response);
+                    break;
+                case "/staffdeleteorder":
+                    deleteOrder(request, response);
+                    break;
+
                 default:
-                    listOrders(request, response);
+                    response.sendRedirect("index.jsp");
                     break;
             }
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             throw new ServletException(ex);
         }
     }
 
-    private void listOrders(HttpServletRequest request, HttpServletResponse response)
+    // Customer View: Show order form to customers
+    private void showOrderForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("orders", orders);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/orderList.jsp");  // JSP 파일 경로 수정
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orderForm.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void showNewOrderForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/orderForm.jsp");  // JSP 파일 경로 수정
-        dispatcher.forward(request, response);
-    }
-
-    private void saveOrder(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    // Customer View: Insert order placed by customer
+    private void insertOrder(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException {
         String customerName = request.getParameter("customerName");
-        String dishName = request.getParameter("dishName");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        String orderDetails = request.getParameter("orderDetails");
+        String status = "pending"; // Default status for new orders
 
-        Order order = new Order(orders.size() + 1, customerName, dishName, quantity, new java.util.Date());
-        orders.add(order);
-        response.sendRedirect("orderlist");
+        Order newOrder = new Order(0, customerName, orderDetails, status);
+        dbManager.insertOrder(newOrder);
+        response.sendRedirect("confirmorder");
+    }
+
+    // Customer View: Show order confirmation
+    private void showOrderConfirmation(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orderConfirmation.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    // Staff View: List all orders for staff
+    private void listOrders(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        List<Order> orders = dbManager.getAllOrders();
+        request.setAttribute("orders", orders);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("staffOrderList.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    // Staff View: Show form to edit order
+    private void showEditOrderForm(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Order existingOrder = dbManager.getOrderById(id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("editOrder.jsp");
+        request.setAttribute("order", existingOrder);
+        dispatcher.forward(request, response);
+    }
+
+    // Staff View: Update order
+    private void updateOrder(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String orderDetails = request.getParameter("orderDetails");
+        String status = request.getParameter("status");
+
+        Order updatedOrder = new Order(id, "", orderDetails, status); // Customer name remains unchanged
+        dbManager.updateOrder(updatedOrder);
+        response.sendRedirect("stafforders");
+    }
+
+    // Staff View: Delete order
+    private void deleteOrder(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        dbManager.deleteOrder(id);
+        response.sendRedirect("stafforders");
     }
 }

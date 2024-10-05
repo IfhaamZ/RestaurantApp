@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.Event;
+import model.Order;
 import model.Table;
 import model.User;
 
@@ -281,6 +282,79 @@ public boolean updateUser(User user) throws SQLException {
 // Delete a user
 public boolean deleteUser(int id) throws SQLException {
     String sql = "DELETE FROM users WHERE id = ?";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql)) {
+        st.setInt(1, id);
+        return st.executeUpdate() > 0;
+    }
+}
+
+// Insert a new order
+public boolean insertOrder(Order order) throws SQLException {
+    String sql = "INSERT INTO orders (customerName, orderDetails, status) VALUES (?, ?, ?)";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql)) {
+        st.setString(1, order.getCustomerName());
+        st.setString(2, order.getOrderDetails());
+        st.setString(3, order.getStatus());
+        return st.executeUpdate() > 0;
+    }
+}
+
+// Fetch all orders for staff view
+public List<Order> getAllOrders() throws SQLException {
+    List<Order> orders = new ArrayList<>();
+    String sql = "SELECT * FROM orders";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql);
+         ResultSet rs = st.executeQuery()) {
+        while (rs.next()) {
+            Order order = new Order(
+                    rs.getInt("id"),
+                    rs.getString("customerName"),
+                    rs.getString("orderDetails"),
+                    rs.getString("status")
+            );
+            orders.add(order);
+        }
+    }
+    return orders;
+}
+
+// Fetch order by ID
+public Order getOrderById(int id) throws SQLException {
+    String sql = "SELECT * FROM orders WHERE id = ?";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql)) {
+        st.setInt(1, id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            return new Order(
+                    rs.getInt("id"),
+                    rs.getString("customerName"),
+                    rs.getString("orderDetails"),
+                    rs.getString("status")
+            );
+        }
+    }
+    return null;
+}
+
+// Update an order
+public boolean updateOrder(Order order) throws SQLException {
+    String sql = "UPDATE orders SET orderDetails = ?, status = ? WHERE id = ?";
+    try (Connection connection = DBConnector.getConnection();
+         PreparedStatement st = connection.prepareStatement(sql)) {
+        st.setString(1, order.getOrderDetails());
+        st.setString(2, order.getStatus());
+        st.setInt(3, order.getId());
+        return st.executeUpdate() > 0;
+    }
+}
+
+// Delete an order
+public boolean deleteOrder(int id) throws SQLException {
+    String sql = "DELETE FROM orders WHERE id = ?";
     try (Connection connection = DBConnector.getConnection();
          PreparedStatement st = connection.prepareStatement(sql)) {
         st.setInt(1, id);

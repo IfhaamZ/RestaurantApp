@@ -1,50 +1,36 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Order Management</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Order Management</h1>
-    </header>
-
-    <nav>
-        <ul>
-            <li><a href="index.jsp">Home</a></li>
-            <li><a href="${pageContext.request.contextPath}/ordernew">Add New Order</a></li>  <!-- 경로 수정 -->
-        </ul>
-    </nav>
-
-    <section>
-        <h2>Order List</h2>
-        <table border="1">
-            <thead>
+    <h2>Order Management</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Order Details</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="order" items="${orders}">
                 <tr>
-                    <th>Order ID</th>
-                    <th>Customer Name</th>
-                    <th>Dish Name</th>
-                    <th>Quantity</th>
-                    <th>Order Date</th>
+                    <td>${order.id}</td>
+                    <td>${order.customerName}</td>
+                    <td>${order.orderDetails}</td>
+                    <td>${order.status}</td>
+                    <td>
+                        <a href="editorder?id=${order.id}">Edit</a> |
+                        <a href="deleteorder?id=${order.id}" onclick="return confirm('Are you sure?');">Delete</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="order" items="${orders}">
-                    <tr>
-                        <td>${order.orderId}</td>
-                        <td>${order.customerName}</td>
-                        <td>${order.dishName}</td>
-                        <td>${order.quantity}</td>
-                        <td>${order.orderDate}</td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 Restaurant Management System. All Rights Reserved.</p>
-    </footer>
+            </c:forEach>
+        </tbody>
+    </table>
 </body>
 </html>

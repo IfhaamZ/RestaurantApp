@@ -1,59 +1,35 @@
 package model;
 
-import java.util.Date;
-
 public class Order {
-    private int orderId;
+    private int id;
     private String customerName;
-    private String dishName;
-    private int quantity;
-    private Date orderDate;
+    private String orderDetails;
+    private String status;
 
-    public Order(int orderId, String customerName, String dishName, int quantity, Date orderDate) {
-        this.orderId = orderId;
+    public Order(int id, String customerName, String orderDetails, String status) {
+        this.id = id;
         this.customerName = customerName;
-        this.dishName = dishName;
-        this.quantity = quantity;
-        this.orderDate = orderDate;
+        this.orderDetails = orderDetails;
+        this.status = status;
     }
 
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public int getId() {
+        return id;
     }
 
     public String getCustomerName() {
         return customerName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public String getOrderDetails() {
+        return orderDetails;
     }
 
-    public String getDishName() {
-        return dishName;
+    public String getStatus() {
+        return status;
     }
 
-    public void setDishName(String dishName) {
-        this.dishName = dishName;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

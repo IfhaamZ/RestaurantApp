@@ -1,31 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Add New Order</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <meta charset="UTF-8">
+    <title>Place Order</title>
 </head>
 <body>
-    <header>
-        <h1>Add New Order</h1>
-    </header>
+    <h2>Place an Order</h2>
+    <form action="insertorder" method="post">
+        <label for="customerName">Customer Name:</label>
+        <input type="text" name="customerName" id="customerName" required><br><br>
 
-    <section>
-        <form action="${pageContext.request.contextPath}/ordersave" method="post">  <!-- 경로 수정 -->
-            <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" name="customerName" required><br>
+        <label for="orderDetails">Order Details:</label>
+        <textarea name="orderDetails" id="orderDetails" required></textarea><br><br>
 
-            <label for="dishName">Dish Name:</label>
-            <input type="text" id="dishName" name="dishName" required><br>
-
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" required><br>
-
-            <input type="submit" value="Save">
-        </form>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 Restaurant Management System. All Rights Reserved.</p>
-    </footer>
+        <button type="submit">Place Order</button>
+    </form>
 </body>
 </html>
