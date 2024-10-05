@@ -1,5 +1,4 @@
 
-
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
@@ -44,23 +43,23 @@
   </servlet-mapping>
 
   <!-- EventServlet to handle all event-related operations -->
-  <servlet>
+  <!-- <servlet>
     <servlet-name>EventServlet</servlet-name>
     <servlet-class>controller.EventServlet</servlet-class>
-  </servlet>
+  </servlet> -->
 
-  <servlet-mapping>
+ <!--> <servlet-mapping>
     <servlet-name>EventServlet</servlet-name>
-    <url-pattern>/eventnew</url-pattern>  <!-- To show add event form -->
-    <url-pattern>/eventinsert</url-pattern>  <!-- To handle new event insertion -->
-    <url-pattern>/eventedit</url-pattern>  <!-- To show edit event form -->
-    <url-pattern>/eventupdate</url-pattern>  <!-- To handle event update -->
-    <url-pattern>/eventdelete</url-pattern>  <!-- To handle event deletion -->
-    <url-pattern>/eventlist</url-pattern>  <!-- To list all events (e.g., EventCalendarStaff.jsp) -->
+    <url-pattern>/eventnew</url-pattern>  
+    <url-pattern>/eventinsert</url-pattern>  
+    <url-pattern>/eventedit</url-pattern>  
+    <url-pattern>/eventupdate</url-pattern>  
+    <url-pattern>/eventdelete</url-pattern>  
+    <url-pattern>/eventlist</url-pattern>  
     <url-pattern>/eventsearch</url-pattern>
     <url-pattern>/staffeventsearch</url-pattern>
     <url-pattern>/staffeventlist</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping> -->
 
   <!-- TableServlet to handle all table-related operations -->
   <servlet>
