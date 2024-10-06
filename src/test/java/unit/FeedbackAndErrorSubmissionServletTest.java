@@ -292,4 +292,127 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(request).getRequestDispatcher("/errorSubmission.jsp");
         verify(rd).forward(request, response);
     }
+
+    // This test checks that when an invalid email is submitted, the system
+    // correctly sets an error message and redisplays the feedback form.
+    @Test
+    public void testInvalidEmailInFeedbackSubmission() throws ServletException, IOException {
+        // Mock servlet path to simulate the action "/feedbackSubmit"
+        when(request.getServletPath()).thenReturn("/feedbackSubmit");
+
+        // Mock parameters with an invalid email
+        when(request.getParameter("name")).thenReturn("John Doe");
+        when(request.getParameter("email")).thenReturn("invalid-email");
+        when(request.getParameter("rating")).thenReturn("4");
+        when(request.getParameter("comments")).thenReturn("Great service");
+
+        // Forward back to the form in case of validation failure
+        when(request.getRequestDispatcher("/feedback.jsp")).thenReturn(rd);
+
+        // Call the Feedback servlet
+        feedbackServlet.doPost(request, response);
+
+        // Verify that an error message is set and the request is forwarded to the form
+        verify(request).setAttribute(eq("errorMessage"), eq("All fields are required and email must be valid."));
+        verify(request).getRequestDispatcher("/feedback.jsp");
+        verify(rd).forward(request, response);
+    }
+
+    // This test ensures that a valid error report submission is processed
+    // correctly, with the system forwarding the user to the confirmation page and
+    // setting a success message.
+    @Test
+    public void testSuccessfulErrorSubmission()
+            throws ServletException, IOException, NoSuchFieldException, IllegalAccessException, SQLException {
+        // Mock servlet path to simulate the action "/submit"
+        when(request.getServletPath()).thenReturn("/submit");
+
+        // Mock valid parameters
+        when(request.getParameter("description")).thenReturn("Valid error description");
+        when(request.getParameter("steps")).thenReturn("Valid steps to reproduce");
+        when(request.getParameter("category")).thenReturn("UI Bug"); // Valid category
+        when(request.getParameter("severity")).thenReturn("High");
+
+        // Mock the DBManager and inject it
+        DBManager dbManager = mock(DBManager.class);
+        when(dbManager.createErrorReportAndReturnID(anyString(), anyString(), anyString(), anyString(),
+                any(Timestamp.class)))
+                .thenReturn(1); // Mock successful DB operation
+
+        // Inject the mocked DBManager using reflection
+        Field dbManagerField = ErrorSubmissionServlet.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true);
+        dbManagerField.set(errorServlet, dbManager);
+
+        // Forward to confirmation page
+        when(request.getRequestDispatcher("/confirmation.jsp")).thenReturn(rd);
+
+        // Call the Error servlet
+        errorServlet.doPost(request, response);
+
+        // Verify that success message is set and request is forwarded to confirmation
+        verify(request).setAttribute(eq("successMessage"), eq("Your error report was successfully submitted."));
+        verify(request).getRequestDispatcher("/confirmation.jsp");
+        verify(rd).forward(request, response);
+    }
+
+    // This test checks that if a required field (e.g., description) is missing
+    // during error submission,
+    // the system sets an error message and redisplays the form for correction.
+    @Test
+    public void testMissingFieldsInErrorSubmission() throws ServletException, IOException {
+        // Mock servlet path to simulate the action "/submit"
+        when(request.getServletPath()).thenReturn("/submit");
+
+        // Mock missing description field
+        when(request.getParameter("description")).thenReturn(""); // Missing description
+        when(request.getParameter("steps")).thenReturn("Steps to reproduce");
+        when(request.getParameter("category")).thenReturn("UI Bug");
+        when(request.getParameter("severity")).thenReturn("High");
+
+        // Forward back to form in case of validation failure
+        when(request.getRequestDispatcher("/errorSubmission.jsp")).thenReturn(rd);
+
+        // Call the Error servlet
+        errorServlet.doPost(request, response);
+
+        // Verify that validation failed and the request was forwarded back to the form
+        verify(request).setAttribute(eq("errorMessage"), eq("All fields are required."));
+        verify(request).getRequestDispatcher("/errorSubmission.jsp");
+        verify(rd).forward(request, response);
+    }
+
+    // This test ensures that when valid data is provided, the error report is
+    // successfully updated in the system
+    @Test
+    public void testSuccessfulErrorUpdate()
+            throws ServletException, IOException, NoSuchFieldException, IllegalAccessException, SQLException {
+        // Mock servlet path to simulate the action "/update"
+        when(request.getServletPath()).thenReturn("/update");
+
+        // Mock valid parameters
+        when(request.getParameter("id")).thenReturn("1");
+        when(request.getParameter("description")).thenReturn("Updated error description");
+        when(request.getParameter("steps")).thenReturn("Updated steps to reproduce");
+        when(request.getParameter("category")).thenReturn("UI Bug");
+        when(request.getParameter("severity")).thenReturn("Critical");
+        when(request.getParameter("staffComments")).thenReturn("This issue has been fixed");
+
+        // Mock the DBManager and inject it
+        DBManager dbManager = mock(DBManager.class);
+        when(dbManager.updateErrorReport(any())).thenReturn(true); // Mock success
+
+        // Inject the mocked DBManager using reflection
+        Field dbManagerField = ErrorSubmissionServlet.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true);
+        dbManagerField.set(errorServlet, dbManager);
+
+        // Call the Error servlet
+        errorServlet.doPost(request, response);
+
+        // Verify that the request was processed and the user was redirected to the
+        // dashboard
+        verify(response).sendRedirect("/staffDashboard.jsp");
+    }
+
 }
