@@ -12,7 +12,7 @@
     <nav>
         <ul>
             <li><a href="menuDisplay">Menu</a></li>
-            <li><a href="">Reservations</a></li>
+            <li><a href="reservationindex.jsp">Reservations</a></li>
             <li><a href="eventlist">Events</a></li>
             <li><a href="tableavailability">Table Availability</a></li>
             <li><a href="dashboard">Feedback</a></li>

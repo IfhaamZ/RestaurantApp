@@ -32,6 +32,10 @@ if (user == null || !user.getRole().equals("admin")) {
                 <i class="fas fa-users-cog"></i> <!-- Icon for User Management -->
                 <a href="adminlistuser">User Management</a>
             </div>
+            <div class="card">
+                <i class="fas fa-users-cog"></i> <!-- Icon for User Management -->
+                <a href="StaffUserDashboard.jsp">Staff Management</a>
+            </div>
         </div>
 
         <!-- Logout button -->

@@ -50,6 +50,20 @@
     <url-pattern>/inventory</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>ReservationServlet</servlet-name>
+    <servlet-class>controller.ReservationServlet</servlet-class> <!-- 서블릿 클래스 경로 확인 -->
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ReservationServlet</servlet-name>
+    <url-pattern>/ReservationServlet</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    <url-pattern>/insert</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    <url-pattern>/edit</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    <url-pattern>/delete</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    <url-pattern>/list</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+  </servlet-mapping>
+
   <!-- EventServlet to handle all event-related operations -->
   <servlet>
     <servlet-name>EventServlet</servlet-name>
