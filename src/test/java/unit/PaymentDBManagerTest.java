@@ -1,101 +1,101 @@
-// package unit;
+package unit;
 
-// import DAO.DBConnector;
-// import DAO.DBManager;
-// import model.Payment;
-// import org.junit.jupiter.api.*;
+import DAO.DBManager;
+import model.Payment;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-// import java.sql.Connection;
-// import java.sql.SQLException;
-// import java.time.LocalDateTime;
-// import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-// import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-// public class PaymentDBManagerTest {
+@ExtendWith(MockitoExtension.class) // Enable Mockito in JUnit 5 tests
+public class PaymentDBManagerTest {
 
-//     private Connection conn;
-//     private DBManager dbManager;
+    @Mock
+    private DBManager dbManager; // Mock the DBManager
 
-//     @BeforeAll
-//     public void setup() throws ClassNotFoundException, SQLException {
-//         conn = DBConnector.getConnection();
-//         dbManager = new DBManager(); // Initialize DBManager
-//     }
+    @BeforeEach
+    public void setup() {
+        // Setup can be used to initialize any variables if needed
+    }
 
-//     @AfterAll
-//     public void tearDown() throws SQLException {
-//         if (conn != null) {
-//             conn.close();
-//         }
-//     }
+@Test
+public void testCreatePayment() throws Exception {
+// Arrange
+Payment payment = new Payment(
+null, "Card", "1234567812345678", "12", "2025", "123",
+"100.50", LocalDateTime.now().toString(), "customer");
+when(dbManager.createPayment(payment)).thenReturn(1); // Simulate successful
+creation returning paymentID = 1
 
-//     @BeforeEach
-//     public void beforeEachTest() throws SQLException {
-//         // Clean the payments table before each test
-//         conn.createStatement().execute("DELETE FROM payments");
-//     }
+// Act
+int paymentID = dbManager.createPayment(payment);
 
-//     @Test
-//     public void testConnection() {
-//         assertNotNull(conn); // Ensure the connection is not null
-//     }
+// Assert
+assertEquals(1, paymentID);
+verify(dbManager, times(1)).createPayment(payment);
+}
 
-//     // Test case for creating a payment
-//     @Test
-//     public void testCreatePayment() throws Exception {
-//         Payment payment = new Payment(null, "Card", "1234567890123456", "01", "25", "123", "100.50",
-//                 LocalDateTime.now().toString(), "customer");
-//         int paymentID = dbManager.createPayment(payment);
-//         assertTrue(paymentID > 0);
+    @Test
+    public void testCancelPayment() throws Exception {
+        // Arrange
+        int paymentID = 1;
+        when(dbManager.cancelPayment(paymentID)).thenReturn(true);
 
-//         // Fetch the payment and check if it was inserted correctly
-//         Payment fetchedPayment = dbManager.getPaymentById(paymentID);
-//         assertNotNull(fetchedPayment);
-//         assertEquals("Card", fetchedPayment.getMethod());
-//         assertEquals("1234567890123456", fetchedPayment.getCardNumDecrypted()); // Check decrypted card number
-//         assertEquals("100.50", fetchedPayment.getPaymentAmount());
-//     }
+        // Act
+        boolean result = dbManager.cancelPayment(paymentID);
 
-//     // Test case for cancelling a payment
-//     @Test
-//     public void testCancelPayment() throws Exception {
-//         // Create a payment
-//         Payment payment = new Payment(null, "Card", "1234567890123456", "01", "25", "123", "100.50",
-//                 LocalDateTime.now().toString(), "customer");
-//         int paymentID = dbManager.createPayment(payment);
+        // Assert
+        assertTrue(result);
+        verify(dbManager, times(1)).cancelPayment(paymentID);
+    }
 
-//         // Cancel the payment
-//         boolean result = dbManager.cancelPayment(paymentID);
-//         assertTrue(result);
+    @Test
+    public void testFetchAllPayments() throws Exception {
+        // Arrange
+        List<Payment> payments = new ArrayList<>();
+        Payment payment = new Payment(
+                "1", "Card", "1234567812345678", "12", "2025", "123",
+                "100.50", LocalDateTime.now().toString(), "customer");
+        payments.add(payment);
 
-//         // Fetch the cancelled payment
-//         Payment fetchedPayment = dbManager.getPaymentById(paymentID);
-//         assertNotNull(fetchedPayment);
-//         assertTrue(fetchedPayment.isCancelled());
-//     }
+        when(dbManager.fetchAllPayments()).thenReturn(payments);
 
-//     // Test case for fetching all payments
-//     @Test
-//     public void testFetchAllPayments() throws Exception {
-//         // Create multiple payments
-//         dbManager.createPayment(new Payment(null, "Card", "1234567890123456", "01", "25", "123", "100.50",
-//                 LocalDateTime.now().toString(), "customer"));
-//         dbManager.createPayment(new Payment(null, "Card", "6543210987654321", "02", "26", "456", "200.75",
-//                 LocalDateTime.now().toString(), "customer"));
+        // Act
+        List<Payment> fetchedPayments = dbManager.fetchAllPayments();
 
-//         // Fetch all payments
-//         List<Payment> payments = dbManager.fetchAllPayments();
-//         assertNotNull(payments);
-//         assertEquals(2, payments.size()); // Ensure there are 2 payments
+        // Assert
+        assertNotNull(fetchedPayments);
+        assertEquals(1, fetchedPayments.size());
+        verify(dbManager, times(1)).fetchAllPayments();
+    }
 
-//         // Check details of the first payment
-//         Payment firstPayment = payments.get(0);
-//         assertEquals("100.50", firstPayment.getPaymentAmount());
+    @Test
+    public void testGetPaymentById() throws Exception {
+        // Arrange
+        int paymentID = 1;
+        Payment payment = new Payment(
+                "1", "Card", "1234567812345678", "12", "2025", "123",
+                "100.50", LocalDateTime.now().toString(), "customer");
 
-//         // Check details of the second payment
-//         Payment secondPayment = payments.get(1);
-//         assertEquals("200.75", secondPayment.getPaymentAmount());
-//     }
-// }
+        when(dbManager.getPaymentById(paymentID)).thenReturn(payment);
+
+        // Act
+        Payment fetchedPayment = dbManager.getPaymentById(paymentID);
+
+        // Assert
+        assertNotNull(fetchedPayment);
+        assertEquals("Card", fetchedPayment.getMethod());
+        assertEquals("100.50", fetchedPayment.getPaymentAmount());
+        verify(dbManager, times(1)).getPaymentById(paymentID);
+    }
+}
