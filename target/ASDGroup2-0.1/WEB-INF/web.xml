@@ -187,4 +187,20 @@
     <url-pattern>/adminlistuser</url-pattern>  <!-- Handle registration requests -->
     <url-pattern>/adminupdateuser</url-pattern>  <!-- Handle registration requests -->
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>OrderServlet</servlet-name>
+    <servlet-class>controller.OrderServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>OrderServlet</servlet-name>
+    <url-pattern>/placeorder</url-pattern>
+    <url-pattern>/insertorder</url-pattern>
+    <url-pattern>/confirmorder</url-pattern>
+    <url-pattern>/stafforders</url-pattern>
+    <url-pattern>/staffeditorder</url-pattern>
+    <url-pattern>/staffupdateorder</url-pattern>
+    <url-pattern>/staffdeleteorder</url-pattern>
+  </servlet-mapping>
 </web-app>
