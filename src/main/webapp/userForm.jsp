@@ -86,6 +86,7 @@
 </head>
 <body>
     <div class="admin-container">
+    
         <h1>Admin Page</h1>
         <div class="form-container">
             <h2><%=(request.getAttribute("user") != null) ? "Edit" : "Create" %> User</h2>
