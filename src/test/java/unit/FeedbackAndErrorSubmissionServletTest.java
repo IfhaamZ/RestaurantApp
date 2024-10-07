@@ -46,6 +46,7 @@ public class FeedbackAndErrorSubmissionServletTest {
     }
 
     // Feedback Management Tests
+    // Test case for valid feedback submission
     @Test
     public void testValidFeedbackSubmission()
             throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
@@ -76,6 +77,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
+    // Test case for feedback submission with missing fields
     @Test
     public void testMissingFeedbackFields() throws ServletException, IOException {
         // Mock servlet path to simulate the action "/feedbackSubmit"
@@ -93,6 +95,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
+    // Test case for feedback submission with incorrect data type (invalid rating)
     @Test
     public void testIncorrectDataTypeInFeedback() throws ServletException, IOException {
         // Mock servlet path to simulate the action "/feedbackSubmit"
@@ -109,6 +112,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
+    // Test case for submitting staff feedback response
     @Test
     public void testRespondToCustomerFeedback()
             throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
@@ -137,6 +141,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(response).sendRedirect("/restaurantApp/viewFeedback");
     }
 
+    // Test case for valid error submission
     // Error Management Tests
     @Test
     public void testValidErrorSubmission()
@@ -168,6 +173,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
+    // Test case for error submission with missing fields
     @Test
     public void testMissingErrorFields() throws ServletException, IOException {
         // Mock servlet path to simulate the action "/submit"
@@ -186,6 +192,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
+    // Test case for viewing an error
     @Test
     public void testViewError() throws ServletException, IOException {
         // Mock servlet path to simulate the action "/viewError"
@@ -199,6 +206,7 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
+    // Test case for updating an error report
     @Test
     public void testUpdateErrorReport()
             throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
