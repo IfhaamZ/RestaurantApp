@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="unit.TableDBManagerTest" time="0.011" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="unit.FeedbackAndErrorSubmissionServletTest" time="0.286" tests="10" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="19"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,9 +58,14 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="63.0"/>
   </properties>
-  <testcase name="testDeleteTable" classname="unit.TableDBManagerTest" time="0"/>
-  <testcase name="testUpdateTable" classname="unit.TableDBManagerTest" time="0.001"/>
-  <testcase name="testCreateTable" classname="unit.TableDBManagerTest" time="0.002"/>
-  <testcase name="testFetchAvailableTables" classname="unit.TableDBManagerTest" time="0.003"/>
-  <testcase name="testReserveTable" classname="unit.TableDBManagerTest" time="0.002"/>
+  <testcase name="testValidFeedbackSubmission" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.186"/>
+  <testcase name="testMissingFeedbackFields" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.006"/>
+  <testcase name="testViewError" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.006"/>
+  <testcase name="testRespondToCustomerFeedback" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.007"/>
+  <testcase name="testFeedbackSubmissionWithSQLException" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.032"/>
+  <testcase name="testUpdateErrorReport" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.003"/>
+  <testcase name="testIncorrectDataTypeInFeedback" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.006"/>
+  <testcase name="testValidErrorSubmission" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.01"/>
+  <testcase name="testErrorSubmissionWithSQLException" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.022"/>
+  <testcase name="testMissingErrorFields" classname="unit.FeedbackAndErrorSubmissionServletTest" time="0.001"/>
 </testsuite>
