@@ -1,20 +1,25 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.Random"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%> <%@page
+import="java.util.Random"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Reservation Management System</title>
-        <!-- Link to CSS -->
-        <link rel="stylesheet" href="css/index.css">
-    </head>
-    <body>
-        <h1>Welcome to the Reservation Management System</h1>
-    <ul>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Reservation Management System</title>
+    <!-- Link to CSS -->
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Reservation Management System</h1>
+    </header>
+    <nav>
+      <ul>
         <li><a href="MakeReservation.jsp">Make a Reservation</a></li>
-        <li><a href="ViewReservation.jsp">View Reservations</a></li>
+        <li><a href="ReservationServlet?action=list">View Reservations</a></li>
         <li><a href="ModifyReservation.jsp">Modify a Reservation</a></li>
         <li><a href="CancelReservation.jsp">Cancel a Reservation</a></li>
-    </ul>
-    </body>
+        <li><a href="StaffDashboard.jsp">Staff Dashboard</a></li>
+      </ul>
+    </nav>
+  </body>
 </html>

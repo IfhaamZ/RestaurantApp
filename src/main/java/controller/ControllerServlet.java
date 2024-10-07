@@ -31,7 +31,14 @@ public class ControllerServlet {
 
     private void handleReservationRequests(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/ReservationServlet");
+        // 전달할 action 값을 설정
+        String action = request.getParameter("action");
+        if (action == null || action.isEmpty()) {
+            action = "list";  // 기본값 설정 (필요에 따라 수정)
+        }
+
+        // `action` 파라미터를 `ReservationServlet`으로 전달
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/ReservationServlet?action=" + action);
         dispatcher.forward(request, response);
     }
 

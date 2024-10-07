@@ -57,9 +57,7 @@ public class Reservation {
     public int getGuests() {
         return guests;
     }
-
     public void setGuests(int guests) {
         this.guests = guests;
     }
-
 }
