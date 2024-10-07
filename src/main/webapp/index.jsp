@@ -11,11 +11,13 @@
 
     <nav>
         <ul>
-            <li><a href="menu.jsp">Menu</a></li>
-            <li><a href="reservation.jsp">Reservations</a></li>
+            <li><a href="menuDisplay">Menu</a></li>
+            <li><a href="">Reservations</a></li>
             <li><a href="eventlist">Events</a></li>
-            <li><a href="tablelist">Table Management</a></li>
-            <li><a href="contact.jsp">Contact Us</a></li>
+            <li><a href="tableavailability">Table Availability</a></li>
+            <li><a href="dashboard">Feedback</a></li>
+            <li><a href="paymentnew">Payment</a></li>
+            <li><a href="placeorder">Place Order</a></li>
         </ul>
     </nav>
 

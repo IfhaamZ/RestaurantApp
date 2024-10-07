@@ -124,7 +124,7 @@
         </table>
 
         <!-- Go Back to Home Button -->
-        <form action="index.jsp" method="get">
+        <form action="staffIndex.jsp" method="get">
             <input type="submit" value="Go Back to Home">
         </form>
     </div>

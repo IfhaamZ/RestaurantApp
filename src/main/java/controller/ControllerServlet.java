@@ -112,10 +112,10 @@ public class ControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    // Show the default page (index.jsp)
+    // Show the default page (login.jsp)
     private void showDefaultPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("userlogin");
         dispatcher.forward(request, response);
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="unit.EventDBManagerTest" time="0.938" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="unit.EventDBManagerTest" time="0.728" tests="4" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="19"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-19\bin"/>
-    <property name="sun.java.command" value="C:\Users\user\AppData\Local\Temp\surefire14239145535797611376\surefirebooter11376663437627850861.jar C:\Users\user\AppData\Local\Temp\surefire14239145535797611376 2024-10-07T21-05-38_238-jvmRun1 surefire2776703788899872410tmp surefire_05983366727448618164tmp"/>
+    <property name="sun.java.command" value="C:\Users\user\AppData\Local\Temp\surefire5380778683920215320\surefirebooter16774512070338795148.jar C:\Users\user\AppData\Local\Temp\surefire5380778683920215320 2024-10-07T23-36-19_153-jvmRun1 surefire5357804544171144326tmp surefire_05043771291247779857tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\user\Desktop\ASD\Assignments\RestaurantApp\target\test-classes;C:\Users\user\Desktop\ASD\Assignments\RestaurantApp\target\classes;C:\Users\user\.m2\repository\javax\javaee-api\8.0\javaee-api-8.0.jar;C:\Users\user\.m2\repository\com\sun\mail\javax.mail\1.6.0\javax.mail-1.6.0.jar;C:\Users\user\.m2\repository\javax\activation\activation\1.1\activation-1.1.jar;C:\Users\user\.m2\repository\org\eclipse\jetty\jetty-server\9.4.51.v20230217\jetty-server-9.4.51.v20230217.jar;C:\Users\user\.m2\repository\javax\servlet\javax.servlet-api\3.1.0\javax.servlet-api-3.1.0.jar;C:\Users\user\.m2\repository\org\eclipse\jetty\jetty-http\9.4.51.v20230217\jetty-http-9.4.51.v20230217.jar;C:\Users\user\.m2\repository\org\eclipse\jetty\jetty-util\9.4.51.v20230217\jetty-util-9.4.51.v20230217.jar;C:\Users\user\.m2\repository\org\eclipse\jetty\jetty-io\9.4.51.v20230217\jetty-io-9.4.51.v20230217.jar;C:\Users\user\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.7.0\junit-jupiter-api-5.7.0.jar;C:\Users\user\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\user\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\user\.m2\repository\org\junit\platform\junit-platform-commons\1.7.0\junit-platform-commons-1.7.0.jar;C:\Users\user\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.7.0\junit-jupiter-params-5.7.0.jar;C:\Users\user\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.7.0\junit-jupiter-engine-5.7.0.jar;C:\Users\user\.m2\repository\org\junit\platform\junit-platform-engine\1.7.0\junit-platform-engine-1.7.0.jar;C:\Users\user\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\user\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\user\.m2\repository\net\bytebuddy\byte-buddy\1.11.19\byte-buddy-1.11.19.jar;C:\Users\user\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.19\byte-buddy-agent-1.11.19.jar;C:\Users\user\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\user\.m2\repository\org\mockito\mockito-junit-jupiter\4.0.0\mockito-junit-jupiter-4.0.0.jar;C:\Users\user\.m2\repository\com\mysql\mysql-connector-j\8.0.31\mysql-connector-j-8.0.31.jar;C:\Users\user\.m2\repository\com\google\protobuf\protobuf-java\3.19.4\protobuf-java-3.19.4.jar;C:\Users\user\.m2\repository\javax\servlet\jstl\1.2\jstl-1.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\user\AppData\Local\Temp\surefire14239145535797611376\surefirebooter11376663437627850861.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\user\AppData\Local\Temp\surefire5380778683920215320\surefirebooter16774512070338795148.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="19.0.1+10-21"/>
@@ -58,8 +58,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="63.0"/>
   </properties>
-  <testcase name="testDeleteEvent" classname="unit.EventDBManagerTest" time="0.91"/>
+  <testcase name="testDeleteEvent" classname="unit.EventDBManagerTest" time="0.695"/>
   <testcase name="testUpdateEvent" classname="unit.EventDBManagerTest" time="0.007"/>
   <testcase name="testInsertEvent" classname="unit.EventDBManagerTest" time="0.002"/>
-  <testcase name="testFetchAllEvents" classname="unit.EventDBManagerTest" time="0.009"/>
+  <testcase name="testFetchAllEvents" classname="unit.EventDBManagerTest" time="0.004"/>
 </testsuite>

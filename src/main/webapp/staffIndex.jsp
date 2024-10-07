@@ -48,6 +48,15 @@ if (user == null || !user.getRole().equals("staff")) {
                 <i class="fas fa-boxes"></i> <!-- Icon for Inventory Management -->
                 <a href="inventoryview">Inventory Management</a>
             </div>
+            <div class="card">
+                <i class="fas fa-receipt"></i> <!-- Icon for Order Management -->
+                <a href="stafforders">Order Management</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-calendar"></i> <!-- Icon for Order Management -->
+                <a href="">Reservation Management</a>
+            </div>
+
         </div>
 
         <!-- Logout button -->
