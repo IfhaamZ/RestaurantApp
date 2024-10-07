@@ -24,7 +24,7 @@ pageEncoding="UTF-8"%>
       <!-- Sidebar -->
       <div class="sidebar">
         <h1>Staff Dashboard</h1>
-        <a href="StaffDashboard.jsp">Dashboard</a>
+        <a href="StaffUserDashboard.jsp">Dashboard</a>
         <a href="StaffAttendance.jsp">Attendance</a>
         <a href="StaffSchedule.jsp">Schedule</a>
         <a href="StaffTask.jsp">Task</a>
