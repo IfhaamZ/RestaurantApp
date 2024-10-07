@@ -6,6 +6,9 @@ public class Order {
     private int orderId;
     private String customerName;
     private String dishName;
+    private String action;
+    
+
     private int quantity;
     private Date orderDate;
 
@@ -15,6 +18,13 @@ public class Order {
         this.dishName = dishName;
         this.quantity = quantity;
         this.orderDate = orderDate;
+    }
+
+    public Order(int orderId, String customerName, String dishName, String action) {
+        this.orderId = orderId;
+        this.customerName = customerName;
+        this.dishName = dishName;
+        this.action = action;
     }
 
     public int getOrderId() {
@@ -55,5 +65,13 @@ public class Order {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 }

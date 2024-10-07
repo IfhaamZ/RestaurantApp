@@ -1,9 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.Order" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Place Order</title>
+    <title>Edit Order</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,6 +26,7 @@
             text-align: center;
             color: #333;
             font-weight: bold;
+            margin-bottom: 20px;
         }
 
         form label {
@@ -33,7 +35,7 @@
             color: #333;
         }
 
-        form input[type="text"], form textarea {
+        form input[type="text"], form select, form textarea {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
@@ -45,9 +47,9 @@
             resize: vertical;
         }
 
-        /* Button styling to match the theme */
+        /* Button styling */
         button {
-            background-color: #ff6b6b; /* Matches the primary color */
+            background-color: #ff6b6b;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -64,20 +66,29 @@
             color: #ff6b6b;
             border: 2px solid #ff6b6b;
         }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Place an Order</h2>
-        <form action="insertorder" method="post">
-            <label for="customerName">Customer Name:</label>
-            <input type="text" name="customerName" id="customerName" required>
+        <h2>Edit Order</h2>
+        <form action="staffupdateorder" method="post">
+            <!-- Hidden field for the order ID -->
+            <input type="hidden" name="id" value="<%= ((Order) request.getAttribute("order")).getId() %>">
 
+            <!-- Order Details -->
             <label for="orderDetails">Order Details:</label>
-            <textarea name="orderDetails" id="orderDetails" rows="4" required></textarea>
+            <textarea name="orderDetails" id="orderDetails" required rows="4"><%= ((Order) request.getAttribute("order")).getOrderDetails() %></textarea>
 
-            <button type="submit">Place Order</button>
+            <!-- Order Status -->
+            <label for="status">Status:</label>
+            <select name="status" id="status">
+                <option value="pending" <%= ((Order) request.getAttribute("order")).getStatus().equals("pending") ? "selected" : "" %>>Pending</option>
+                <option value="confirmed" <%= ((Order) request.getAttribute("order")).getStatus().equals("confirmed") ? "selected" : "" %>>Confirmed</option>
+                <option value="completed" <%= ((Order) request.getAttribute("order")).getStatus().equals("completed") ? "selected" : "" %>>Completed</option>
+            </select>
+
+            <!-- Submit Button -->
+            <button type="submit">Update Order</button>
         </form>
     </div>
 </body>
