@@ -54,7 +54,7 @@ if (user == null || !user.getRole().equals("staff")) {
             </div>
             <div class="card">
                 <i class="fas fa-calendar"></i> <!-- Icon for Order Management -->
-                <a href="">Reservation Management</a>
+                <a href="ReservationServlet?action=list">Reservation Management</a>
             </div>
 
         </div>

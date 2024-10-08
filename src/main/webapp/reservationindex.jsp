@@ -15,7 +15,6 @@ import="java.util.Random"%>
     <nav>
       <ul>
         <li><a href="MakeReservation.jsp">Make a Reservation</a></li>
-        <li><a href="ReservationServlet?action=list">View Reservations</a></li>
         <li><a href="ModifyReservation.jsp">Modify a Reservation</a></li>
         <li><a href="CancelReservation.jsp">Cancel a Reservation</a></li>
       </ul>

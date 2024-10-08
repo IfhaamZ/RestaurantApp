@@ -70,21 +70,6 @@ public class InventoryDBManagerTest {
         assertNull(inventory.getProductByID("P003"));
     }
 
-    // @Test
-    // public void testUpdateStockLevel() throws Exception {
-    // // Arrange
-    // Product product = new Product("P001", "Monitor", 15);
-    // String updatedBy = "Manager";
-    // inventory.addProduct(product, updatedBy);
-
-    // // Act: Update stock level for the product
-    // boolean isUpdated = inventory.updateStockLevel("P001", 30, updatedBy);
-
-    // // Assert: Verify the stock was updated
-    // assertTrue(isUpdated);
-    // assertEquals(30, inventory.getProductByID("P001").getStockQuantity());
-    // }
-
     @Test
     public void testCheckLowStockLevels() {
         // Arrange: Set up products with one low stock

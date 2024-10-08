@@ -18,14 +18,14 @@
         <p style="color: green">${message}</p>
       </c:if>
 
-      <table>
+      <%-- <table>
         <c:forEach var="entry" items="${stockLevels}">
           <tr>
             <td>${entry.key}</td>
             <td>${entry.value}</td>
           </tr>
         </c:forEach>
-      </table>
+      </table> --%>
 
       <!-- Only Staff can update stock levels -->
       <c:if test="${role == 'staff'}">
