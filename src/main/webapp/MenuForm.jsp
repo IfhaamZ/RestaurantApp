@@ -5,6 +5,17 @@
 <head>
     <title>Manage Menu Item</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/MenuForm.css">
+    <script>
+        // JavaScript function to validate the form before submission
+        function validateForm() {
+            const price = document.getElementById("price").value;
+            if (price <= 0) {
+                alert("Price must be greater than 0.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -18,7 +29,7 @@
     </header>
 
     <div class="container">
-        <form action="${menuItem == null ? 'menuinsert' : 'menuupdate'}" method="post">
+        <form action="${menuItem == null ? 'menuinsert' : 'menuupdate'}" method="post" onsubmit="return validateForm()">
             <c:choose>
                 <c:when test="${menuItem != null}">
                     <input type="hidden" name="menuId" value="${menuItem.id}">
@@ -29,16 +40,22 @@
             </c:choose>
 
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required value="${menuItem != null ? menuItem.name : ''}">
+            <input type="text" id="name" name="name" required pattern="[A-Za-z\s]+" 
+                   title="Please enter a valid name using only letters and spaces." 
+                   value="${menuItem != null ? menuItem.name : ''}">
 
             <label for="description">Description:</label>
             <textarea id="description" name="description" required>${menuItem != null ? menuItem.description : ''}</textarea>
 
             <label for="price">Price:</label>
-            <input type="number" step="0.01" id="price" name="price" required value="${menuItem != null ? menuItem.price : ''}">
+            <input type="number" step="0.01" id="price" name="price" required 
+                   title="Please enter a valid price greater than 0." 
+                   value="${menuItem != null ? menuItem.price : ''}">
 
             <label for="category">Category:</label>
-            <input type="text" id="category" name="category" required value="${menuItem != null ? menuItem.category : ''}">
+            <input type="text" id="category" name="category" required pattern="[A-Za-z\s]+" 
+                   title="Please enter a valid category using only letters and spaces." 
+                   value="${menuItem != null ? menuItem.category : ''}">
 
             <button type="submit" class="btn-submit">${menuItem == null ? 'Add Item' : 'Update Item'}</button>
         </form>
