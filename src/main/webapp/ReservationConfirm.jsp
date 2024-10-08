@@ -3,10 +3,13 @@
 <html>
 <head>
     <title>Reservation Confirmation</title>
+    <link rel="stylesheet" href="css/ReservationConfirm.css" />
 </head>
 <body>
-    <h2>Your reservation has been successfully made!</h2>
-    <p>Thank you for making a reservation with us.</p>
-    <a href="index.jsp">Back to Home</a>
+    <div class="confirmation-container">
+        <h2>Your reservation has been successfully made!</h2>
+        <p>Thank you for making a reservation with us.</p>
+        <a href="index.jsp">Back to Home</a>
+    </div>
 </body>
 </html>
