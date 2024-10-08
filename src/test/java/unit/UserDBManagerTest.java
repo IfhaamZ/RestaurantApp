@@ -88,7 +88,8 @@ public class UserDBManagerTest {
     @Test
     public void testUpdateUser() throws Exception {
         // Arrange
-        User updatedUser = new User("John Doe", "john@newexample.com", "newpassword123");
+        User updatedUser = new User("John Doe", "john@newexample.com",
+                "newpassword123");
         when(dbManager.updateUser(updatedUser)).thenReturn(true);
 
         // Act
