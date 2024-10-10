@@ -1,0 +1,125 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    font-size: 16px;
+    padding: 20px;
+}
+
+/* Header Styling */
+header {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Staff Content Section */
+.staff-content {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.staff-content h2 {
+    font-size: 2rem;
+    color: #ff6b6b;
+}
+
+.staff-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* Card Container for Links */
+.staff-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.staff-links .card {
+    background-color: #2a9d8f; /* Green background similar to your image */
+    border-radius: 10px;
+    width: 250px;
+    padding: 30px;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.staff-links .card:hover {
+    transform: translateY(-10px);
+    background-color: #1e7067; /* Slightly darker green on hover */
+}
+
+.staff-links .card a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Icon styling */
+.staff-links .card i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* Logout Button Styling */
+form button {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+form button:hover {
+    background-color: #555;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 50px;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .staff-links {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}

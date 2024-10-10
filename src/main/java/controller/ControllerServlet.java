@@ -40,6 +40,18 @@ public class ControllerServlet extends HttpServlet {
                 case "/feedback":
                     handleFeedbackRequest(request, response); // Show the dashboard
                     break;
+                case "/payment":
+                    handlePaymentRequests(request, response);
+                    break;
+                case "/inventory":
+                    handleInventoryRequests(request, response);
+                    break;
+                case "/user":
+                    handleUserRequests(request, response);
+                    break;
+                case "/reservation":
+                    handleReservationRequests(request, response);
+                    break;
                 default:
                     showDefaultPage(request, response);
                     break;
@@ -63,6 +75,19 @@ public class ControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    private void handleReservationRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // 전달할 action 값을 설정
+        String action = request.getParameter("action");
+        if (action == null || action.isEmpty()) {
+            action = "list"; // 기본값 설정 (필요에 따라 수정)
+        }
+
+        // `action` 파라미터를 `ReservationServlet`으로 전달
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/ReservationServlet?action=" + action);
+        dispatcher.forward(request, response);
+    }
+
     // Show a default or error page (optional)
     private void handleErrorRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -77,6 +102,12 @@ public class ControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    private void handleUserRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/UserServlet");
+        dispatcher.forward(request, response);
+    }
+
     // Handle requests related to menu management
     private void handleMenuRequests(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -84,10 +115,23 @@ public class ControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    // Show the default page (index.jsp)
+    // Handle requests related to inventory management
+    private void handleInventoryRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/InventoryServlet");
+        dispatcher.forward(request, response);
+    }
+
+    private void handlePaymentRequests(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/PaymentServlet");
+        dispatcher.forward(request, response);
+    }
+
+    // Show the default page (login.jsp)
     private void showDefaultPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("userlogin");
         dispatcher.forward(request, response);
     }
 }

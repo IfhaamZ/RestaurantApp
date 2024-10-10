@@ -4,14 +4,19 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
   version="3.1">
+
+  <welcome-file-list>
+    <welcome-file>login.jsp</welcome-file>
+  </welcome-file-list>
+
   <servlet>
-    <servlet-name>index.jsp</servlet-name>
-    <jsp-file>/index.jsp</jsp-file>
+    <servlet-name>login.jsp</servlet-name>
+    <jsp-file>/login.jsp</jsp-file>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>index.jsp</servlet-name>
-    <url-pattern>/index/*</url-pattern>
+    <servlet-name>login.jsp</servlet-name>
+    <url-pattern>/login/*</url-pattern>
   </servlet-mapping>
 
   <!-- DB Connection Parameters -->
@@ -41,6 +46,22 @@
     <url-pattern>/menu</url-pattern>
     <url-pattern>/error</url-pattern>
     <url-pattern>/feedback</url-pattern>
+    <url-pattern>/payment</url-pattern>
+    <url-pattern>/inventory</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ReservationServlet</servlet-name>
+    <servlet-class>controller.ReservationServlet</servlet-class> <!-- 서블릿 클래스 경로 확인 -->
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ReservationServlet</servlet-name>
+    <url-pattern>/ReservationServlet</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    <url-pattern>/insert</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    <url-pattern>/edit</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    <url-pattern>/delete</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
+    <url-pattern>/list</url-pattern> <!-- /ReservationServlet 경로로 서블릿 매핑 -->
   </servlet-mapping>
 
   <!-- EventServlet to handle all event-related operations -->
@@ -141,4 +162,64 @@
     <url-pattern>/StaffDashboard</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>PaymentServlet</servlet-name>
+    <servlet-class>controller.PaymentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PaymentServlet</servlet-name>
+    <url-pattern>/paymentnew</url-pattern>
+    <url-pattern>/paymentinsert</url-pattern>
+    <url-pattern>/paymentstatus</url-pattern>
+    <url-pattern>/paymentcancel</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>InventoryServlet</servlet-name>
+    <servlet-class>controller.InventoryServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>InventoryServlet</servlet-name>
+    <url-pattern>/inventoryview</url-pattern>
+    <url-pattern>/inventoryupdate</url-pattern>
+    <url-pattern>/inventorylowStockNotification</url-pattern>
+    <url-pattern>/inventoryviewStockDetail</url-pattern>
+    <url-pattern>/inventoryviewAuditTrail</url-pattern>
+  </servlet-mapping>
+
+  <!-- UserServlet to handle user login, logout, and registration -->
+  <servlet>
+    <servlet-name>UserServlet</servlet-name>
+    <servlet-class>controller.UserServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>UserServlet</servlet-name>
+    <url-pattern>/userlogin</url-pattern>  <!-- Handle login requests -->
+    <url-pattern>/userlogout</url-pattern>  <!-- Handle logout requests -->
+    <url-pattern>/userregister</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/adminadduser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/admininsertuser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/adminedituser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/admindeleteuser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/adminlistuser</url-pattern>  <!-- Handle registration requests -->
+    <url-pattern>/adminupdateuser</url-pattern>  <!-- Handle registration requests -->
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>OrderServlet</servlet-name>
+    <servlet-class>controller.OrderServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>OrderServlet</servlet-name>
+    <url-pattern>/placeorder</url-pattern>
+    <url-pattern>/insertorder</url-pattern>
+    <url-pattern>/confirmorder</url-pattern>
+    <url-pattern>/stafforders</url-pattern>
+    <url-pattern>/staffeditorder</url-pattern>
+    <url-pattern>/staffupdateorder</url-pattern>
+    <url-pattern>/staffdeleteorder</url-pattern>
+  </servlet-mapping>
 </web-app>

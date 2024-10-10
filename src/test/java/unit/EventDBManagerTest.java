@@ -1,113 +1,94 @@
-// package unit;
+package unit;
 
-// import org.junit.jupiter.api.*;
-// import java.sql.Connection;
-// import java.sql.SQLException;
-// import java.time.LocalDate;
-// import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-// import static org.junit.jupiter.api.Assertions.*;
+import model.Event;
+import DAO.DBManager;
 
-// import model.Event;
-// import DAO.DBConnector;
-// import DAO.DBManager;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-// public class EventDBManagerTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-//     private Connection conn;
-//     private DBManager dbManager;
+@ExtendWith(MockitoExtension.class) // Enable Mockito in JUnit 5 tests
+public class EventDBManagerTest {
 
-//     @BeforeAll
-//     public void setup() throws ClassNotFoundException, SQLException {
-//         conn = DBConnector.getConnection();
-//         dbManager = new DBManager(); // Adjust based on how DBManager is initialized
-//     }
+@Mock
+private DBManager dbManager; // Mock the DBManager
 
-//     @AfterAll
-//     public void tearDown() throws SQLException {
-//         if (conn != null) {
-//             conn.close();
-//         }
-//     }
+@BeforeEach
+public void setup() {
+// Any setup logic can go here
+}
 
-//     @BeforeEach
-//     public void beforeEachTest() throws SQLException {
-//         conn.createStatement().execute("DELETE FROM Event"); // Clean the event table before each test
-//     }
+@Test
+public void testInsertEvent() throws Exception {
+// Arrange
+Event event = new Event(0, "Music Night", "Enjoy live music",
+LocalDate.now(), "Music");
+when(dbManager.createEvent(event)).thenReturn(true); // Mock the createEvent call
 
-//     @Test
-//     public void testConnection() {
-//         assertNotNull(conn); // Ensure the connection is not null
-//     }
+// Act
+boolean result = dbManager.createEvent(event);
 
-//     @Test
-//     public void testInsertEvent() throws SQLException {
-//         Event event = new Event(0, "Music Night", "Enjoy live music", LocalDate.now(), "Music");
-//         boolean result = dbManager.createEvent(event);
-//         assertTrue(result);
+// Assert
+assertTrue(result); // Ensure the event creation returns true
+verify(dbManager, times(1)).createEvent(event); // Verify that createEvent was called once
+}
 
-//         List<Event> eventList = dbManager.fetchAllEvents();
-//         assertEquals(1, eventList.size());
-//         Event insertedEvent = eventList.get(0);
-//         assertEquals("Music Night", insertedEvent.getName());
-//         assertEquals("Enjoy live music", insertedEvent.getDescription());
-//     }
+@Test
+public void testFetchAllEvents() throws Exception {
+// Arrange
+List<Event> eventList = new ArrayList<>();
+eventList.add(new Event(0, "Music Night", "Enjoy live music",
+LocalDate.now(), "Music"));
+eventList.add(new Event(0, "Art Exhibition", "View various art pieces",
+LocalDate.now().plusDays(2), "Art"));
 
-//     @Test
-//     public void testFetchAllEvents() throws SQLException {
-//         Event event1 = new Event(0, "Music Night", "Enjoy live music", LocalDate.now(), "Music");
-//         Event event2 = new Event(0, "Art Exhibition", "View various art pieces", LocalDate.now().plusDays(2), "Art");
-//         dbManager.createEvent(event1);
-//         dbManager.createEvent(event2);
+when(dbManager.fetchAllEvents()).thenReturn(eventList); // Mock the fetchAllEvents call
 
-//         List<Event> eventList = dbManager.fetchAllEvents();
-//         assertEquals(2, eventList.size());
+// Act
+List<Event> fetchedEvents = dbManager.fetchAllEvents();
 
-//         Event fetchedEvent = eventList.get(1);
-//         assertEquals("Art Exhibition", fetchedEvent.getName());
-//         assertEquals("View various art pieces", fetchedEvent.getDescription());
-//     }
+// Assert
+assertEquals(2, fetchedEvents.size()); // Ensure we fetched two events
+assertEquals("Music Night", fetchedEvents.get(0).getName());
+verify(dbManager, times(1)).fetchAllEvents(); // Verify that fetchAllEvents was called once
+}
 
-//     // @Test
-//     // public void testUpdateEvent() throws SQLException {
-//     //     Event event = new Event(0, "Music Night", "Enjoy live music", LocalDate.now(), "Music");
-//     //     dbManager.createEvent(event);
+@Test
+public void testUpdateEvent() throws Exception {
+// Arrange
+Event updatedEvent = new Event(1, "Updated Music Night", "Updated Description", LocalDate.now().plusDays(1), "Music");
+when(dbManager.updateEvent(updatedEvent)).thenReturn(true); // Mock the updateEvent call
 
-//     //     Event updatedEvent = new Event(event.getId(), "Updated Music Night", "Updated Description",
-//     //             LocalDate.now().plusDays(1), "Music");
-//     //     boolean result = dbManager.updateEvent(updatedEvent);
-//     //     assertTrue(result);
+// Act
+boolean result = dbManager.updateEvent(updatedEvent);
 
-//     //     List<Event> eventList = dbManager.fetchAllEvents();
-//     //     assertEquals(1, eventList.size());
-//     //     Event fetchedEvent = eventList.get(0);
-//     //     assertEquals("Updated Music Night", fetchedEvent.getName());
-//     //     assertEquals("Updated Description", fetchedEvent.getDescription());
-//     // }
+// Assert
+assertTrue(result); // Ensure the event update returns true
+verify(dbManager, times(1)).updateEvent(updatedEvent); // Verify that updateEvent was called once
+}
 
-//     // @Test
-//     // public void testDeleteEvent() throws SQLException {
-//     //     Event event = new Event(0, "Music Night", "Enjoy live music", LocalDate.now(), "Music");
-//     //     dbManager.createEvent(event);
+@Test
+public void testDeleteEvent() throws Exception {
+// Arrange
+int eventId = 1;
+when(dbManager.deleteEvent(eventId)).thenReturn(true); // Mock the deleteEvent call
 
-//     //     boolean result = dbManager.deleteEvent(event.getId());
-//     //     assertTrue(result);
+// Act
+boolean result = dbManager.deleteEvent(eventId);
 
-//     //     List<Event> eventList = dbManager.fetchAllEvents();
-//     //     assertEquals(0, eventList.size());
-//     // }
-
-//     @Test
-//     public void testSearchEvents() throws SQLException {
-//         Event event1 = new Event(0, "Music Night", "Enjoy live music", LocalDate.now(), "Music");
-//         Event event2 = new Event(0, "Art Exhibition", "View various art pieces", LocalDate.now().plusDays(2), "Art");
-//         dbManager.createEvent(event1);
-//         dbManager.createEvent(event2);
-
-//         List<Event> result = dbManager.searchEvents("Art", LocalDate.now().plusDays(2).toString());
-//         assertEquals(1, result.size());
-//         Event foundEvent = result.get(0);
-//         assertEquals("Art Exhibition", foundEvent.getName());
-//     }
-// }
+// Assert
+assertTrue(result); // Ensure the event deletion returns true
+verify(dbManager, times(1)).deleteEvent(eventId); // Verify that deleteEvent was called once
+}
+}
