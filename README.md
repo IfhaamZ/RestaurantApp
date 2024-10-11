@@ -12,7 +12,13 @@ This project is built using **Java** with **JSP** for the frontend and **Maven**
 - **Menu Management**: Staff can add, update, and remove menu items.
 - **Event Management**: Staff can create and manage restaurant events, view upcoming events, and delete past or canceled events.
 - **Reservation System**: Customers can make reservations, and staff can view and manage these reservations.
-- **User Management**: Admins and staff can manage users and their roles.
+- **User Management**: Admins can manage users and their roles.
+- **Staff Management**: Admins can manage staff and their roles.
+- **Error Management**: Allows customers to report issues, and staff to view and update error statuses.
+-** Feedback Management**: Enables customers to submit feedback and staff to respond to it.
+- **Order Management**: Facilitates order creation, tracking, and status updates by staff.
+- **Payment Management**: Supports multiple payment methods with the ability to cancel or view payment history.
+- **Inventory Management**: Monitors stock levels, updates inventory, and provides low stock notifications.
 
 ## Tech Stack
 
@@ -63,22 +69,22 @@ To run this project locally, follow the steps below:
 
 This project is integrated with **Azure DevOps Pipelines** for continuous integration and deployment.
 
-
 ## Project Structure
 
-├── src
-│   ├── main
-│   │   ├── java
-│   │   │   └── DAO          # Data Access Objects for database interaction
-│   │   │   └── model        # Java models for Menu, Table, Event, etc.
-│   │   │   └── controller   # Servlets for handling HTTP requests
-│   │   ├── webapp
-│   │   │   └── jsp          # JSP files for frontend views
-│   │   │   └── css          # CSS files for styling
-│   ├── test                 # Unit tests
-├── pom.xml                  # Maven configuration file
-├── .yml                     # Azure DevOps pipeline configuration
-├── README.md                # Project documentation
+- **src**
+  - **main**
+    - **java**
+      - **DAO**: Data Access Objects for database interaction
+      - **model**: Java models for Menu, Table, Event, etc.
+      - **controller**: Servlets for handling HTTP requests
+    - **webapp**
+      - **jsp**: JSP files for frontend views
+      - **css**: CSS files for styling
+  - **test**: Unit tests
+- **pom.xml**: Maven configuration file
+- **.yml**: Azure DevOps pipeline configuration
+- **README.md**: Project documentation
+
 
 
 ## SQL Tables
