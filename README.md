@@ -15,7 +15,7 @@ This project is built using **Java** with **JSP** for the frontend and **Maven**
 - **User Management**: Admins can manage users and their roles.
 - **Staff Management**: Admins can manage staff and their roles.
 - **Error Management**: Allows customers to report issues, and staff to view and update error statuses.
--** Feedback Management**: Enables customers to submit feedback and staff to respond to it.
+- **Feedback Management**: Enables customers to submit feedback and staff to respond to it.
 - **Order Management**: Facilitates order creation, tracking, and status updates by staff.
 - **Payment Management**: Supports multiple payment methods with the ability to cancel or view payment history.
 - **Inventory Management**: Monitors stock levels, updates inventory, and provides low stock notifications.
