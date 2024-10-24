@@ -74,6 +74,12 @@ public class ErrorSubmissionServlet extends HttpServlet {
                 case "/mainStaffDashboard": // Redirects to the main staff dashboard
                     returnToStaffDashboard(request, response);
                     break;
+                case "/updateErrorStatus": // Handles updating the error status
+                    updateErrorStatus(request, response); // New logic for status update
+                    break;
+                case "/deleteError": // Handle deletion of an error report
+                    deleteError(request, response); // Include the deletion logic
+                    break;
                 default:
                     listErrors(request, response); // Default action, e.g., show list of errors (if needed)
                     break;
@@ -111,7 +117,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
         String steps = request.getParameter("steps");
         String category = request.getParameter("category");
         String severity = request.getParameter("severity");
-
+        String status = request.getParameter("status");
         // Validate required fields
         if (description == null || description.trim().isEmpty() ||
                 steps == null || steps.trim().isEmpty() ||
@@ -129,7 +135,8 @@ public class ErrorSubmissionServlet extends HttpServlet {
 
         // Delegate database operation to DBManager
         try {
-            int errorId = dbManager.createErrorReportAndReturnID(description, steps, category, severity, createdAt);
+            int errorId = dbManager.createErrorReportAndReturnID(description, steps, category, severity, createdAt,
+                    status);
             logger.info("Error report inserted into the database successfully with ID: " + errorId);
 
             // Set success message and error ID for tracking
@@ -160,7 +167,7 @@ public class ErrorSubmissionServlet extends HttpServlet {
         String category = request.getParameter("category");
         String severity = request.getParameter("severity");
         String staffComments = request.getParameter("staffComments"); // Retrieve staff comments
-
+        String status = request.getParameter("status"); // Retrieve status
         // Server-side validation
         if (isInvalidInput(idStr, description, steps, category, severity)) {
             handleValidationError(request, response, idStr, description, steps, category, severity, staffComments);
@@ -169,7 +176,9 @@ public class ErrorSubmissionServlet extends HttpServlet {
 
         // Proceed to update the error report
         int id = Integer.parseInt(idStr);
-        error error = new error(id, description, steps, category, severity, staffComments, null); // Pass staff comments
+        // Update the constructor call in updateError
+        error error = new error(id, description, steps, category, severity, staffComments, null, status);
+        // Pass staff comments
 
         try {
             boolean success = dbManager.updateErrorReport(error); // Include staff comments in the update
@@ -183,6 +192,48 @@ public class ErrorSubmissionServlet extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Database error occurred while updating the error report", e);
             handleError(request, response, "Database error occurred.");
+        }
+    }
+
+    // Handle error report deletion
+    private void deleteError(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        logger.info("Processing error report deletion.");
+
+        // Retrieve error ID from the request
+        String errorIdStr = request.getParameter("errorId");
+
+        if (errorIdStr == null || errorIdStr.isEmpty()) {
+            logger.warning("No error ID provided for deletion.");
+            request.setAttribute("errorMessage", "No error ID provided.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/viewError.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+
+        try {
+            int errorId = Integer.parseInt(errorIdStr);
+
+            // Call DBManager to delete the error report
+            boolean isDeleted = dbManager.deleteErrorById(errorId);
+
+            if (isDeleted) {
+                logger.info("Error report with ID " + errorId + " deleted successfully.");
+                request.setAttribute("successMessage", "Error report deleted successfully.");
+                // Forward to the new errorDeleted.jsp page
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/errorDeleted.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                logger.warning("Failed to delete error report with ID " + errorId);
+                request.setAttribute("errorMessage", "Error report deletion failed.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/viewError.jsp");
+                dispatcher.forward(request, response);
+            }
+        } catch (NumberFormatException e) {
+            logger.warning("Invalid error ID format: " + errorIdStr);
+            request.setAttribute("errorMessage", "Invalid error ID format.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/viewError.jsp");
+            dispatcher.forward(request, response);
         }
     }
 
@@ -245,6 +296,52 @@ public class ErrorSubmissionServlet extends HttpServlet {
         logger.info("Displaying staff dashboard.");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/mainStaffDashboard.jsp");
         dispatcher.forward(request, response);
+    }
+
+    // Add method to handle the status update
+    private void updateErrorStatus(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("Processing error status update.");
+
+        // Retrieve the error ID and new status from the request
+        String errorIdStr = request.getParameter("id");
+        String status = request.getParameter("status");
+
+        if (errorIdStr == null || errorIdStr.isEmpty() || status == null || status.isEmpty()) {
+            logger.warning("Invalid status update: No error ID or status provided.");
+            request.setAttribute("errorMessage", "Invalid error ID or status.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/staffDashboard.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+
+        try {
+            int errorId = Integer.parseInt(errorIdStr);
+
+            // Update the status in the database
+            boolean isUpdated = dbManager.updateErrorStatus(errorId, status);
+
+            if (isUpdated) {
+                logger.info("Error status updated successfully for ID: " + errorId);
+                request.setAttribute("successMessage", "Error status updated successfully.");
+                response.sendRedirect(request.getContextPath() + "/staffDashboard"); // Redirect back to dashboard
+            } else {
+                logger.warning("Failed to update error status for ID: " + errorId);
+                request.setAttribute("errorMessage", "Error status update failed.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/staffDashboard.jsp");
+                dispatcher.forward(request, response);
+            }
+        } catch (NumberFormatException e) {
+            logger.warning("Invalid error ID format: " + errorIdStr);
+            request.setAttribute("errorMessage", "Invalid error ID format.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/staffDashboard.jsp");
+            dispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error occurred while updating error status", e);
+            request.setAttribute("errorMessage", "Database error occurred.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/staffDashboard.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
     // List submitted errors (not part of original logic, can be used for error

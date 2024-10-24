@@ -408,10 +408,13 @@ public class DBManager {
 
     // Error and Feedback
     // Method to create a new error report and return its generated ID
+    // createFeedbackAndReturnID and createErrorReportAndReturnID.
+    // This class is a reusable service that can be called by multiple servlets or
+    // other components to handle database interactions.
+    // Method to create a new error report and return its generated ID
     public int createErrorReportAndReturnID(String description, String steps, String category, String severity,
-            Timestamp createdAt)
-            throws SQLException {
-        String sql = "INSERT INTO errors (description, steps, category, severity, created_at) VALUES (?, ?, ?, ?, ?)";
+            Timestamp createdAt, String status) throws SQLException {
+        String sql = "INSERT INTO errors (description, steps, category, severity, created_at, status) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql,
                         PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -422,6 +425,7 @@ public class DBManager {
             statement.setString(3, category);
             statement.setString(4, severity);
             statement.setTimestamp(5, createdAt); // Set the created_at timestamp
+            statement.setString(6, status); // Set the status
 
             // Execute update
             int affectedRows = statement.executeUpdate();
@@ -440,9 +444,9 @@ public class DBManager {
         }
     }
 
-    // Method to retrieve all error reports
+    // Method to retrieve all error reports, including status
     public List<error> getAllErrorReports() throws SQLException {
-        String sql = "SELECT * FROM errors";
+        String sql = "SELECT id, description, steps, category, severity, created_at, staff_comments, status FROM errors";
         List<error> errorReports = new ArrayList<>();
 
         try (Connection connection = DBConnector.getConnection();
@@ -457,7 +461,9 @@ public class DBManager {
                         resultSet.getString("steps"),
                         resultSet.getString("category"),
                         resultSet.getString("severity"),
-                        resultSet.getTimestamp("created_at")); // Retrieve createdAt
+                        resultSet.getTimestamp("created_at"), // Retrieve createdAt
+                        resultSet.getString("status") // Retrieve status
+                );
                 errorReport.setStaffComments(resultSet.getString("staff_comments")); // Retrieve staff comments
                 errorReports.add(errorReport);
             }
@@ -465,9 +471,9 @@ public class DBManager {
         return errorReports;
     }
 
-    // Method to update an existing error report
+    // Method to update an existing error report, including status
     public boolean updateErrorReport(error errorReport) throws SQLException {
-        String sql = "UPDATE errors SET description=?, steps=?, category=?, severity=?, staff_comments=? WHERE id=?";
+        String sql = "UPDATE errors SET description=?, steps=?, category=?, severity=?, staff_comments=?, status=? WHERE id=?";
 
         try (Connection connection = DBConnector.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -478,8 +484,8 @@ public class DBManager {
             statement.setString(3, errorReport.getCategory());
             statement.setString(4, errorReport.getSeverity());
             statement.setString(5, errorReport.getStaffComments()); // Update staff comments
-            statement.setInt(6, errorReport.getId()); // Error ID for the WHERE clause
-
+            statement.setString(6, errorReport.getStatus()); // Update status
+            statement.setInt(7, errorReport.getId()); // Error ID for the WHERE clause
             // Execute update and return whether the operation was successful
             return statement.executeUpdate() > 0;
         }
@@ -501,8 +507,10 @@ public class DBManager {
                             resultSet.getString("steps"),
                             resultSet.getString("category"),
                             resultSet.getString("severity"),
-                            resultSet.getTimestamp("created_at"));
-                    errorReport.setStaffComments(resultSet.getString("staff_comments"));
+                            resultSet.getTimestamp("created_at"),
+                            resultSet.getString("status") // Include status field
+                    );
+                    errorReport.setStaffComments(resultSet.getString("staff_comments")); // Set staff comments
                 }
             }
         }
@@ -611,6 +619,16 @@ public class DBManager {
         return feedbackList;
     }
 
+    // Method to delete feedback by ID
+    public boolean deleteFeedbackById(int feedbackId) throws SQLException {
+        String sql = "DELETE FROM feedback WHERE feedback_id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, feedbackId); // Set the feedback ID parameter
+            return statement.executeUpdate() > 0; // Return true if a row was deleted
+        }
+    }
+
     // Method to update feedback with staff response
     public boolean updateFeedbackWithResponse(int feedbackId, String staffResponse) throws SQLException {
         String sql = "UPDATE feedback SET staff_response=? WHERE feedback_id=?"; // Changed from 'id' to 'feedback_id'
@@ -622,6 +640,33 @@ public class DBManager {
             statement.setInt(2, feedbackId);
 
             return statement.executeUpdate() > 0;
+        }
+    }
+
+    // Method to update the status of an error report
+    public boolean updateErrorStatus(int errorId, String status) throws SQLException {
+        String sql = "UPDATE errors SET status = ? WHERE id = ?";
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            // Set the status and error ID
+            statement.setString(1, status);
+            statement.setInt(2, errorId);
+
+            // Execute update and return whether the operation was successful
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+    // Method to delete an error report by its ID
+    public boolean deleteErrorById(int errorId) throws SQLException {
+        String sql = "DELETE FROM errors WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, errorId); // Set the error ID
+            return statement.executeUpdate() > 0; // Return true if a row was deleted
         }
     }
 }
