@@ -52,6 +52,9 @@ public class FeedbackSubmissionServlet extends HttpServlet {
                 case "/feedbackSubmit": // Handle feedback submission
                     submitFeedback(request, response);
                     break;
+                case "/viewAverageRating": // New action to view the average feedback rating
+                    viewAverageRating(request, response); // Handle average rating viewing
+                    break;
                 case "/formSubmit":
                     showForm(request, response); // Show the feedback submission form
                     break;
@@ -139,6 +142,20 @@ public class FeedbackSubmissionServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Failed to submit your feedback. Please try again.");
             forwardRequest(request, response, "/feedback.jsp");
         }
+    }
+
+    private void viewAverageRating(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        logger.info("Displaying average customer feedback rating for staff.");
+
+        // Call the DBManager to calculate the average rating
+        double averageRating = dbManager.calculateAverageRating();
+
+        // Set the average rating as an attribute in the request
+        request.setAttribute("averageRating", averageRating);
+
+        // Forward the request to the JSP page
+        forwardRequest(request, response, "/averageRating.jsp");
     }
 
     // Validate input

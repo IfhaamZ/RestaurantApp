@@ -128,6 +128,12 @@
             <p>View Customer's Feedback</p>
             <button onclick="location.href='/viewFeedback'">Give Feedback</button>
         </div>
+
+        <div class="card">
+            <h2>View Average Feedback Rating</h2>
+            <p>Analyze the average customer feedback rating.</p>
+            <button onclick="location.href='/viewAverageRating'">View Average Rating</button>
+        </div>
     </div>
 
     <div class="footer">

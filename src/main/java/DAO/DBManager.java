@@ -659,6 +659,20 @@ public class DBManager {
         }
     }
 
+    // In DBManager.java
+    public double calculateAverageRating() throws SQLException {
+        String query = "SELECT AVG(rating) AS averageRating FROM feedback";
+        try (Connection connection = DBConnector.getConnection(); // Use DBConnector to get the connection
+                PreparedStatement statement = connection.prepareStatement(query);
+                ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getDouble("averageRating");
+            }
+        }
+        return 0.0;
+    }
+
     // Method to delete an error report by its ID
     public boolean deleteErrorById(int errorId) throws SQLException {
         String sql = "DELETE FROM errors WHERE id = ?";

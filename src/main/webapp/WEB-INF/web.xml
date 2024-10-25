@@ -141,6 +141,7 @@
     <url-pattern>/deleteFeedback</url-pattern> 
     <url-pattern>/showFeedback</url-pattern>
     <url-pattern>/StaffDashboard</url-pattern>
+    <url-pattern>/viewAverageRating</url-pattern>
   </servlet-mapping>
 
 </web-app>
