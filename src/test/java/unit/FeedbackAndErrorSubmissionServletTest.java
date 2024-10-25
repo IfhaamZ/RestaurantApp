@@ -285,4 +285,75 @@ public class FeedbackAndErrorSubmissionServletTest {
         verify(rd).forward(request, response);
     }
 
+    @Test
+    public void testFeedbackSubmissionWithMissingName() throws ServletException, IOException {
+        // Simulate the servlet path for feedback submission
+        when(request.getServletPath()).thenReturn("/feedbackSubmit");
+
+        // Provide empty name but valid other fields
+        when(request.getParameter("name")).thenReturn("");
+        when(request.getParameter("email")).thenReturn("john@example.com");
+        when(request.getParameter("rating")).thenReturn("4");
+        when(request.getParameter("comments")).thenReturn("Good service");
+        when(request.getRequestDispatcher("/feedback.jsp")).thenReturn(rd);
+
+        // Call the Feedback servlet
+        feedbackServlet.doPost(request, response);
+
+        // Verify that validation failed and the error message was set
+        verify(request).setAttribute(eq("errorMessage"), eq("All fields are required and email must be valid."));
+        verify(request).getRequestDispatcher("/feedback.jsp");
+        verify(rd).forward(request, response);
+    }
+
+    @Test
+    public void testViewCustomerFeedback()
+            throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
+        // Mock servlet path to simulate the action "/viewCustomerFeedback"
+        when(request.getServletPath()).thenReturn("/viewCustomerFeedback");
+        when(request.getParameter("id")).thenReturn("1"); // Mock feedback ID
+
+        // Mock DBManager and feedback
+        DBManager dbManager = mock(DBManager.class);
+        when(dbManager.getFeedbackById(1))
+                .thenReturn(new feedback(1, "John", "john@example.com", "Good service", 5, null, null));
+
+        // Inject the mocked DBManager using reflection
+        Field dbManagerField = FeedbackSubmissionServlet.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true);
+        dbManagerField.set(feedbackServlet, dbManager);
+
+        // Call the Feedback servlet
+        feedbackServlet.doGet(request, response);
+
+        // Verify the feedback view page is shown
+        verify(request).getRequestDispatcher("/viewCustomerFeedback.jsp");
+        verify(rd).forward(request, response);
+    }
+
+    @Test
+    public void testErrorReportDeletionSuccess()
+            throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
+        // Simulate the servlet path for deleting an error
+        when(request.getServletPath()).thenReturn("/deleteError");
+        when(request.getParameter("errorId")).thenReturn("1");
+
+        // Mock the DBManager and deletion success
+        DBManager dbManager = mock(DBManager.class);
+        when(dbManager.deleteErrorById(1)).thenReturn(true);
+
+        // Inject the mocked DBManager using reflection
+        Field dbManagerField = ErrorSubmissionServlet.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true);
+        dbManagerField.set(errorServlet, dbManager);
+
+        // Call the Error servlet to delete the error
+        errorServlet.doPost(request, response);
+
+        // Verify success message and forward to the confirmation page
+        verify(request).setAttribute(eq("successMessage"), eq("Error report deleted successfully."));
+        verify(request).getRequestDispatcher("/errorDeleted.jsp");
+        verify(rd).forward(request, response);
+    }
+
 }
