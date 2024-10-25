@@ -126,7 +126,7 @@
         <div class="card">
             <h2>View and Update Feedback</h2>
             <p>View Customer's Feedback</p>
-            <button onclick="location.href='/viewFeedback'">Give Feedback</button>
+            <button onclick="location.href='/viewFeedback'">View the Feedback</button>
         </div>
 
         <div class="card">

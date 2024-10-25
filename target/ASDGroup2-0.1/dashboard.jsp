@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Customer Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,23 +11,22 @@
             padding: 0;
             background-color: #f6f6f6;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
         h1 {
             color: #1E90FF;
+            margin-top: 30px;
             text-align: center;
             font-size: 32px;
-            margin-bottom: 40px;
         }
 
         .container {
             display: flex;
-            justify-content: center;
-            margin-top: 20px;
+            justify-content: space-evenly;
+            width: 80%;
+            margin-top: 50px;
         }
 
         .card {
@@ -37,7 +36,6 @@
             padding: 20px;
             text-align: center;
             width: 250px;
-            margin: 0 15px;
             transition: transform 0.3s, background-color 0.3s;
         }
 
@@ -45,7 +43,7 @@
             transform: translateY(-5px);
             background-color: #f0f8ff;
         }
-
+        
         .card h2 {
             color: #1E90FF;
             font-size: 20px;
@@ -59,7 +57,7 @@
         }
 
         .card button {
-            background-color: #1E90FF;
+            background-color: #28a745; /* Green button */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -70,33 +68,12 @@
         }
 
         .card button:hover {
-            background-color: #007BFF;
+            background-color: #218838;
             box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
             transform: scale(1.05);
         }
 
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 14px;
-            color: #555;
-            padding: 20px;
-            width: 100%;
-            background-color: #f6f6f6;
-            position: fixed;
-            bottom: 0;
-        }
-
-        .footer a {
-            color: #1E90FF;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Dropdown style */
+        /* Dropdown */
         .dropdown {
             position: relative;
             display: inline-block;
@@ -106,10 +83,11 @@
             display: none;
             position: absolute;
             background-color: white;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
             min-width: 200px;
-            border-radius: 5px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
             z-index: 1;
+            border-radius: 5px;
+            padding: 12px 0;
         }
 
         .dropdown-content a {
@@ -128,12 +106,30 @@
             display: block;
         }
 
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            padding: 20px;
+            width: 100%;
+            background-color: #f6f6f6;
+        }
+
+        .footer a {
+            color: #1E90FF;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
         /* Media Query for Responsiveness */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
                 align-items: center;
-                width: 100%;
             }
 
             .card {
