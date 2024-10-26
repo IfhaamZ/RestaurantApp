@@ -29,8 +29,7 @@ public void setup() {
 @Test
 public void testCreateMenuItem() throws Exception {
 // Arrange
-MenuItem item = new MenuItem(0, "Pizza", "Cheese pizza", 10.99, "Main
-Course");
+MenuItem item = new MenuItem(0, "Pizza", "Cheese pizza", 10.99, "Main Course");
 when(dbManager.insertMenuItem(item)).thenReturn(true);
 
 // Act
@@ -44,8 +43,7 @@ verify(dbManager, times(1)).insertMenuItem(item);
 @Test
 public void testUpdateMenuItem() throws Exception {
 // Arrange
-MenuItem updatedItem = new MenuItem(1, "Pasta", "Creamy pasta", 12.99, "Main
-Course");
+MenuItem updatedItem = new MenuItem(1, "Pasta", "Creamy pasta", 12.99, "Main Course");
 when(dbManager.updateMenuItem(updatedItem)).thenReturn(true);
 
 // Act
@@ -74,8 +72,7 @@ verify(dbManager, times(1)).deleteMenuItem(menuItemId);
 public void testFetchAllMenuItems() throws Exception {
 // Arrange
 List<MenuItem> menuItems = new ArrayList<>();
-menuItems.add(new MenuItem(0, "Pizza", "Cheese pizza", 10.99, "Main
-Course"));
+menuItems.add(new MenuItem(0, "Pizza", "Cheese pizza", 10.99, "Main Course"));
 when(dbManager.fetchAllMenuItems()).thenReturn(menuItems);
 
 // Act

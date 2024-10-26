@@ -44,22 +44,12 @@ when(request.getSession()).thenReturn(session);
 when(request.getRequestDispatcher(anyString())).thenReturn(rd);
 }
 
-<<<<<<< HEAD
     // Feedback Management Tests
     @Test
     public void testValidFeedbackSubmission()
             throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
         // Mock servlet path to simulate the action "/feedbackSubmit"
         when(request.getServletPath()).thenReturn("/feedbackSubmit");
-=======
-// Feedback Management Tests
-@Test
-public void testValidFeedbackSubmission()
-throws ServletException, IOException, SQLException, NoSuchFieldException,
-IllegalAccessException {
-// Mock servlet path to simulate the action "/feedbackSubmit"
-when(request.getServletPath()).thenReturn("/feedbackSubmit");
->>>>>>> parent of ee544a2 (debugging)
 
 // Mock valid parameters
 when(request.getParameter("name")).thenReturn("John Doe");
@@ -68,16 +58,10 @@ when(request.getParameter("rating")).thenReturn("5");
 when(request.getParameter("comments")).thenReturn("Excellent service");
 when(request.getRequestDispatcher("/feedbackConfirmation.jsp")).thenReturn(rd);
 
-<<<<<<< HEAD
-        // Mock the DBManager and inject it
-        DBManager dbManager = mock(DBManager.class);
-        when(dbManager.createFeedbackAndReturnID(anyString(), anyString(), anyString(), anyInt())).thenReturn(1);
-=======
 // Mock the DBManager and inject it
 DBManager dbManager = mock(DBManager.class);
 when(dbManager.createFeedbackAndReturnID(anyString(), anyString(),
 anyString(), anyInt())).thenReturn(1);
->>>>>>> parent of ee544a2 (debugging)
 
 // Inject the mocked DBManager using reflection
 Field dbManagerField =
@@ -111,22 +95,12 @@ verify(request).getRequestDispatcher("/feedback.jsp");
 verify(rd).forward(request, response);
 }
 
-<<<<<<< HEAD
     @Test
     public void testIncorrectDataTypeInFeedback() throws ServletException, IOException {
         // Mock servlet path to simulate the action "/feedbackSubmit"
         when(request.getServletPath()).thenReturn("/feedbackSubmit");
         when(request.getParameter("rating")).thenReturn("five"); // Invalid rating
         when(request.getRequestDispatcher("/feedback.jsp")).thenReturn(rd);
-=======
-@Test
-public void testIncorrectDataTypeInFeedback() throws ServletException,
-IOException {
-// Mock servlet path to simulate the action "/feedbackSubmit"
-when(request.getServletPath()).thenReturn("/feedbackSubmit");
-when(request.getParameter("rating")).thenReturn("five"); // Invalid rating
-when(request.getRequestDispatcher("/feedback.jsp")).thenReturn(rd);
->>>>>>> parent of ee544a2 (debugging)
 
 // Call the Feedback servlet
 feedbackServlet.doPost(request, response);
@@ -137,58 +111,6 @@ verify(request).getRequestDispatcher("/feedback.jsp");
 verify(rd).forward(request, response);
 }
 
-<<<<<<< HEAD
-    @Test
-    public void testRespondToCustomerFeedback()
-            throws ServletException, IOException, SQLException, NoSuchFieldException, IllegalAccessException {
-        // Mock servlet path to simulate the action "/submitStaffFeedbackResponse"
-        when(request.getServletPath()).thenReturn("/submitStaffFeedbackResponse");
-
-        // Mock parameters and request dispatcher
-        when(request.getParameter("staffResponse_1")).thenReturn("Staff feedback response");
-        when(request.getRequestDispatcher(anyString())).thenReturn(rd);
-        when(request.getContextPath()).thenReturn("/restaurantApp"); // Mocking the context path
-
-        // Mock the DBManager and inject it
-        DBManager dbManager = mock(DBManager.class);
-        when(dbManager.getAllFeedback()).thenReturn(
-                Collections.singletonList(new feedback(1, "John", "john@example.com", "Good service", 5, null, null)));
-
-        // Inject the mocked DBManager using reflection
-        Field dbManagerField = FeedbackSubmissionServlet.class.getDeclaredField("dbManager");
-        dbManagerField.setAccessible(true); // Make the private field accessible
-        dbManagerField.set(feedbackServlet, dbManager); // Set the mocked dbManager
-
-        // Call the Feedback servlet method for submitting staff feedback
-        feedbackServlet.submitStaffFeedbackResponse(request, response);
-
-        // Verify the redirect is called with the correct path
-        verify(response).sendRedirect("/restaurantApp/viewFeedback");
-    }
-
-    @Test
-    public void testMissingErrorFields() throws ServletException, IOException {
-        // Mock servlet path to simulate the action "/submit"
-        when(request.getServletPath()).thenReturn("/submit");
-        when(request.getParameter("description")).thenReturn(""); // Missing description
-        when(request.getParameter("steps")).thenReturn("Steps to reproduce");
-        when(request.getParameter("category")).thenReturn("UI Bug");
-        when(request.getParameter("severity")).thenReturn("High");
-
-        // Call the Error servlet
-        errorServlet.doPost(request, response);
-
-        // Verify that validation failed and the request was forwarded back to the form
-        verify(request).setAttribute(eq("errorMessage"), anyString());
-        verify(request).getRequestDispatcher("/errorSubmission.jsp");
-        verify(rd).forward(request, response);
-    }
-
-    @Test
-    public void testViewError() throws ServletException, IOException {
-        // Mock servlet path to simulate the action "/viewError"
-        when(request.getServletPath()).thenReturn("/viewError");
-=======
 @Test
 public void testRespondToCustomerFeedback()
 throws ServletException, IOException, SQLException, NoSuchFieldException,
@@ -280,7 +202,6 @@ verify(rd).forward(request, response);
 public void testViewError() throws ServletException, IOException {
 // Mock servlet path to simulate the action "/viewError"
 when(request.getServletPath()).thenReturn("/viewError");
->>>>>>> parent of ee544a2 (debugging)
 
 // Call the Error servlet
 errorServlet.doGet(request, response);
@@ -296,15 +217,6 @@ verify(rd).forward(request, response);
         // Mock servlet path to simulate the action "/update"
         when(request.getServletPath()).thenReturn("/update");
 
-<<<<<<< HEAD
-        // Mock valid parameters for updating the error report
-        when(request.getParameter("id")).thenReturn("1");
-        when(request.getParameter("description")).thenReturn("Updated error description");
-        when(request.getParameter("steps")).thenReturn("Updated steps to reproduce");
-        when(request.getParameter("category")).thenReturn("UI Bug");
-        when(request.getParameter("severity")).thenReturn("Critical");
-        when(request.getParameter("staffComments")).thenReturn("This issue has been fixed");
-=======
 // Mock valid parameters for updating the error report
 when(request.getParameter("id")).thenReturn("1");
 when(request.getParameter("description")).thenReturn("Updated error
@@ -314,7 +226,6 @@ when(request.getParameter("category")).thenReturn("UI Bug");
 when(request.getParameter("severity")).thenReturn("Critical");
 when(request.getParameter("staffComments")).thenReturn("This issue has been
 fixed");
->>>>>>> parent of ee544a2 (debugging)
 
         // Mock the DBManager and inject it
         DBManager dbManager = mock(DBManager.class);
@@ -492,8 +403,6 @@ fixed");
     }
 
 }
-<<<<<<< HEAD
-=======
 
 // Test SQL Exception during feedback submission
 @Test
@@ -708,4 +617,3 @@ verify(response).sendRedirect("/staffDashboard.jsp");
 }
 
 }
->>>>>>> parent of ee544a2 (debugging)
