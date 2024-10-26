@@ -41,7 +41,7 @@
 
         .card:hover {
             transform: translateY(-5px);
-            background-color: #f0f8ff; /* Light blue background on hover */
+            background-color: #f0f8ff;
         }
         
         .card h2 {
@@ -57,7 +57,7 @@
         }
 
         .card button {
-            background-color: #1E90FF;
+            background-color: #ff4d4d; /* Red button */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -68,8 +68,8 @@
         }
 
         .card button:hover {
-            background-color: #007BFF;
-            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+            background-color: #cc0000; /* Darker red on hover */
+            box-shadow: 0 4px 8px rgba(255, 77, 77, 0.3);
             transform: scale(1.05);
         }
 
@@ -126,7 +126,13 @@
         <div class="card">
             <h2>View and Update Feedback</h2>
             <p>View Customer's Feedback</p>
-            <button onclick="location.href='/viewFeedback'">Give Feedback</button>
+            <button onclick="location.href='/viewFeedback'">View the Feedback</button>
+        </div>
+
+        <div class="card">
+            <h2>View Average Feedback Rating</h2>
+            <p>Analyze the average customer feedback rating.</p>
+            <button onclick="location.href='/viewAverageRating'">View Average Rating</button>
         </div>
     </div>
 

@@ -3,7 +3,7 @@ package model;
 import java.sql.Timestamp;
 
 public class feedback {
-
+    // Fields to store feedback details
     private int feedbackId; // Unique identifier for feedback
     private String customerName; // Customer's name
     private String customerEmail; // Customer's email
@@ -35,7 +35,8 @@ public class feedback {
         this.createdAt = createdAt;
     }
 
-    // Getters and setters
+    // Getters and setters for each field
+    // Getter and Setter for Feedback ID
     public int getFeedbackId() {
         return feedbackId;
     }

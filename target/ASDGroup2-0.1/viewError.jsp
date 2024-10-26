@@ -88,6 +88,15 @@
             background-color: #0056b3;
         }
 
+        .delete-btn {
+            background-color: #dc3545;
+            margin-top: 20px;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
         a {
             text-decoration: none;
             color: #28a745;
@@ -174,11 +183,18 @@
         <p><strong>Category:</strong> <%= err.getCategory() != null ? err.getCategory() : "Uncategorized" %></p>
         <p><strong>Severity:</strong> <%= err.getSeverity() != null ? err.getSeverity() : "Unknown" %></p>
 
-<!-- Display createdAt field -->
-        <p><strong>Date Submitted:</strong> <%= err.getCreatedAt() != null ? err.getCreatedAt() : "N/A" %></p> <!-- Display Created At -->
-        <!-- Display staff comments to the customer -->
+        <p><strong>Status:</strong> <%= err.getStatus() != null ? err.getStatus() : "No status available" %></p> <!-- Added status -->
+
+        <p><strong>Date Submitted:</strong> <%= err.getCreatedAt() != null ? err.getCreatedAt() : "N/A" %></p>
+
         <h3>Update from Staff</h3>
         <p><%= err.getStaffComments() != null ? err.getStaffComments() : "No updates yet." %></p>
+
+        <!-- Delete button form -->
+        <form action="deleteError" method="post">
+            <input type="hidden" name="errorId" value="<%= err.getId() %>">
+            <button type="submit" class="delete-btn">Delete Error Report</button>
+        </form>
 
         <a href="dashboard.jsp" class="back-btn">Back to Dashboard</a>
     <%

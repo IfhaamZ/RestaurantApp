@@ -153,6 +153,7 @@ a:hover {
             <th>Severity</th>
             <th>Staff Comments</th>
             <th>Date Submitted</th>
+            <th>Status</th> <!-- Added Status column -->
             <th>Actions</th>
         </tr>
         </thead>
@@ -171,6 +172,8 @@ a:hover {
             <td><%= err.getSeverity() %></td>
             <td><%= err.getStaffComments() != null ? err.getStaffComments() : "No comments yet" %></td>
             <td><%= err.getCreatedAt() != null ? err.getCreatedAt() : "N/A" %></td> <!-- Display Created At -->
+            <td><%= err.getStatus() != null ? err.getStatus() : "No status" %></td>
+
             <td><a href="editError.jsp?id=<%= err.getId() %>" class="btn btn-green">Edit</a></td>
         </tr>
         <%

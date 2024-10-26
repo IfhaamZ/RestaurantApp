@@ -16,10 +16,11 @@ import DAO.DBManager;
 import model.feedback;
 
 public class FeedbackSubmissionServlet extends HttpServlet {
-
+    // Logger to track important events
     private static final Logger logger = Logger.getLogger(FeedbackSubmissionServlet.class.getName());
     private DBManager dbManager;
 
+    // Initialize the servlet and DBManager
     @Override
     public void init() throws ServletException {
         try {
@@ -31,58 +32,68 @@ public class FeedbackSubmissionServlet extends HttpServlet {
         }
     }
 
+    // Handle POST requests and forward to doGet for uniform handling
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request, response); // Forward POST requests to doGet for uniform handling
     }
 
+    // Handle GET requests and route based on action
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Get the specific action from the path
         String action = request.getServletPath();
 
         try {
             switch (action) {
-                case "/feedbackSubmit":
+                case "/feedbackSubmit": // Handle feedback submission
                     submitFeedback(request, response);
+                    break;
+                case "/viewAverageRating": // New action to view the average feedback rating
+                    viewAverageRating(request, response); // Handle average rating viewing
                     break;
                 case "/formSubmit":
                     showForm(request, response); // Show the feedback submission form
                     break;
                 case "/feedbackConfirmation":
-                    showConfirmation(request, response);
+                    showConfirmation(request, response); // Show feedback confirmation page
                     break;
-                case "/backDashboard": // Handle redirect to the dashboard
+                case "/backDashboard": // Redirect to dashboard
                     backToDashboard(request, response);
                     break;
-                case "/viewFeedback": // Handle feedback view for staff
+                case "/viewFeedback": // View all feedback for staff
                     viewFeedback(request, response);
                     break;
-                case "/submitStaffFeedbackResponse": // Handle feedback update from staff
+                case "/submitStaffFeedbackResponse": // Staff updates feedback responses
                     submitStaffFeedbackResponse(request, response);
                     break;
-                case "/viewCustomerFeedback": // Handle feedback view for customer
+                case "/viewCustomerFeedback": // Customer views specific feedback by ID
                     viewCustomerFeedback(request, response);
                     break;
                 case "/lookupFeedback": // Handle customer lookup of feedback by ID
                     lookupFeedback(request, response);
                     break;
-                case "/updateFeedback":
+                case "/updateFeedback": // Update specific feedback entry
                     updateFeedback(request, response);
                     break;
-                case "/feedbackDashboard":
+                case "/deleteFeedback": // New case to handle feedback deletion
+                    deleteFeedback(request, response);
+                    break;
+                case "/feedbackDashboard": // Show feedback dashboard for staff
                     showFeedback(request, response);
                     break;
-                case "/StaffDashboard":
+                case "/StaffDashboard": // Redirect to main staff dashboard
                     returnFeedbackDashboard(request, response);
                     break;
-                default:
+                default: // Show feedback form by default
                     showForm(request, response);
                     break;
             }
         } catch (SQLException ex) {
+            // Log SQL-related exceptions
             logger.log(Level.SEVERE, "SQL error occurred", ex);
             throw new ServletException(ex);
         }
@@ -131,6 +142,20 @@ public class FeedbackSubmissionServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Failed to submit your feedback. Please try again.");
             forwardRequest(request, response, "/feedback.jsp");
         }
+    }
+
+    private void viewAverageRating(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        logger.info("Displaying average customer feedback rating for staff.");
+
+        // Call the DBManager to calculate the average rating
+        double averageRating = dbManager.calculateAverageRating();
+
+        // Set the average rating as an attribute in the request
+        request.setAttribute("averageRating", averageRating);
+
+        // Forward the request to the JSP page
+        forwardRequest(request, response, "/averageRating.jsp");
     }
 
     // Validate input
@@ -210,6 +235,7 @@ public class FeedbackSubmissionServlet extends HttpServlet {
 
         int feedbackId;
         try {
+            // Parse feedback ID as an integer
             feedbackId = Integer.parseInt(feedbackIdStr);
         } catch (NumberFormatException e) {
             logger.warning("Invalid feedback ID format: " + feedbackIdStr);
@@ -232,6 +258,44 @@ public class FeedbackSubmissionServlet extends HttpServlet {
         // page
         request.setAttribute("feedback", fb);
         forwardRequest(request, response, "/viewCustomerFeedback.jsp");
+    }
+
+    // delete feedback
+    private void deleteFeedback(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        logger.info("Processing feedback deletion.");
+
+        // Retrieve feedback ID from the request
+        String feedbackIdStr = request.getParameter("feedbackId");
+
+        if (feedbackIdStr == null || feedbackIdStr.isEmpty()) {
+            logger.warning("No feedback ID provided for deletion.");
+            request.setAttribute("errorMessage", "No feedback ID provided.");
+            forwardRequest(request, response, "/lookupFeedback.jsp");
+            return;
+        }
+
+        try {
+            int feedbackId = Integer.parseInt(feedbackIdStr);
+
+            // Call DBManager to delete the feedback
+            boolean isDeleted = dbManager.deleteFeedbackById(feedbackId);
+
+            if (isDeleted) {
+                logger.info("Feedback with ID " + feedbackId + " deleted successfully.");
+                request.setAttribute("successMessage", "Feedback deleted successfully.");
+                // Forward to the new feedbackDeleted.jsp page
+                forwardRequest(request, response, "/feedbackDeleted.jsp");
+            } else {
+                logger.warning("Failed to delete feedback with ID " + feedbackId);
+                request.setAttribute("errorMessage", "Feedback deletion failed.");
+                forwardRequest(request, response, "/lookupFeedback.jsp");
+            }
+        } catch (NumberFormatException e) {
+            logger.warning("Invalid feedback ID format: " + feedbackIdStr);
+            request.setAttribute("errorMessage", "Invalid feedback ID format.");
+            forwardRequest(request, response, "/lookupFeedback.jsp");
+        }
     }
 
     // Helper method to forward request
