@@ -4,10 +4,12 @@ import DAO.DBManager;
 import model.Payment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,8 @@ public void testCreatePayment() throws Exception {
 Payment payment = new Payment(
 null, "Card", "1234567812345678", "12", "2025", "123",
 "100.50", LocalDateTime.now().toString(), "customer");
-when(dbManager.createPayment(payment)).thenReturn(1); // Simulate successful creation returning paymentID = 1
+when(dbManager.createPayment(payment)).thenReturn(1); // Simulate successful
+creation returning paymentID = 1
 
 // Act
 int paymentID = dbManager.createPayment(payment);
