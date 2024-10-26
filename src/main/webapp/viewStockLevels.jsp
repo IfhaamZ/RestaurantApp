@@ -55,7 +55,7 @@
 
       <!-- Home Button -->
       <a href="inventorylowStockNotification" class="form-button low-stock-button">Check Low Stock Notification</a>
-      <a href="index.jsp" class="form-button home-button">Main Page</a>
+      <a href="staffIndex.jsp" class="form-button home-button">Main Page</a>
     </div>
   </body>
 </html>

@@ -133,7 +133,7 @@
         </table>
 
         <!-- 홈으로 돌아가기 버튼 -->
-        <a href="index.jsp" class="back-btn">Back to Home</a>
+        <a href="staffIndex.jsp" class="back-btn">Back to Home</a>
     </div>
 </body>
 </html>

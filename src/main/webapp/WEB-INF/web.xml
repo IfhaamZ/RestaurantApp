@@ -64,12 +64,12 @@
   </servlet-mapping>
 
   <!-- EventServlet to handle all event-related operations -->
-  <!-- <servlet>
+  <servlet>
     <servlet-name>EventServlet</servlet-name>
     <servlet-class>controller.EventServlet</servlet-class>
-  </servlet> -->
+  </servlet>
 
- <!--> <servlet-mapping>
+ <servlet-mapping>
     <servlet-name>EventServlet</servlet-name>
     <url-pattern>/eventnew</url-pattern>  
     <url-pattern>/eventinsert</url-pattern>  
@@ -80,7 +80,7 @@
     <url-pattern>/eventsearch</url-pattern>
     <url-pattern>/staffeventsearch</url-pattern>
     <url-pattern>/staffeventlist</url-pattern>
-  </servlet-mapping> -->
+  </servlet-mapping>
 
   <!-- TableServlet to handle all table-related operations -->
   <servlet>

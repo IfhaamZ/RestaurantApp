@@ -9,8 +9,8 @@ public class CreateDB {
 
     protected static final String db_url = "jdbc:mysql://localhost:3306/";
     protected static final String db_user = "root";
-    protected static final String db_pass = "Karthi";
-    protected static final String db_name = "restaurant_db";
+    protected static final String db_pass = "Lama1234!";
+    protected static final String db_name = "restaurantdb";
 
     public static void main(String[] args) {
         try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pass);

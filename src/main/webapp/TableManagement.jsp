@@ -12,7 +12,7 @@
         <h1>Table Management</h1>
         <nav>
             <ul>
-                <li><a href="index.jsp">Home</a></li>
+                <li><a href="staffIndex.jsp">Home</a></li>
             </ul>
         </nav>
     </header>
