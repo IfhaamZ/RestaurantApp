@@ -7,52 +7,80 @@ pool:
 variables:
   buildConfiguration: "Release"
 
-steps:
-  # Manually install JDK (Java Development Kit) version 19
-  - script: |
-      sudo apt-get update
-      sudo apt-get install -y openjdk-19-jdk
-    displayName: "Install OpenJDK 19"
+stages:
+  - stage: Build
+    displayName: "Build Stage"
+    jobs:
+      - job: BuildJob
+        displayName: "Build Job"
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          # Manually install JDK (Java Development Kit) version 19
+          - script: |
+              sudo apt-get update
+              sudo apt-get install -y openjdk-19-jdk
+            displayName: "Install OpenJDK 19"
 
-  # Restore Maven dependencies
-  - task: Maven@4
-    displayName: "Maven - Restore Dependencies"
-    inputs:
-      mavenPomFile: "pom.xml" # Path to the pom.xml file
-      goals: "dependency:resolve"
+          # Restore Maven dependencies
+          - task: Maven@4
+            displayName: "Maven - Restore Dependencies"
+            inputs:
+              mavenPomFile: "pom.xml"
+              goals: "dependency:resolve"
 
-  # Build the Maven project
-  - task: Maven@4
-    displayName: "Maven - Build"
-    inputs:
-      mavenPomFile: "pom.xml" # Path to the pom.xml file
-      goals: "clean install"
+          # Build the Maven project
+          - task: Maven@4
+            displayName: "Maven - Build"
+            inputs:
+              mavenPomFile: "pom.xml"
+              goals: "clean install"
 
-  # Run unit tests
-  - task: Maven@4
-    displayName: 'Run unit tests - $(buildConfiguration)'
-    inputs:
-      mavenPomFile: "pom.xml"
-      goals: "test"
-      options: "-DskipTests=false"
+          # Run unit tests
+          - task: Maven@4
+            displayName: 'Run unit tests - $(buildConfiguration)'
+            inputs:
+              mavenPomFile: "pom.xml"
+              goals: "test"
+              options: "-DskipTests=false"
 
-  # Publish test results
-  - task: PublishTestResults@2
-    displayName: 'Publish Test Results'
-    inputs:
-      testResultsFiles: '**/target/surefire-reports/*.xml'
-      mergeTestResults: true
+          # Publish test results
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results'
+            inputs:
+              testResultsFiles: '**/target/surefire-reports/*.xml'
+              mergeTestResults: true
 
-  # Compress the contents of the target directory into a ZIP file
-  - script: |
-      zip -r $(Build.ArtifactStagingDirectory)/artifact.zip $(System.DefaultWorkingDirectory)/target
-    displayName: "Create ZIP File of Build Artifacts"
+          # Compress the contents of the target directory into a ZIP file
+          - script: |
+              zip -r $(Build.ArtifactStagingDirectory)/artifact.zip $(System.DefaultWorkingDirectory)/target
+            displayName: "Create ZIP File of Build Artifacts"
 
-  # Publish the ZIP file as an artifact
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifacts"
-    inputs:
-      pathtoPublish: "$(Build.ArtifactStagingDirectory)/artifact.zip"
-      artifactName: "drop"
-      publishLocation: "Container"
-      condition: succeeded()
+          # Publish the ZIP file as an artifact
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifacts"
+            inputs:
+              pathtoPublish: "$(Build.ArtifactStagingDirectory)/artifact.zip"
+              artifactName: "drop"
+              publishLocation: "Container"
+              condition: succeeded()
+
+  - stage: Deploy
+    displayName: "Deployment Stage"
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: DeployJob
+        displayName: "Deploy Job"
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          # Placeholder for deployment step
+          - script: echo "Deploying application..."
+            displayName: "Deployment Placeholder"
+            condition: always()
+
+          # Real deployment step (if available)
+          # - task: <deployment_task_here>
+          #   inputs:
+          #     <input_parameters_here>
