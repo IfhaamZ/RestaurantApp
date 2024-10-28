@@ -1,12 +1,20 @@
 package DAO;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import model.Event;
 import model.InventoryAudit;
 import model.MenuItem;
@@ -408,225 +416,6 @@ public class DBManager {
         }
     }
 
-    // Error and Feedback
-    // Method to create a new error report and return its generated ID
-    public int createErrorReportAndReturnID(String description, String steps, String category, String severity,
-            Timestamp createdAt)
-            throws SQLException {
-        String sql = "INSERT INTO errors (description, steps, category, severity, created_at) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql,
-                        PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-            // Set parameters
-            statement.setString(1, description);
-            statement.setString(2, steps);
-            statement.setString(3, category);
-            statement.setString(4, severity);
-            statement.setTimestamp(5, createdAt); // Set the created_at timestamp
-
-            // Execute update
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Error report creation failed, no rows affected.");
-            }
-
-            // Retrieve the generated ID
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1); // Return the generated ID
-                } else {
-                    throw new SQLException("Error report creation failed, no ID obtained.");
-                }
-            }
-        }
-    }
-
-    // Method to retrieve all error reports
-    public List<error> getAllErrorReports() throws SQLException {
-        String sql = "SELECT * FROM errors";
-        List<error> errorReports = new ArrayList<>();
-
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery()) {
-
-            // Loop through the result set and create error objects
-            while (resultSet.next()) {
-                error errorReport = new error(
-                        resultSet.getInt("id"),
-                        resultSet.getString("description"),
-                        resultSet.getString("steps"),
-                        resultSet.getString("category"),
-                        resultSet.getString("severity"),
-                        resultSet.getTimestamp("created_at")); // Retrieve createdAt
-                errorReport.setStaffComments(resultSet.getString("staff_comments")); // Retrieve staff comments
-                errorReports.add(errorReport);
-            }
-        }
-        return errorReports;
-    }
-
-    // Method to update an existing error report
-    public boolean updateErrorReport(error errorReport) throws SQLException {
-        String sql = "UPDATE errors SET description=?, steps=?, category=?, severity=?, staff_comments=? WHERE id=?";
-
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            // Set parameters for the update statement
-            statement.setString(1, errorReport.getDescription());
-            statement.setString(2, errorReport.getSteps());
-            statement.setString(3, errorReport.getCategory());
-            statement.setString(4, errorReport.getSeverity());
-            statement.setString(5, errorReport.getStaffComments()); // Update staff comments
-            statement.setInt(6, errorReport.getId()); // Error ID for the WHERE clause
-
-            // Execute update and return whether the operation was successful
-            return statement.executeUpdate() > 0;
-        }
-    }
-
-    // Method to retrieve a specific error report by ID
-    public error getErrorById(int id) throws SQLException {
-        String sql = "SELECT * FROM errors WHERE id = ?";
-        error errorReport = null;
-
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    errorReport = new error(
-                            resultSet.getInt("id"),
-                            resultSet.getString("description"),
-                            resultSet.getString("steps"),
-                            resultSet.getString("category"),
-                            resultSet.getString("severity"),
-                            resultSet.getTimestamp("created_at"));
-                    errorReport.setStaffComments(resultSet.getString("staff_comments"));
-                }
-            }
-        }
-        return errorReport; // Return the error object if found, or null otherwise
-    }
-
-    // Feedback Submission Method
-    public boolean createFeedback(String customerName, String customerEmail, String feedbackText, int rating)
-            throws SQLException {
-        String sql = "INSERT INTO feedback (customer_name, customer_email, feedback_text, rating) VALUES (?, ?, ?, ?)";
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            // Set parameters for the feedback submission
-            statement.setString(1, customerName);
-            statement.setString(2, customerEmail);
-            statement.setString(3, feedbackText);
-            statement.setInt(4, rating);
-
-            // Execute update and return whether the operation was successful
-            return statement.executeUpdate() > 0;
-        }
-    }
-
-    // Method to create feedback and return its generated ID
-    public int createFeedbackAndReturnID(String customerName, String customerEmail, String feedbackText, int rating)
-            throws SQLException {
-        String sql = "INSERT INTO feedback (customer_name, customer_email, feedback_text, rating) VALUES (?, ?, ?, ?)";
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql,
-                        PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-            // Set parameters for the feedback submission
-            statement.setString(1, customerName);
-            statement.setString(2, customerEmail);
-            statement.setString(3, feedbackText);
-            statement.setInt(4, rating);
-
-            // Execute update
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Feedback submission failed, no rows affected.");
-            }
-
-            // Retrieve the generated ID
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1); // Return the generated ID
-                } else {
-                    throw new SQLException("Feedback submission failed, no ID obtained.");
-                }
-            }
-        }
-    }
-
-    // Method to get feedback by ID
-    public feedback getFeedbackById(int feedbackId) throws SQLException {
-        String sql = "SELECT * FROM feedback WHERE feedback_id = ?"; // Changed from 'id' to 'feedback_id'
-        feedback fb = null;
-
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, feedbackId);
-            try (ResultSet rs = statement.executeQuery()) {
-                if (rs.next()) {
-                    // Assuming the feedback table has columns: feedback_id, customer_name, email,
-                    // feedback_text, rating, staff_response
-                    fb = new feedback(
-                            rs.getInt("feedback_id"), // Use feedback_id here
-                            rs.getString("customer_name"),
-                            rs.getString("customer_email"),
-                            rs.getString("feedback_text"),
-                            rs.getInt("rating"),
-                            rs.getString("staff_response"),
-                            rs.getTimestamp("created_at") // Assuming this is a timestamp field
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error fetching feedback by ID", e);
-        }
-        return fb;
-    }
-
-    public List<feedback> getAllFeedback() throws SQLException {
-        String sql = "SELECT * FROM feedback";
-        List<feedback> feedbackList = new ArrayList<>();
-
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                feedback fb = new feedback(
-                        resultSet.getInt("feedback_id"), // Changed from 'id' to 'feedback_id'
-                        resultSet.getString("customer_name"),
-                        resultSet.getString("customer_email"),
-                        resultSet.getString("feedback_text"),
-                        resultSet.getInt("rating"),
-                        resultSet.getString("staff_response"), // Staff response added
-                        resultSet.getTimestamp("created_at") // Created at timestamp added
-                );
-                feedbackList.add(fb);
-            }
-        }
-        return feedbackList;
-    }
-
-    // Method to update feedback with staff response
-    public boolean updateFeedbackWithResponse(int feedbackId, String staffResponse) throws SQLException {
-        String sql = "UPDATE feedback SET staff_response=? WHERE feedback_id=?"; // Changed from 'id' to 'feedback_id'
-
-        try (Connection connection = DBConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, staffResponse);
-            statement.setInt(2, feedbackId);
-
-            return statement.executeUpdate() > 0;
-        }
-    }
-
     // Payment Management Methods
 
     // Create Payment and return the generated paymentID
@@ -851,88 +640,86 @@ public class DBManager {
     }
 
     // Insert a new order
-public boolean insertOrder(Order order) throws SQLException {
-    String sql = "INSERT INTO orders (customerName, orderDetails, status) VALUES (?, ?, ?)";
-    try (Connection connection = DBConnector.getConnection();
-         PreparedStatement st = connection.prepareStatement(sql)) {
-        st.setString(1, order.getCustomerName());
-        st.setString(2, order.getOrderDetails());
-        st.setString(3, order.getStatus());
-        return st.executeUpdate() > 0;
-    }
-}
-
-// Fetch all orders for staff view
-public List<Order> getAllOrders() throws SQLException {
-    List<Order> orders = new ArrayList<>();
-    String sql = "SELECT * FROM orders";
-    try (Connection connection = DBConnector.getConnection();
-         PreparedStatement st = connection.prepareStatement(sql);
-         ResultSet rs = st.executeQuery()) {
-        while (rs.next()) {
-            Order order = new Order(
-                    rs.getInt("id"),
-                    rs.getString("customerName"),
-                    rs.getString("orderDetails"),
-                    rs.getString("status")
-            );
-            orders.add(order);
+    public boolean insertOrder(Order order) throws SQLException {
+        String sql = "INSERT INTO orders (customerName, orderDetails, status) VALUES (?, ?, ?)";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, order.getCustomerName());
+            st.setString(2, order.getOrderDetails());
+            st.setString(3, order.getStatus());
+            return st.executeUpdate() > 0;
         }
     }
-    return orders;
-}
 
-// Fetch order by ID
-public Order getOrderById(int id) throws SQLException {
-    String sql = "SELECT * FROM orders WHERE id = ?";
-    try (Connection connection = DBConnector.getConnection();
-         PreparedStatement st = connection.prepareStatement(sql)) {
-        st.setInt(1, id);
-        ResultSet rs = st.executeQuery();
-        if (rs.next()) {
-            return new Order(
-                    rs.getInt("id"),
-                    rs.getString("customerName"),
-                    rs.getString("orderDetails"),
-                    rs.getString("status")
-            );
+    // Fetch all orders for staff view
+    public List<Order> getAllOrders() throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM orders";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("id"),
+                        rs.getString("customerName"),
+                        rs.getString("orderDetails"),
+                        rs.getString("status"));
+                orders.add(order);
+            }
+        }
+        return orders;
+    }
+
+    // Fetch order by ID
+    public Order getOrderById(int id) throws SQLException {
+        String sql = "SELECT * FROM orders WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return new Order(
+                        rs.getInt("id"),
+                        rs.getString("customerName"),
+                        rs.getString("orderDetails"),
+                        rs.getString("status"));
+            }
+        }
+        return null;
+    }
+
+    // Update an order
+    public boolean updateOrder(Order order) throws SQLException {
+        String sql = "UPDATE orders SET orderDetails = ?, status = ? WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, order.getOrderDetails());
+            st.setString(2, order.getStatus());
+            st.setInt(3, order.getId());
+            return st.executeUpdate() > 0;
         }
     }
-    return null;
-}
 
-// Update an order
-public boolean updateOrder(Order order) throws SQLException {
-    String sql = "UPDATE orders SET orderDetails = ?, status = ? WHERE id = ?";
-    try (Connection connection = DBConnector.getConnection();
-         PreparedStatement st = connection.prepareStatement(sql)) {
-        st.setString(1, order.getOrderDetails());
-        st.setString(2, order.getStatus());
-        st.setInt(3, order.getId());
-        return st.executeUpdate() > 0;
+    // Delete an order
+    public boolean deleteOrder(int id) throws SQLException {
+        String sql = "DELETE FROM orders WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            return st.executeUpdate() > 0;
+        }
     }
-}
 
-// Delete an order
-public boolean deleteOrder(int id) throws SQLException {
-    String sql = "DELETE FROM orders WHERE id = ?";
-    try (Connection connection = DBConnector.getConnection();
-            PreparedStatement st = connection.prepareStatement(sql)) {
-        st.setInt(1, id);
-        return st.executeUpdate() > 0;
-    }
-}
-
-// 예약 추가 메서드
+    // 예약 추가 메서드
     public boolean addReservation(Reservation reservation) throws SQLException {
         String sql = "INSERT INTO reservations (name, reservation_date, reservation_time, guests) VALUES (?, ?, ?, ?)";
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement st = connection.prepareStatement(sql)) {
+                PreparedStatement st = connection.prepareStatement(sql)) {
 
             // LocalDate와 LocalTime을 MySQL의 Date와 Time으로 변환
             st.setString(1, reservation.getName());
-            st.setDate(2, Date.valueOf(reservation.getDate()));  // LocalDate -> java.sql.Date
-            st.setTime(3, Time.valueOf(reservation.getTime()));  // LocalTime -> java.sql.Time
+            st.setDate(2, Date.valueOf(reservation.getDate())); // LocalDate -> java.sql.Date
+            st.setTime(3, Time.valueOf(reservation.getTime())); // LocalTime -> java.sql.Time
             st.setInt(4, reservation.getGuests());
 
             return st.executeUpdate() > 0;
@@ -943,7 +730,7 @@ public boolean deleteOrder(int id) throws SQLException {
     public void deleteReservation(int reservationId, String reservationName) throws SQLException {
         String sql = "DELETE FROM reservations WHERE id = ? AND name = ?";
         try (Connection connection = DBConnector.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, reservationId);
             preparedStatement.setString(2, reservationName);
             preparedStatement.executeUpdate();
@@ -954,7 +741,7 @@ public boolean deleteOrder(int id) throws SQLException {
     public boolean updateReservation(Reservation reservation) throws SQLException {
         String sql = "UPDATE reservations SET name = ?, reservation_date = ?, reservation_time = ?, guests = ? WHERE id = ?";
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement st = connection.prepareStatement(sql)) {
+                PreparedStatement st = connection.prepareStatement(sql)) {
 
             st.setString(1, reservation.getName());
             st.setDate(2, Date.valueOf(reservation.getDate()));
@@ -962,20 +749,18 @@ public boolean deleteOrder(int id) throws SQLException {
             st.setInt(4, reservation.getGuests());
             st.setInt(5, reservation.getId());
 
-            
-
             return st.executeUpdate() > 0;
         }
     }
 
-     // 모든 예약 데이터를 가져오는 메서드 추가
+    // 모든 예약 데이터를 가져오는 메서드 추가
     public List<Reservation> getAllReservations() throws SQLException {
         String sql = "SELECT * FROM reservations";
         List<Reservation> reservations = new ArrayList<>();
 
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement st = connection.prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -990,5 +775,283 @@ public boolean deleteOrder(int id) throws SQLException {
         }
 
         return reservations;
+    }
+
+    // Error and Feedback
+    // Method to create a new error report and return its generated ID
+    // createFeedbackAndReturnID and createErrorReportAndReturnID.
+    // This class is a reusable service that can be called by multiple servlets or
+    // other components to handle database interactions.
+    // Method to create a new error report and return its generated ID
+    public int createErrorReportAndReturnID(String description, String steps, String category, String severity,
+            Timestamp createdAt, String status) throws SQLException {
+        String sql = "INSERT INTO errors (description, steps, category, severity, created_at, status) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql,
+                        PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            // Set parameters
+            statement.setString(1, description);
+            statement.setString(2, steps);
+            statement.setString(3, category);
+            statement.setString(4, severity);
+            statement.setTimestamp(5, createdAt); // Set the created_at timestamp
+            statement.setString(6, status); // Set the status
+
+            // Execute update
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Error report creation failed, no rows affected.");
+            }
+
+            // Retrieve the generated ID
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Return the generated ID
+                } else {
+                    throw new SQLException("Error report creation failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
+    // Method to retrieve all error reports, including status
+    public List<error> getAllErrorReports() throws SQLException {
+        String sql = "SELECT id, description, steps, category, severity, created_at, staff_comments, status FROM errors";
+        List<error> errorReports = new ArrayList<>();
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()) {
+
+            // Loop through the result set and create error objects
+            while (resultSet.next()) {
+                error errorReport = new error(
+                        resultSet.getInt("id"),
+                        resultSet.getString("description"),
+                        resultSet.getString("steps"),
+                        resultSet.getString("category"),
+                        resultSet.getString("severity"),
+                        resultSet.getTimestamp("created_at"), // Retrieve createdAt
+                        resultSet.getString("status") // Retrieve status
+                );
+                errorReport.setStaffComments(resultSet.getString("staff_comments")); // Retrieve staff comments
+                errorReports.add(errorReport);
+            }
+        }
+        return errorReports;
+    }
+
+    // Method to update an existing error report, including status
+    public boolean updateErrorReport(error errorReport) throws SQLException {
+        String sql = "UPDATE errors SET description=?, steps=?, category=?, severity=?, staff_comments=?, status=? WHERE id=?";
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            // Set parameters for the update statement
+            statement.setString(1, errorReport.getDescription());
+            statement.setString(2, errorReport.getSteps());
+            statement.setString(3, errorReport.getCategory());
+            statement.setString(4, errorReport.getSeverity());
+            statement.setString(5, errorReport.getStaffComments()); // Update staff comments
+            statement.setString(6, errorReport.getStatus()); // Update status
+            statement.setInt(7, errorReport.getId()); // Error ID for the WHERE clause
+            // Execute update and return whether the operation was successful
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+    // Method to retrieve a specific error report by ID
+    public error getErrorById(int id) throws SQLException {
+        String sql = "SELECT * FROM errors WHERE id = ?";
+        error errorReport = null;
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    errorReport = new error(
+                            resultSet.getInt("id"),
+                            resultSet.getString("description"),
+                            resultSet.getString("steps"),
+                            resultSet.getString("category"),
+                            resultSet.getString("severity"),
+                            resultSet.getTimestamp("created_at"),
+                            resultSet.getString("status") // Include status field
+                    );
+                    errorReport.setStaffComments(resultSet.getString("staff_comments")); // Set staff comments
+                }
+            }
+        }
+        return errorReport; // Return the error object if found, or null otherwise
+    }
+
+    // Feedback Submission Method
+    public boolean createFeedback(String customerName, String customerEmail, String feedbackText, int rating)
+            throws SQLException {
+        String sql = "INSERT INTO feedback (customer_name, customer_email, feedback_text, rating) VALUES (?, ?, ?, ?)";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            // Set parameters for the feedback submission
+            statement.setString(1, customerName);
+            statement.setString(2, customerEmail);
+            statement.setString(3, feedbackText);
+            statement.setInt(4, rating);
+
+            // Execute update and return whether the operation was successful
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+    // Method to create feedback and return its generated ID
+    public int createFeedbackAndReturnID(String customerName, String customerEmail, String feedbackText, int rating)
+            throws SQLException {
+        String sql = "INSERT INTO feedback (customer_name, customer_email, feedback_text, rating) VALUES (?, ?, ?, ?)";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql,
+                        PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            // Set parameters for the feedback submission
+            statement.setString(1, customerName);
+            statement.setString(2, customerEmail);
+            statement.setString(3, feedbackText);
+            statement.setInt(4, rating);
+
+            // Execute update
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Feedback submission failed, no rows affected.");
+            }
+
+            // Retrieve the generated ID
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Return the generated ID
+                } else {
+                    throw new SQLException("Feedback submission failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
+    // Method to get feedback by ID
+    public feedback getFeedbackById(int feedbackId) throws SQLException {
+        String sql = "SELECT * FROM feedback WHERE feedback_id = ?"; // Changed from 'id' to 'feedback_id'
+        feedback fb = null;
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, feedbackId);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    // Assuming the feedback table has columns: feedback_id, customer_name, email,
+                    // feedback_text, rating, staff_response
+                    fb = new feedback(
+                            rs.getInt("feedback_id"), // Use feedback_id here
+                            rs.getString("customer_name"),
+                            rs.getString("customer_email"),
+                            rs.getString("feedback_text"),
+                            rs.getInt("rating"),
+                            rs.getString("staff_response"),
+                            rs.getTimestamp("created_at") // Assuming this is a timestamp field
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching feedback by ID", e);
+        }
+        return fb;
+    }
+
+    public List<feedback> getAllFeedback() throws SQLException {
+        String sql = "SELECT * FROM feedback";
+        List<feedback> feedbackList = new ArrayList<>();
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                feedback fb = new feedback(
+                        resultSet.getInt("feedback_id"), // Changed from 'id' to 'feedback_id'
+                        resultSet.getString("customer_name"),
+                        resultSet.getString("customer_email"),
+                        resultSet.getString("feedback_text"),
+                        resultSet.getInt("rating"),
+                        resultSet.getString("staff_response"), // Staff response added
+                        resultSet.getTimestamp("created_at") // Created at timestamp added
+                );
+                feedbackList.add(fb);
+            }
+        }
+        return feedbackList;
+    }
+
+    // Method to delete feedback by ID
+    public boolean deleteFeedbackById(int feedbackId) throws SQLException {
+        String sql = "DELETE FROM feedback WHERE feedback_id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, feedbackId); // Set the feedback ID parameter
+            return statement.executeUpdate() > 0; // Return true if a row was deleted
+        }
+    }
+
+    // Method to update feedback with staff response
+    public boolean updateFeedbackWithResponse(int feedbackId, String staffResponse) throws SQLException {
+        String sql = "UPDATE feedback SET staff_response=? WHERE feedback_id=?"; // Changed from 'id' to 'feedback_id'
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, staffResponse);
+            statement.setInt(2, feedbackId);
+
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+    // Method to update the status of an error report
+    public boolean updateErrorStatus(int errorId, String status) throws SQLException {
+        String sql = "UPDATE errors SET status = ? WHERE id = ?";
+
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            // Set the status and error ID
+            statement.setString(1, status);
+            statement.setInt(2, errorId);
+
+            // Execute update and return whether the operation was successful
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+    // In DBManager.java
+    public double calculateAverageRating() throws SQLException {
+        String query = "SELECT AVG(rating) AS averageRating FROM feedback";
+        try (Connection connection = DBConnector.getConnection(); // Use DBConnector to get the connection
+                PreparedStatement statement = connection.prepareStatement(query);
+                ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getDouble("averageRating");
+            }
+        }
+        return 0.0;
+    }
+
+    // Method to delete an error report by its ID
+    public boolean deleteErrorById(int errorId) throws SQLException {
+        String sql = "DELETE FROM errors WHERE id = ?";
+        try (Connection connection = DBConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, errorId); // Set the error ID
+            return statement.executeUpdate() > 0; // Return true if a row was deleted
+        }
     }
 }

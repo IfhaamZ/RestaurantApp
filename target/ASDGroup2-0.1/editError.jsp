@@ -48,7 +48,7 @@
             margin-bottom: 10px;
         }
 
-        textarea, input[type="text"] {
+        textarea, input[type="text"], select {
             width: 100%;
             padding: 12px;
             font-size: 16px;
@@ -65,7 +65,7 @@
         }
 
         input[type="submit"] {
-            background-color: #007bff;
+            background-color: #dc3545;  /* Red */
             color: white;
             padding: 12px 20px;
             font-size: 18px;
@@ -77,7 +77,7 @@
         }
 
         input[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: #c82333;  /* Darker Red */
         }
 
         a {
@@ -129,6 +129,7 @@
 
     <h1>Edit Error Report</h1>
 
+    <!-- Unified Form -->
     <form action="/update" method="post" onsubmit="return validateForm()">
         <input type="hidden" name="id" value="<%= err.getId() %>">
 
@@ -147,10 +148,17 @@
         <label for="staffComments">Staff Comments:</label>
         <textarea id="staffComments" name="staffComments"><%= err.getStaffComments() != null ? err.getStaffComments() : "" %></textarea>
 
-<!-- Display the createdAt field as non-editable information -->
-    <label for="createdAt">Date Submitted:</label>
-    <input id="createdAt" type="text" name="createdAt" value="<%= err.getCreatedAt() != null ? err.getCreatedAt() : "N/A" %>" readonly>
-        
+        <!-- Display the createdAt field as non-editable information -->
+        <label for="createdAt">Date Submitted:</label>
+        <input id="createdAt" type="text" name="createdAt" value="<%= err.getCreatedAt() != null ? err.getCreatedAt() : "N/A" %>" readonly>
+
+        <!-- Status Dropdown -->
+        <label for="status">Update Status:</label>
+        <select id="status" name="status">
+            <option value="In Progress" <%= "In Progress".equals(err.getStatus()) ? "selected" : "" %>>In Progress</option>
+            <option value="Resolved" <%= "Resolved".equals(err.getStatus()) ? "selected" : "" %>>Resolved</option>
+        </select>
+
         <input type="submit" value="Update Error Report">
     </form>
 

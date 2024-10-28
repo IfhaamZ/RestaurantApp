@@ -30,7 +30,7 @@
         <h1>${table == null ? "Add Table" : "Edit Table"}</h1>
         <nav>
             <ul>
-                <li><a href="index.jsp">Home</a></li>
+                <li><a href="staffIndex.jsp">Home</a></li>
                 <li><a href="tablelist">Manage Tables</a></li>
             </ul>
         </nav>

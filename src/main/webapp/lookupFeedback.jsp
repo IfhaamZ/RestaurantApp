@@ -79,6 +79,35 @@
         .back-btn:hover {
             text-decoration: underline;
         }
+
+        /* Delete button styles */
+        .delete-btn {
+            padding: 12px 20px;
+            background-color: #dc3545; /* Red for delete */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Make the button full width */
+            margin-top: 20px;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333; /* Darker red on hover */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -119,6 +148,13 @@
         <p><strong>Rating:</strong> <%= fb.getRating() %></p>
         <h2>Staff Response</h2>
         <p><%= fb.getStaffResponse() != null ? fb.getStaffResponse() : "No response yet" %></p>
+
+        <!-- Delete form -->
+        <form action="deleteFeedback" method="post">
+            <input type="hidden" name="feedbackId" value="<%= fb.getFeedbackId() %>">
+            <button type="submit" class="delete-btn">Delete Feedback</button>
+        </form>
+        
         <a href="dashboard.jsp" class="back-btn">Back to Dashboard</a>
     <%
             }

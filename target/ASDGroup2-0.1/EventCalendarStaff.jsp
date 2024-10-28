@@ -12,8 +12,7 @@
         <h1>Staff Event Management</h1>
         <nav>
             <ul>
-                <li><a href="index.jsp">Home</a></li>
-                <li><a href="EventCalendarStaff.jsp">Manage Events</a></li>
+                <li><a href="staffIndex.jsp">Home</a></li>
                 <li><a href="logout.jsp">Logout</a></li>
             </ul>
         </nav>

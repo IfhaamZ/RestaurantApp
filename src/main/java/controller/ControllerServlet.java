@@ -1,11 +1,12 @@
 package controller;
 
+import java.io.IOException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class ControllerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -25,19 +26,19 @@ public class ControllerServlet extends HttpServlet {
         try {
             // Route to appropriate method based on action
             switch (action) {
-                case "/event":
+                case "/event": // Handle event-related requests
                     handleEventRequests(request, response);
                     break;
-                case "/table":
+                case "/table": // Handle table management requests
                     handleTableRequests(request, response); // New case for handling table-related requests
                     break;
-                case "/menu":
+                case "/menu": // Handle menu-related requests
                     handleMenuRequests(request, response); // New case for handling table-related requests
                     break;
-                case "/error":
+                case "/error": // Handle error submission requests
                     handleErrorRequest(request, response); // Show the dashboard
                     break;
-                case "/feedback":
+                case "/feedback": // Handle feedback submission requests
                     handleFeedbackRequest(request, response); // Show the dashboard
                     break;
                 case "/payment":
@@ -57,6 +58,7 @@ public class ControllerServlet extends HttpServlet {
                     break;
             }
         } catch (Exception ex) {
+            // Handle any exceptions that occur during the request processing
             throw new ServletException(ex);
         }
     }

@@ -11,7 +11,7 @@
         <h1>Menu Management</h1>
         <nav>
             <ul>
-                <li><a href="index.jsp">Home</a></li>
+                <li><a href="staffIndex.jsp">Home</a></li>
                 <li><a href="menuform">Add New Item</a></li>
             </ul>
         </nav>
