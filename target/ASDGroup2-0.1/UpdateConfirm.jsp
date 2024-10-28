@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Update Confirm</title>
-    <link rel="stylesheet" href="css/Confirm.css" />
+    <link rel="stylesheet" href="css/UpdateConfirm.css" />
 </head>
 <body>
     <h2>Reservation Updated Successfully!</h2>
